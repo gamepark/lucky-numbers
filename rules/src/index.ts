@@ -1,2 +1,2 @@
-export {default} from './MyBoardGame'
-export {MyBoardGameOptionsSpec} from './MyBoardGameOptions'
+export {default} from './LuckyNumbers'
+export {LuckyNumbersOptionsSpec} from './LuckyNumbersOptions'

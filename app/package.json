@@ -1,5 +1,5 @@
 {
-  "name": "@gamepark/board-game-template-app",
+  "name": "@gamepark/lucky-number-app",
   "version": "0.0.0",
   "private": true,
   "description": "React application",
@@ -21,6 +21,7 @@
     "i18next": "^21.2.4",
     "imagemin-webp-webpack-plugin": "^3.3.6",
     "intl-messageformat": "^9.9.1",
+    "lodash.shuffle": "^4.2.0",
     "react": "^17.0.2",
     "react-app-rewire-alias": "^1.0.3",
     "react-app-rewired": "^2.1.8",

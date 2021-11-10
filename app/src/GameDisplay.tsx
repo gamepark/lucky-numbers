@@ -1,20 +1,25 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import GameView from '@gamepark/board-game-template/GameView'
-import {Letterbox, Picture} from '@gamepark/react-components'
-import Images from './images/Images'
+import GameView from '@gamepark/lucky-number/GameView'
+import {usePlayerId} from '@gamepark/react-client'
+import {Letterbox} from '@gamepark/react-components'
+import DrawPile from './clovers/DrawPile'
+import FaceUpClovers from './clovers/FaceUpClovers'
+import PlayerDisplay from './players/PlayerDisplay'
 
 type Props = {
   game: GameView
 }
 
 export default function GameDisplay({game}: Props) {
+  const playerId = usePlayerId()
   return (
     <Letterbox css={letterBoxStyle} top={0}>
-      <div css={sampleCss}>
-        {JSON.stringify(game)}
+      <div css={givePerspective}>
+        {game.players.map((player, index) => <PlayerDisplay key={index} player={player} index={index} isMine={playerId === index + 1}/>)}
+        <DrawPile size={game.faceDownClovers} canDraw={playerId && game.activePlayer === playerId && game.players[playerId - 1].clovers.length === 0}/>
+        <FaceUpClovers clovers={game.faceUpClovers}/>
       </div>
-      <Picture src={Images.sampleImage} css={sampleImageCss}/>
     </Letterbox>
   )
 }
@@ -30,23 +35,12 @@ const fadeIn = keyframes`
 
 const letterBoxStyle = css`
   animation: ${fadeIn} 3s ease-in forwards;
+
+  > div {
+    perspective: 100em;
+  }
 `
 
-const sampleCss = css`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 3rem;
-  background-color: black;
-  padding: 0.5em;
-  border-radius: 1em;
-`
-
-const sampleImageCss = css`
-  position: absolute;
-  bottom: 5%;
-  left: calc(50% - 6.5em);
-  width: 13em;
-  height: 20em;
+const givePerspective = css`
+  transform: rotateX(10deg);
 `
