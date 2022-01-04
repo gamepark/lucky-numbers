@@ -9,13 +9,6 @@ import MoveView from './moves/MoveView'
 import PlaceClover, {placeClover, placeCloverMove} from './moves/PlaceClover'
 import {isValidPosition} from './PlayerState'
 
-/**
- * Your Board Game rules must extend either "SequentialGame" or "SimultaneousGame".
- * When there is at least on situation during the game where multiple players can act at the same time, it is a "SimultaneousGame"
- * If the game contains information that players does not know (dices, hidden cards...), it must implement "IncompleteInformation".
- * If the game contains information that some players know, but the other players does not, it must implement "SecretInformation" instead.
- * Later on, you can also implement "Competitive", "Undo", "TimeLimit" and "Eliminations" to add further features to the game.
- */
 export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
   implements IncompleteInformation<GameState, GameView, Move, MoveView> {
   constructor(state: GameState)
@@ -44,7 +37,7 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
       return []
     } else {
       const moves: Move[] = []
-      const player = this.state.players[playerId - 1]
+      const player = this.state.players[playerId - 1]     // TODO : replace by find method (even a getter function)
       if (player.clovers.length > 0) {
         for (const clover of player.clovers) {
           for (let row = 0; row < 4; row++) {
@@ -104,14 +97,6 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
     return {...this.state, faceDownClovers: this.state.faceDownClovers.length}
   }
 
-  /**
-   * If you game has incomplete information, sometime you need to alter a Move before it is sent to the players and spectator.
-   * For example, if a card is revealed, the id of the revealed card should be ADDED to the Move in the MoveView
-   * Sometime, you will hide information: for example if a player secretly choose a card, you will hide the card to the other players or spectators.
-   *
-   * @param move The move that has been played
-   * @return What a person should know about the move that was played
-   */
   getMoveView(move: Move): MoveView {
     if (move.type === MoveType.DrawClover) {
       return {...move, clover: this.state.faceDownClovers[0]}
