@@ -27,3 +27,13 @@ export function isValidPosition(garden: Garden, clover: Clover, row: number, col
   }
   return true
 }
+
+export enum PlayerColor {
+  Elf = 1, Fairy, Unicorn, Gobelin
+}
+
+export const playerColors = Object.values(PlayerColor).filter(isPlayerColor)
+
+function isPlayerColor(arg: string | PlayerColor): arg is PlayerColor {
+  return typeof arg === 'number'
+}
