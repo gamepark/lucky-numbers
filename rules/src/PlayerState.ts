@@ -14,7 +14,10 @@ export const emptyGarden = [
   [null, null, null, null]
 ]
 
-export function isValidPosition(garden: Garden, clover: Clover, row: number, column: number) {
+export function isValidPosition(garden: Garden, clover: Clover, row: number, column: number, isSetupPhase:boolean) {
+  if(isSetupPhase){
+    return (row === 0 && column === 0) || (row === 1 && column === 1) || (row === 2 && column === 2) || (row === 3 && column === 3)
+  }
   for (let i = 0; i < 4; i++) {
     const rowSpace = garden[row][i]
     const columnSpace = garden[i][column]

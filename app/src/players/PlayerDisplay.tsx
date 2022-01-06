@@ -2,6 +2,7 @@
 import {css} from '@emotion/react'
 import PlayerState from '@gamepark/lucky-number/PlayerState'
 import {usePlay, usePlayer, usePlayerId} from '@gamepark/react-client'
+import { gameContext } from '@gamepark/react-client/dist/GameProvider/GameContext'
 import {Draggable} from '@gamepark/react-components'
 import CloverImage from '../clovers/CloverImage'
 import {boardLeft, boardTop, canDragStyle, cloverSize, playerCloverLeft, playerCloverTop} from '../styles'
@@ -15,9 +16,10 @@ type Props = {
   isMine?: boolean
   activePlayer:boolean
   nbPlayers:number
+  isSetupPhase:boolean
 }
 
-export default function PlayerDisplay({player, index, isMine, activePlayer, nbPlayers}: Props) {
+export default function PlayerDisplay({player, index, isMine, activePlayer, nbPlayers, isSetupPhase}: Props) {
 
   const playerId = usePlayerId<number>()
   const playerInfo = usePlayer(index+1)
@@ -26,7 +28,7 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, nbPl
   return (
     <>
       <PlayerPanel playerInfo={playerInfo} index={getDisplayPosition(playerId, index, nbPlayers)} activePlayer={activePlayer} />
-      <Board garden={player.garden} isMine={isMine} css={boardPosition(getDisplayPosition(playerId, index, nbPlayers))}/>
+      <Board garden={player.garden} isMine={isMine} isSetupPhase={isSetupPhase} css={boardPosition(getDisplayPosition(playerId, index, nbPlayers))}/>
       {player.clovers.map((clover, cloverIndex) =>
         <Draggable key={`${clover.color} ${clover.number}`} type={CLOVER} item={clover} css={cloverPosition(getDisplayPosition(playerId, index, nbPlayers), cloverIndex)} canDrag={isMine} drop={play}>
           <CloverImage clover={clover} css={isMine && canDragStyle} />
