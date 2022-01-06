@@ -37,7 +37,7 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
       return []
     } else {
       const moves: Move[] = []
-      const player = this.state.players[playerId - 1]     // TODO : replace by find method (even a getter function)
+      const player = this.state.players[playerId - 1]
       if (player.clovers.length > 0) {
         for (const clover of player.clovers) {
           for (let row = 0; row < 4; row++) {

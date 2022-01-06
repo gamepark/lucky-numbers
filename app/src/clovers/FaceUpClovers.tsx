@@ -1,16 +1,24 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import Clover from '@gamepark/lucky-number/material/Clover'
-import {cloverSize} from '../styles'
+import { usePlay } from '@gamepark/react-client'
+import { Draggable } from '@gamepark/react-components'
+import { CLOVER } from '../players/CloverDropArea'
+import {canDragStyle, cloverSize} from '../styles'
 import CloverImage from './CloverImage'
 
 type Props = {
   clovers: Clover[]
+  canDrag:boolean
 }
 
-export default function FaceUpClovers({clovers}: Props) {
+export default function FaceUpClovers({clovers, canDrag}: Props) {
+  const play = usePlay()
   return <>
-    {clovers.map((clover, index) => <CloverImage key={index} clover={clover} css={position(index)}/>)}
+    {clovers.map((clover, index) => 
+    <Draggable key={index} type={CLOVER} item={clover} canDrag={canDrag} drop={play} >
+      <CloverImage clover={clover} css={[position(index), canDrag && canDragStyle]}/>
+    </Draggable> )}
   </>
 }
 

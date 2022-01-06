@@ -4,7 +4,7 @@ import PlayerState from '@gamepark/lucky-number/PlayerState'
 import {usePlay, usePlayer, usePlayerId} from '@gamepark/react-client'
 import {Draggable} from '@gamepark/react-components'
 import CloverImage from '../clovers/CloverImage'
-import {boardLeft, boardTop, cloverSize, playerCloverLeft, playerCloverTop} from '../styles'
+import {boardLeft, boardTop, canDragStyle, cloverSize, playerCloverLeft, playerCloverTop} from '../styles'
 import Board from './Board'
 import {CLOVER} from './CloverDropArea'
 import PlayerPanel from './PlayerPanel'
@@ -29,7 +29,7 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, nbPl
       <Board garden={player.garden} isMine={isMine} css={boardPosition(getDisplayPosition(playerId, index, nbPlayers))}/>
       {player.clovers.map((clover, cloverIndex) =>
         <Draggable key={`${clover.color} ${clover.number}`} type={CLOVER} item={clover} css={cloverPosition(getDisplayPosition(playerId, index, nbPlayers), cloverIndex)} canDrag={isMine} drop={play}>
-          <CloverImage clover={clover}/>
+          <CloverImage clover={clover} css={isMine && canDragStyle} />
         </Draggable>
       )}
     </>

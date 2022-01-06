@@ -1,4 +1,4 @@
-import { css } from "@emotion/react"
+import { css, keyframes } from "@emotion/react"
 
 export const headerHeight = 7
 export const cloverSize = 7
@@ -20,4 +20,23 @@ export const toFullSize = css`
 
 export const toAbsolute = css`
   position: absolute;
+`
+
+const opacityKeyframe = keyframes`
+  from {
+    filter: drop-shadow(0 0 0.1em white) drop-shadow(0 0 0.1em white);
+  }
+  to {
+    filter: drop-shadow(0 0 0.4em white) drop-shadow(0 0 0.4em white);
+  }
+`
+
+export const canDragStyle = css`
+  cursor: pointer;
+  animation: ${opacityKeyframe} 1s ease-in-out alternate infinite;
+
+  &:hover:after {
+    animation: none;
+    filter: drop-shadow(0 0 0.3em white) drop-shadow(0 0 0.3em white);
+  }
 `
