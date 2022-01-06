@@ -19,7 +19,12 @@ export default function GameDisplay({game}: Props) {
       <div css={givePerspective}>
         {game.players.map((player, index) => <PlayerDisplay key={index} player={player} index={index} isMine={playerId !== undefined && index === playerId-1} activePlayer={game.activePlayer === index+1 || game.activePlayer === undefined} nbPlayers={game.players.length} />)}
         <DrawPile size={game.faceDownClovers} canDraw={playerId !== undefined && game.activePlayer === playerId && game.players[playerId - 1].clovers.length === 0}/>
-        <FaceUpClovers clovers={game.faceUpClovers} canDrag={playerId !== undefined && game.activePlayer === playerId && game.players[playerId-1].clovers.length === 0} />
+        <FaceUpClovers 
+          clovers={game.faceUpClovers} 
+          canDrag={playerId !== undefined && game.activePlayer === playerId && game.players[playerId-1].clovers.length === 0} 
+          activePlayer={game.activePlayer}
+          cloversInHand={playerId === undefined ? undefined : game.players[playerId-1].clovers}
+          />
       </div>
     </Letterbox>
   )

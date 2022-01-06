@@ -24,11 +24,16 @@ export function placeClover(state: GameState | GameView, move: PlaceClover) {
   } else {
     state.faceUpClovers = state.faceUpClovers.filter(clover => clover.number !== move.clover.number || clover.color !== move.clover.color)
   }
-  const clover = player.garden[move.row][move.column]
-  if (clover) {
-    state.faceUpClovers.push(clover)
+  if (move.row === -1 && move.column === -1){
+    state.faceUpClovers.push(move.clover)
+  } else {
+    const clover = player.garden[move.row][move.column]
+    if (clover) {
+      state.faceUpClovers.push(clover)
+    }
+    player.garden[move.row][move.column] = move.clover
   }
-  player.garden[move.row][move.column] = move.clover
+
   if (state.activePlayer !== undefined) {
     state.activePlayer = (state.activePlayer % state.players.length) + 1
   }

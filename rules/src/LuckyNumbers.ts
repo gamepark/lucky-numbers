@@ -40,6 +40,7 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
       const player = this.state.players[playerId - 1]
       if (player.clovers.length > 0) {
         for (const clover of player.clovers) {
+          moves.push(placeCloverMove(playerId, clover, -1, -1))
           for (let row = 0; row < 4; row++) {
             for (let column = 0; column < 4; column++) {
               if (isValidPosition(player.garden, clover, row, column)) {
