@@ -19,28 +19,29 @@ type Props = {
 
 export default function PlayerDisplay({player, index, isMine, activePlayer, nbPlayers}: Props) {
 
-  function getDisplayPosition():number{
-    if (playerId === undefined){
-      return nbPlayers === 2 ? index*2 : index
-    } else {
-      return (index -playerId+1+nbPlayers)%nbPlayers
-    } 
-  }
   const playerId = usePlayerId<number>()
   const playerInfo = usePlayer(index+1)
   const play = usePlay()
 
   return (
     <>
-      <PlayerPanel playerInfo={playerInfo} index={getDisplayPosition()} activePlayer={activePlayer} />
-      <Board garden={player.garden} isMine={isMine} css={boardPosition(getDisplayPosition())}/>
+      <PlayerPanel playerInfo={playerInfo} index={getDisplayPosition(playerId, index, nbPlayers)} activePlayer={activePlayer} />
+      <Board garden={player.garden} isMine={isMine} css={boardPosition(getDisplayPosition(playerId, index, nbPlayers))}/>
       {player.clovers.map((clover, cloverIndex) =>
-        <Draggable key={`${clover.color} ${clover.number}`} type={CLOVER} item={clover} css={cloverPosition(getDisplayPosition(), cloverIndex)} canDrag={isMine} drop={play}>
+        <Draggable key={`${clover.color} ${clover.number}`} type={CLOVER} item={clover} css={cloverPosition(getDisplayPosition(playerId, index, nbPlayers), cloverIndex)} canDrag={isMine} drop={play}>
           <CloverImage clover={clover}/>
         </Draggable>
       )}
     </>
   )
+}
+
+function getDisplayPosition(playerId:number|undefined, index:number, nbPlayers:number):number{
+  if (playerId === undefined){
+    return nbPlayers === 2 ? index*2 : index
+  } else {
+    return nbPlayers === 2 ? ((index -playerId+1+nbPlayers)%nbPlayers)*3 : (index -playerId+1+nbPlayers)%nbPlayers
+  } 
 }
 
 const boardPosition = (index: number) => css`

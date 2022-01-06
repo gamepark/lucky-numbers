@@ -26,7 +26,6 @@ const PlayerPanel : FC<Props> = ({playerInfo, index, activePlayer}) => {
             <AvatarPanel playerInfo={playerInfo}/>
             <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? getPlayerName(playerInfo?.id, t) : playerInfo?.name}</h1>
             <PlayerTimer playerId={index} css={[toAbsolute,timerStyle]}/>
-            <div css={[toAbsolute,timerStyle]} >00:00</div>
         </div>
     
 
