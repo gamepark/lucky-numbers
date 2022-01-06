@@ -22,7 +22,6 @@ export default function HeaderText({loading, game}: Props) {
 }
 
 function getPseudo(player: number, players: PlayerInfo<number>[], t: TFunction): string {
-  console.log(player)
   if (players[player].name === undefined) {
     return getPlayerName(player, t) 
   } else {

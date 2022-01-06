@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import {css} from '@emotion/react'
+import {css, keyframes} from '@emotion/react'
+import Clover from '@gamepark/lucky-number/material/Clover'
+import PlaceClover, { isPlaceClover } from '@gamepark/lucky-number/moves/PlaceClover'
 import PlayerState from '@gamepark/lucky-number/PlayerState'
-import {usePlay, usePlayer, usePlayerId} from '@gamepark/react-client'
-import { gameContext } from '@gamepark/react-client/dist/GameProvider/GameContext'
+import {Animation, useAnimation, usePlay, usePlayer, usePlayerId} from '@gamepark/react-client'
 import {Draggable} from '@gamepark/react-components'
 import CloverImage from '../clovers/CloverImage'
 import {boardLeft, boardTop, canDragStyle, cloverSize, playerCloverLeft, playerCloverTop} from '../styles'
@@ -24,18 +25,25 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, nbPl
   const playerId = usePlayerId<number>()
   const playerInfo = usePlayer(index+1)
   const play = usePlay()
+  const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move))
+
+  const displayPosition = getDisplayPosition(playerId, index, nbPlayers)
 
   return (
     <>
-      <PlayerPanel playerInfo={playerInfo} index={getDisplayPosition(playerId, index, nbPlayers)} activePlayer={activePlayer} />
-      <Board garden={player.garden} isMine={isMine} isSetupPhase={isSetupPhase} css={boardPosition(getDisplayPosition(playerId, index, nbPlayers))}/>
+      <PlayerPanel playerInfo={playerInfo} index={displayPosition} activePlayer={activePlayer} />
+      <Board garden={player.garden} isMine={isMine} isSetupPhase={isSetupPhase} css={boardPosition(displayPosition)}/>
       {player.clovers.map((clover, cloverIndex) =>
-        <Draggable key={`${clover.color} ${clover.number}`} type={CLOVER} item={clover} css={cloverPosition(getDisplayPosition(playerId, index, nbPlayers), cloverIndex)} canDrag={isMine} drop={play}>
-          <CloverImage clover={clover} css={isMine && canDragStyle} />
+        <Draggable key={`${clover.color} ${clover.number}`} type={CLOVER} item={clover} css={cloverPosition(displayPosition, cloverIndex)} canDrag={isMine} drop={play}>
+          <CloverImage clover={clover} css={[isMine && canDragStyle, (isCloverAnimated(clover, placeCloverAnimation)) && placeCloverTranslation(placeCloverAnimation!.duration,cloverIndex, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column)]} />
         </Draggable>
       )}
     </>
   )
+}
+
+function isCloverAnimated(clover:Clover, animation:Animation<PlaceClover>|undefined):boolean{
+  return animation !== undefined && animation.move.clover.color === clover.color && animation.move.clover.number === clover.number
 }
 
 function getDisplayPosition(playerId:number|undefined, index:number, nbPlayers:number):number{
@@ -45,6 +53,17 @@ function getDisplayPosition(playerId:number|undefined, index:number, nbPlayers:n
     return nbPlayers === 2 ? ((index -playerId+1+nbPlayers)%nbPlayers)*3 : (index -playerId+1+nbPlayers)%nbPlayers
   } 
 }
+
+const placeCloverKeyframes = (index:number, playerPosition:number, row:number, column:number) => keyframes`
+from{}
+to{
+  transform:translateX(${(playerPosition<2 ? -3.18 : 1)*11 + column*(cloverSize+1)}em) translateY(${(playerPosition === 1 || playerPosition === 2 ? (-3+index) : (-index))*(cloverSize+1) + row*(cloverSize+1)}em);
+}
+`
+
+const placeCloverTranslation = (duration:number, index:number, playerPosition:number, row:number, column:number) => css`
+  animation: ${placeCloverKeyframes(index, playerPosition, row, column)} ${duration}s ease-in-out forwards;
+`
 
 const boardPosition = (index: number) => css`
   left: ${boardLeft(index)}em;

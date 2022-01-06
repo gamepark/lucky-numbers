@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import LuckyNumbersView from './LuckyNumbersView'
 import translations from './translations.json'
+import luckyNumbersAnimations from './LuckyNumbersAnimations'
 
 setupTranslation(translations, {debug: false})
 
@@ -60,7 +61,12 @@ const style = css`
 
 ReactDOM.render(
   <StrictMode>
-    <GameProvider game="lucky-numbers" Rules={LuckyNumbers} RulesView={LuckyNumbersView} optionsSpec={LuckyNumbersOptionsSpec}>
+    <GameProvider game="lucky-numbers" 
+                  Rules={LuckyNumbers} 
+                  RulesView={LuckyNumbersView} 
+                  optionsSpec={LuckyNumbersOptionsSpec}
+                  animations={luckyNumbersAnimations}
+    >
       <App/>
     </GameProvider>
     <Global styles={[normalize, style]}/>

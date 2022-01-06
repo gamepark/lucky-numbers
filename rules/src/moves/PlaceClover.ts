@@ -2,6 +2,7 @@ import GameState from '../GameState'
 import GameView from '../GameView'
 import Clover from '../material/Clover'
 import Position from '../material/Position'
+import Move from './Move'
 import MoveType from './MoveType'
 
 type PlaceClover = {
@@ -37,4 +38,8 @@ export function placeClover(state: GameState | GameView, move: PlaceClover) {
   if (state.activePlayer !== undefined) {
     state.activePlayer = (state.activePlayer % state.players.length) + 1
   }
+}
+
+export function isPlaceClover(move: Move): move is PlaceClover {
+  return move.type === MoveType.PlaceClover
 }
