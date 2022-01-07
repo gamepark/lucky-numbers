@@ -44,15 +44,36 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
     <div css={[canDrop && discardZoneStyle, isOver && isOverDiscard]} ref={dropRef}></div>
       {clovers.map((clover, index) => 
       <Draggable key={index} type={CLOVER} item={clover} canDrag={canDrag} drop={play}>
-        <CloverImage clover={clover} css={[position(index), canDrag && canDragStyle, isCloverAnimated(clover, placeCloverAnimation) && displayPositionOfAnimPlayer !== false && placeCloverTranslation(placeCloverAnimation!.duration, displayPositionOfAnimPlayer, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column)]}/>
+        <CloverImage clover={clover} 
+                     css={[position(index), 
+                     canDrag && canDragStyle, 
+                     isCloverAnimated(clover, placeCloverAnimation) && displayPositionOfAnimPlayer !== false && placeCloverTranslation(placeCloverAnimation!.duration, displayPositionOfAnimPlayer, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column),
+                     isCloverSorted(index, clovers, placeCloverAnimation) && sortClovers(placeCloverAnimation!.duration, index)
+                     ]}/>
       </Draggable> )}
   </>
   )
 }
 
+function isCloverSorted(index:number, discard:Clover[], animation:Animation<PlaceClover>|undefined):boolean{
+  return animation !== undefined && discard.findIndex(clover => isSameClover(clover, animation.move.clover)) < index
+}
+
 function isCloverAnimated(clover:Clover, animation:Animation<PlaceClover>|undefined):boolean{
   return animation !== undefined && isSameClover(clover, animation.move.clover)
 }
+
+const sortClovers = (duration:number, index:number) => css`
+  animation: ${sortCloverKeyframes(index)} ${duration}s ease-in-out forwards;
+`
+
+const sortCloverKeyframes = (index:number) => keyframes`
+from{}
+to{
+  left: ${((index-1)%6) * (cloverSize + 1) + 66}em;
+  top: ${Math.floor((index-1)/6)*(cloverSize +1) + 66}em;
+}
+`
 
 const placeCloverTranslation = (duration:number, playerPos:number, row:number, column:number) => css`
   animation: ${discardCloverKeyframes(playerPos, row, column)} ${duration}s ease-in-out infinite;
