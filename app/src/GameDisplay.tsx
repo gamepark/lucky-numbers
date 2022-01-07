@@ -25,7 +25,7 @@ export default function GameDisplay({game}: Props) {
                          activePlayer={game.activePlayer === index+1 || game.activePlayer === undefined} 
                          nbPlayers={game.players.length} 
                          isSetupPhase={game.activePlayer === undefined}
-                         cloversDiscarded={game.faceUpClovers.length} />
+                         cloversDiscarded={game.faceUpClovers} />
         )}
         <DrawPile size={game.faceDownClovers} canDraw={playerId !== undefined && game.activePlayer === playerId && game.players[playerId - 1].clovers.length === 0}/>
         <FaceUpClovers 
@@ -33,6 +33,7 @@ export default function GameDisplay({game}: Props) {
           canDrag={playerId !== undefined && game.activePlayer === playerId && game.players[playerId-1].clovers.length === 0} 
           activePlayer={game.activePlayer}
           cloversInHand={playerId === undefined ? undefined : game.players[playerId-1].clovers}
+          nbPlayers={game.players.length}
           />
       </div>
     </Letterbox>

@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import {css} from '@emotion/react'
-import Clover from '@gamepark/lucky-number/material/Clover'
-import { placeCloverMove } from '@gamepark/lucky-number/moves/PlaceClover'
-import { usePlay, usePlayerId } from '@gamepark/react-client'
+import {css, keyframes} from '@emotion/react'
+import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
+import PlaceClover, { isPlaceClover, placeCloverMove } from '@gamepark/lucky-number/moves/PlaceClover'
+import { Animation, useAnimation, usePlay, usePlayerId } from '@gamepark/react-client'
 import { Draggable } from '@gamepark/react-components'
 import { DropTargetMonitor, useDrop } from 'react-dnd'
+import { getDisplayPosition } from '../players/PlayerDisplay'
 import { CLOVER } from '../players/CloverDropArea'
-import {canDragStyle, cloverSize} from '../styles'
+import {canDragStyle, cloverSize, boardTop, boardLeft} from '../styles'
 import CloverImage from './CloverImage'
 
 type Props = {
@@ -14,16 +15,19 @@ type Props = {
   canDrag:boolean
   cloversInHand:Clover[]|undefined
   activePlayer:number|undefined
+  nbPlayers:number
 }
 
-export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePlayer}: Props) {
+export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePlayer, nbPlayers}: Props) {
   const play = usePlay()
   const playerId = usePlayerId()
+  const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && clovers.find(clover => isSameClover(clover, animation.move.clover)) !== undefined)
+  const displayPositionOfAnimPlayer = placeCloverAnimation !== undefined && getDisplayPosition(playerId, placeCloverAnimation.move.playerId-1 , nbPlayers)
 
   const [{canDrop, isOver}, dropRef] = useDrop({
     accept: CLOVER,
     canDrop: (item: Clover) => {
-      return cloversInHand !== undefined && cloversInHand.find(clover => clover.color === item.color && clover.number === item.number && activePlayer === playerId) !== undefined
+      return cloversInHand !== undefined && cloversInHand.find(clover => isSameClover(clover, item) && activePlayer === playerId) !== undefined
     },
     drop: (item: Clover) => {
       return placeCloverMove(playerId, {color:item.color, number:item.number}, -1,-1)
@@ -39,12 +43,28 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
   <>
     <div css={[canDrop && discardZoneStyle, isOver && isOverDiscard]} ref={dropRef}></div>
       {clovers.map((clover, index) => 
-      <Draggable key={index} type={CLOVER} item={clover} canDrag={canDrag} drop={play} >
-        <CloverImage clover={clover} css={[position(index), canDrag && canDragStyle]}/>
+      <Draggable key={index} type={CLOVER} item={clover} canDrag={canDrag} drop={play}>
+        <CloverImage clover={clover} css={[position(index), canDrag && canDragStyle, isCloverAnimated(clover, placeCloverAnimation) && displayPositionOfAnimPlayer !== false && placeCloverTranslation(placeCloverAnimation!.duration, displayPositionOfAnimPlayer, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column)]}/>
       </Draggable> )}
   </>
   )
 }
+
+function isCloverAnimated(clover:Clover, animation:Animation<PlaceClover>|undefined):boolean{
+  return animation !== undefined && isSameClover(clover, animation.move.clover)
+}
+
+const placeCloverTranslation = (duration:number, playerPos:number, row:number, column:number) => css`
+  animation: ${discardCloverKeyframes(playerPos, row, column)} ${duration}s ease-in-out infinite;
+`
+
+const discardCloverKeyframes = (playerPos:number, row:number, column:number) => keyframes`
+from{}
+to{
+  top:${boardTop(playerPos) + 1.7 + (cloverSize+1)*row}em;
+  left:${boardLeft(playerPos) + 1.7 + (cloverSize+1)*column}em;
+}
+`
 
 const discardZoneStyle = css`
   position:absolute;

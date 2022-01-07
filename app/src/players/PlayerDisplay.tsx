@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import Clover from '@gamepark/lucky-number/material/Clover'
+import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
 import PlaceClover, { isPlaceClover } from '@gamepark/lucky-number/moves/PlaceClover'
 import PlayerState from '@gamepark/lucky-number/PlayerState'
 import {Animation, useAnimation, usePlay, usePlayer, usePlayerId} from '@gamepark/react-client'
@@ -18,7 +18,7 @@ type Props = {
   activePlayer:boolean
   nbPlayers:number
   isSetupPhase:boolean
-  cloversDiscarded:number
+  cloversDiscarded:Clover[]
 }
 
 export default function PlayerDisplay({player, index, isMine, activePlayer, nbPlayers, isSetupPhase, cloversDiscarded}: Props) {
@@ -40,7 +40,7 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, nbPl
         item={clover} 
         css={[cloverPosition(displayPosition, cloverIndex), 
               (isCloverAnimated(clover, placeCloverAnimation)) && (placeCloverAnimation!.move.row === -1
-                ? discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded) 
+                ? discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length) 
                 : placeCloverTranslation(placeCloverAnimation!.duration,cloverIndex, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column))]} 
         canDrag={isMine} 
         drop={play}>
@@ -53,10 +53,10 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, nbPl
 }
 
 function isCloverAnimated(clover:Clover, animation:Animation<PlaceClover>|undefined):boolean{
-  return animation !== undefined && animation.move.clover.color === clover.color && animation.move.clover.number === clover.number
+  return animation !== undefined && isSameClover(clover, animation.move.clover)
 }
 
-function getDisplayPosition(playerId:number|undefined, index:number, nbPlayers:number):number{
+export function getDisplayPosition(playerId:number|undefined, index:number, nbPlayers:number):number{
   if (playerId === undefined){
     return nbPlayers === 2 ? index*2 : index
   } else {

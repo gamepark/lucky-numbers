@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
+import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
 import PlaceClover, {isPlaceClover, placeCloverMove} from '@gamepark/lucky-number/moves/PlaceClover'
 import {Garden, isValidPosition} from '@gamepark/lucky-number/PlayerState'
 import {Animation, useAnimation, usePlayerId} from '@gamepark/react-client'
@@ -14,7 +15,7 @@ type Props = {
   idGarden:number
   isMine?: boolean
   isSetupPhase: boolean
-  cloversDiscarded:number
+  cloversDiscarded:Clover[]
   playerPosition:number
 } & HTMLAttributes<HTMLDivElement>
 
@@ -26,7 +27,7 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
       {garden.map((line, row) =>
         line.map((clover, column) =>
           <Fragment key={`${row} ${column}`}>
-            {clover && <CloverImage clover={clover} css={[position(row, column), isCloverAnimated(row, column, placeCloverAnimation) && placeCloverAnimation!.move.playerId === idGarden+1 && discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded, playerPosition)]}/>}
+            {clover && <CloverImage clover={clover} css={[position(row, column), isCloverAnimated(row, column, placeCloverAnimation) && placeCloverAnimation!.move.playerId === idGarden+1 && discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length - (cloversDiscarded.find(clover => isSameClover(clover, placeCloverAnimation!.move.clover)) !== undefined ? 1 : 0), playerPosition)]}/>}
             {isMine && <CloverDropArea canPlaceClover={clover => isValidPosition(garden, clover, row, column, isSetupPhase)}
                                        onDropClover={clover => placeCloverMove(playerId, clover, row, column)}
                                        css={[position(row, column)]}/>}
@@ -43,7 +44,7 @@ const discardCloverTranslation = (duration:number, nbDiscarded:number, playerPos
 
 const discardCloverKeyframes = (nbDiscarded:number, playerPos:number) => keyframes`
 from{}
-70%,to{
+to{
   top:${((playerPos === 1 || playerPos === 2) ? 57 : 8) + Math.floor(nbDiscarded/6)*(cloverSize +1)}em;
   left:${0+(playerPos<2 ? (cloverSize+1)*4 + 19: -cloverSize+1 - 56) + (nbDiscarded%6) * (cloverSize + 1)}em;
 }
