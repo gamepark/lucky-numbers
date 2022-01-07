@@ -17,7 +17,16 @@ export default function GameDisplay({game}: Props) {
   return (
     <Letterbox css={letterBoxStyle} top={0}>
       <div css={givePerspective}>
-        {game.players.map((player, index) => <PlayerDisplay key={index} player={player} index={index} isMine={playerId !== undefined && index === playerId-1} activePlayer={game.activePlayer === index+1 || game.activePlayer === undefined} nbPlayers={game.players.length} isSetupPhase={game.activePlayer === undefined} />)}
+        {game.players.map((player, index) => 
+          <PlayerDisplay key={index} 
+                         player={player} 
+                         index={index} 
+                         isMine={playerId !== undefined && index === playerId-1} 
+                         activePlayer={game.activePlayer === index+1 || game.activePlayer === undefined} 
+                         nbPlayers={game.players.length} 
+                         isSetupPhase={game.activePlayer === undefined}
+                         cloversDiscarded={game.faceUpClovers.length} />
+        )}
         <DrawPile size={game.faceDownClovers} canDraw={playerId !== undefined && game.activePlayer === playerId && game.players[playerId - 1].clovers.length === 0}/>
         <FaceUpClovers 
           clovers={game.faceUpClovers} 

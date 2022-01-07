@@ -18,9 +18,10 @@ type Props = {
   activePlayer:boolean
   nbPlayers:number
   isSetupPhase:boolean
+  cloversDiscarded:number
 }
 
-export default function PlayerDisplay({player, index, isMine, activePlayer, nbPlayers, isSetupPhase}: Props) {
+export default function PlayerDisplay({player, index, isMine, activePlayer, nbPlayers, isSetupPhase, cloversDiscarded}: Props) {
 
   const playerId = usePlayerId<number>()
   const playerInfo = usePlayer(index+1)
@@ -34,8 +35,17 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, nbPl
       <PlayerPanel playerInfo={playerInfo} index={displayPosition} activePlayer={activePlayer} />
       <Board garden={player.garden} isMine={isMine} isSetupPhase={isSetupPhase} css={boardPosition(displayPosition)}/>
       {player.clovers.map((clover, cloverIndex) =>
-        <Draggable key={`${clover.color} ${clover.number}`} type={CLOVER} item={clover} css={cloverPosition(displayPosition, cloverIndex)} canDrag={isMine} drop={play}>
-          <CloverImage clover={clover} css={[isMine && canDragStyle, (isCloverAnimated(clover, placeCloverAnimation)) && placeCloverTranslation(placeCloverAnimation!.duration,cloverIndex, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column)]} />
+        <Draggable key={`${clover.color} ${clover.number}`} 
+        type={CLOVER} 
+        item={clover} 
+        css={[cloverPosition(displayPosition, cloverIndex), 
+              (isCloverAnimated(clover, placeCloverAnimation)) && (placeCloverAnimation!.move.row === -1
+                ? discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded) 
+                : placeCloverTranslation(placeCloverAnimation!.duration,cloverIndex, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column))]} 
+        canDrag={isMine} 
+        drop={play}>
+          <CloverImage clover={clover} 
+                       css={[isMine && canDragStyle]} />
         </Draggable>
       )}
     </>
@@ -53,6 +63,19 @@ function getDisplayPosition(playerId:number|undefined, index:number, nbPlayers:n
     return nbPlayers === 2 ? ((index -playerId+1+nbPlayers)%nbPlayers)*3 : (index -playerId+1+nbPlayers)%nbPlayers
   } 
 }
+
+const discardCloverTranslation = (duration:number, nbDiscarded:number) => css`
+  transition:all 0.2s linear;
+  animation: ${discardCloverKeyframes(nbDiscarded)} ${duration}s ease-in-out forwards;
+`
+
+const discardCloverKeyframes = (nbDiscarded:number) => keyframes`
+from{}
+to{
+  left: ${(nbDiscarded%6) * (cloverSize + 1) + 66}em;
+  top: ${Math.floor(nbDiscarded/6)*(cloverSize +1) + 66}em;
+}
+`
 
 const placeCloverKeyframes = (index:number, playerPosition:number, row:number, column:number) => keyframes`
 from{}
@@ -76,4 +99,5 @@ const cloverPosition = (playerIndex: number, index: number) => css`
   height: ${cloverSize}em;
   left: ${playerCloverLeft(playerIndex)}em;
   top: ${playerCloverTop(playerIndex, index)}em;
+  transform-style:preserve-3d;
 `
