@@ -8,7 +8,7 @@ const luckyNumbersAnimations : Animations<GameView, MoveView, number> = {
     getAnimationDuration(move:MoveView,{action, state, playerId}){
         
         if (move.type === MoveType.DrawClover){
-            return 1.5
+            return 0
         } else if (move.type === MoveType.PlaceClover){
             return action.playerId === playerId ? 0 : 1
         }

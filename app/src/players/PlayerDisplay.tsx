@@ -33,7 +33,7 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, nbPl
   return (
     <>
       <PlayerPanel playerInfo={playerInfo} index={displayPosition} activePlayer={activePlayer} />
-      <Board garden={player.garden} isMine={isMine} isSetupPhase={isSetupPhase} css={boardPosition(displayPosition)}/>
+      <Board garden={player.garden} idGarden={index} isMine={isMine} isSetupPhase={isSetupPhase} cloversDiscarded={cloversDiscarded} playerPosition={displayPosition} css={boardPosition(displayPosition)}/>
       {player.clovers.map((clover, cloverIndex) =>
         <Draggable key={`${clover.color} ${clover.number}`} 
         type={CLOVER} 
