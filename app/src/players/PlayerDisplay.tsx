@@ -16,12 +16,13 @@ type Props = {
   index: number
   isMine?: boolean
   activePlayer:boolean
+  isAnyWinner:boolean
   nbPlayers:number
   isSetupPhase:boolean
   cloversDiscarded:Clover[]
 }
 
-export default function PlayerDisplay({player, index, isMine, activePlayer, nbPlayers, isSetupPhase, cloversDiscarded}: Props) {
+export default function PlayerDisplay({player, index, isMine, activePlayer, isAnyWinner, nbPlayers, isSetupPhase, cloversDiscarded}: Props) {
 
   const playerId = usePlayerId<number>()
   const playerInfo = usePlayer(index+1)
@@ -32,7 +33,7 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, nbPl
 
   return (
     <>
-      <PlayerPanel playerInfo={playerInfo} index={displayPosition} activePlayer={activePlayer} />
+      <PlayerPanel playerInfo={playerInfo} index={displayPosition} activePlayer={activePlayer && !isAnyWinner} />
       <Board garden={player.garden} idGarden={index} isMine={isMine} isSetupPhase={isSetupPhase} cloversDiscarded={cloversDiscarded} playerPosition={displayPosition} css={boardPosition(displayPosition)}/>
       {player.clovers.map((clover, cloverIndex) =>
         <Draggable key={`${clover.color} ${clover.number}`} 

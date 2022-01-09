@@ -56,9 +56,8 @@ const panelPosition = (index:number) => css`
 `
 
 const nameStyle = css`
-    width:7em;
-    font-size: 2.8em;
-    font-family: 'Reggae One', sans-serif;
+    width:7.8em;
+    font-size: 2.5em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

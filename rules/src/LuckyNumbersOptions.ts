@@ -16,13 +16,14 @@ export const LuckyNumbersOptionsSpec: OptionsSpec<LuckyNumbersOptions> = {}
 export function getPlayerName(playerId: number, t: TFunction) {
   switch (playerId) {
     case 1:
-      return t('Elf Player')
+      return t('Mischievous Player')
     case 2:
-      return t('Fairy Player')
+      return t('Waggish Player')
     case 3:
-      return t('Gobelin Player')
+      return t('Boisterous Player')
     case 4:
-      return t('Unicorn Player')
-      default :return ""
+      return t('Rascal Player')
+    default:
+      return t('Error Player')
   }
 }

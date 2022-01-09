@@ -7,6 +7,7 @@ import {Letterbox} from '@gamepark/react-components'
 import CloverImage from './clovers/CloverImage'
 import DrawPile from './clovers/DrawPile'
 import FaceUpClovers from './clovers/FaceUpClovers'
+import { isWinner } from './players/Board'
 import PlayerDisplay from './players/PlayerDisplay'
 import {parabolicAnimation} from './styles'
 
@@ -26,6 +27,7 @@ export default function GameDisplay({game}: Props) {
                          index={index} 
                          isMine={playerId !== undefined && index === playerId-1} 
                          activePlayer={game.activePlayer === index+1 || game.activePlayer === undefined} 
+                         isAnyWinner={game.players.some(p => isWinner(p.garden))}
                          nbPlayers={game.players.length} 
                          isSetupPhase={game.activePlayer === undefined}
                          cloversDiscarded={game.faceUpClovers} />
