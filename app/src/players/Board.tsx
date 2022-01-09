@@ -27,7 +27,10 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
       {garden.map((line, row) =>
         line.map((clover, column) =>
           <Fragment key={`${row} ${column}`}>
-            {clover && <CloverImage clover={clover} css={[position(row, column), isCloverAnimated(row, column, placeCloverAnimation) && placeCloverAnimation!.move.playerId === idGarden+1 && discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length - (cloversDiscarded.find(clover => isSameClover(clover, placeCloverAnimation!.move.clover)) !== undefined ? 1 : 0), playerPosition)]}/>}
+            {clover && <div css={[css`position:absolute;width:${cloverSize}em;height:${cloverSize}em;`, position(row, column),
+                                    isCloverAnimated(row, column, placeCloverAnimation) && placeCloverAnimation!.move.playerId === idGarden+1 && discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length - (cloversDiscarded.find(clover => isSameClover(clover, placeCloverAnimation!.move.clover)) !== undefined ? 1 : 0), playerPosition),
+                                    isWinner(garden) && jumpingAnimation(row+column)
+                                    ]} ><CloverImage clover={clover} /></div>}
             {isMine && <CloverDropArea canPlaceClover={clover => isValidPosition(garden, clover, row, column, isSetupPhase)}
                                        onDropClover={clover => placeCloverMove(playerId, clover, row, column)}
                                        css={[position(row, column)]}/>}
@@ -37,6 +40,29 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
     </div>
   )
 }
+
+export function isWinner(garden:Garden):boolean{
+  return garden.every(row => row.every(clover => clover !== null))
+}
+
+const jumpingKeyframes = keyframes`
+  from,40%{
+    transform:translateZ(0em) rotateZ(0deg);
+  }
+  40%{
+    transform:translateZ(4em) rotateZ(0deg);
+  }
+  60%{
+    transform:translateZ(4em) rotateZ(360deg);
+  }
+  60%,to{
+    transform:translateZ(0em) rotateZ(360deg);
+  }
+`
+
+const jumpingAnimation = (index:number) => css`
+  animation: ${jumpingKeyframes} 1.5s ease-in-out ${index/6}s infinite; 
+`
 
 const discardCloverTranslation = (duration:number, nbDiscarded:number, playerPos:number) => css`
   animation: ${discardCloverKeyframes(nbDiscarded, playerPos)} ${duration}s ease-in-out forwards;
@@ -62,6 +88,7 @@ const style = css`
   background-size: cover;
   border-radius: 3em;
   box-shadow: 0 0 0.3em black, 0 0 0.3em black, 0 0 0.3em black;
+  transform-style:preserve-3d;
 `
 
 const position = (row: number, column: number) => css`
