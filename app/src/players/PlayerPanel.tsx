@@ -43,6 +43,7 @@ const panelBGStyle = (index:number, activePlayer:boolean) => css`
     height:12em;
     border:solid 0.6em ${activePlayer ? "gold" : "green"};
     border-radius:2em;
+    transform-style:preserve-3d;
 `
 
 const panelPosition = (index:number) => css`
@@ -51,6 +52,7 @@ const panelPosition = (index:number) => css`
     top: ${panelTop(index)}em;
     width:34.3em;
     height:6em;
+    transform-style:preserve-3d;
 `
 
 const nameStyle = css`

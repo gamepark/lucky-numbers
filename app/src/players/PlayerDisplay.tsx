@@ -6,7 +6,7 @@ import PlayerState from '@gamepark/lucky-number/PlayerState'
 import {Animation, useAnimation, usePlay, usePlayer, usePlayerId} from '@gamepark/react-client'
 import {Draggable} from '@gamepark/react-components'
 import CloverImage from '../clovers/CloverImage'
-import {boardLeft, boardTop, canDragStyle, cloverSize, playerCloverLeft, playerCloverTop} from '../styles'
+import {boardLeft, boardMargin, boardTop, canDragStyle, cloverSize, parabolicAnimation, parabolicKeyframes, playerCloverLeft, playerCloverTop} from '../styles'
 import Board from './Board'
 import {CLOVER} from './CloverDropArea'
 import PlayerPanel from './PlayerPanel'
@@ -41,7 +41,8 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, nbPl
         css={[cloverPosition(displayPosition, cloverIndex), 
               (isCloverAnimated(clover, placeCloverAnimation)) && (placeCloverAnimation!.move.row === -1
                 ? discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length) 
-                : placeCloverTranslation(placeCloverAnimation!.duration,cloverIndex, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column))]} 
+                : placeCloverTranslation(placeCloverAnimation!.duration, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column))
+              ]} 
         canDrag={isMine} 
         drop={play}>
           <CloverImage clover={clover} 
@@ -64,6 +65,8 @@ export function getDisplayPosition(playerId:number|undefined, index:number, nbPl
   } 
 }
 
+
+
 const discardCloverTranslation = (duration:number, nbDiscarded:number) => css`
   transition:all 0.2s linear;
   animation: ${discardCloverKeyframes(nbDiscarded)} ${duration}s ease-in-out forwards;
@@ -77,20 +80,22 @@ to{
 }
 `
 
-const placeCloverKeyframes = (index:number, playerPosition:number, row:number, column:number) => keyframes`
+const placeCloverKeyframes = (playerPosition:number, row:number, column:number) => keyframes`
 from{}
 to{
-  transform:translateX(${(playerPosition<2 ? -3.18 : 1)*11 + column*(cloverSize+1)}em) translateY(${(playerPosition === 1 || playerPosition === 2 ? (-3+index) : (-index))*(cloverSize+1) + row*(cloverSize+1)}em);
+  left:${boardLeft(playerPosition) + boardMargin + (cloverSize+1)*column}em;
+  top:${boardTop(playerPosition) + boardMargin + (cloverSize+1)*row}em;
 }
 `
 
-const placeCloverTranslation = (duration:number, index:number, playerPosition:number, row:number, column:number) => css`
-  animation: ${placeCloverKeyframes(index, playerPosition, row, column)} ${duration}s ease-in-out forwards;
+const placeCloverTranslation = (duration:number, playerPosition:number, row:number, column:number) => css`
+  animation: ${placeCloverKeyframes(playerPosition, row, column)} ${duration}s ease-in-out forwards;
 `
 
 const boardPosition = (index: number) => css`
   left: ${boardLeft(index)}em;
   top: ${boardTop(index)}em;
+  transform-style:preserve-3d;
 `
 
 const cloverPosition = (playerIndex: number, index: number) => css`

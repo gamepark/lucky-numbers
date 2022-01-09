@@ -1,11 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
 import GameView from '@gamepark/lucky-number/GameView'
+import CloverColor from '@gamepark/lucky-number/material/CloverColor'
 import {usePlayerId} from '@gamepark/react-client'
 import {Letterbox} from '@gamepark/react-components'
+import CloverImage from './clovers/CloverImage'
 import DrawPile from './clovers/DrawPile'
 import FaceUpClovers from './clovers/FaceUpClovers'
 import PlayerDisplay from './players/PlayerDisplay'
+import {parabolicAnimation} from './styles'
 
 type Props = {
   game: GameView
@@ -27,7 +30,12 @@ export default function GameDisplay({game}: Props) {
                          isSetupPhase={game.activePlayer === undefined}
                          cloversDiscarded={game.faceUpClovers} />
         )}
-        <DrawPile size={game.faceDownClovers} canDraw={playerId !== undefined && game.activePlayer === playerId && game.players[playerId - 1].clovers.length === 0}/>
+        <DrawPile 
+          size={game.faceDownClovers} 
+          canDraw={playerId !== undefined && game.activePlayer === playerId && game.players[playerId - 1].clovers.length === 0}
+          activePlayer={game.activePlayer}
+          nbPlayers={game.players.length}
+          />
         <FaceUpClovers 
           clovers={game.faceUpClovers} 
           canDrag={playerId !== undefined && game.activePlayer === playerId && game.players[playerId-1].clovers.length === 0} 
@@ -39,6 +47,15 @@ export default function GameDisplay({game}: Props) {
     </Letterbox>
   )
 }
+
+const testTranslation = css`
+  width:5em;
+  height:5em;
+  position:absolute;
+  top:30em;
+  left:30em;
+  transform:translateZ(0em);
+`
 
 const fadeIn = keyframes`
   from, 50% {
@@ -58,5 +75,7 @@ const letterBoxStyle = css`
 `
 
 const givePerspective = css`
+  position:relative;
   transform: rotateX(10deg);
+  transform-style:preserve-3d;
 `

@@ -19,6 +19,7 @@ export const style = css`
   width: ${cloverSize}em;
   height: ${cloverSize}em;
   filter: drop-shadow(0 0 0.1em black) drop-shadow(0 0 0.1em black);
+  transform-style: preserve-3d;
 `
 
 const clovers = {

@@ -1,27 +1,32 @@
 /** @jsxImportSource @emotion/react */
-import {css} from '@emotion/react'
-import DrawClover, {drawCloverMove, DrawView, isDrawClover} from '@gamepark/lucky-number/moves/DrawClover'
-import PlaceClover from '@gamepark/lucky-number/moves/PlaceClover'
+import {css, keyframes} from '@emotion/react'
+import CloverColor from '@gamepark/lucky-number/material/CloverColor'
+import {drawCloverMove, DrawView, isDrawClover} from '@gamepark/lucky-number/moves/DrawClover'
 import {Animation, useAnimation, usePlay, usePlayerId} from '@gamepark/react-client'
 import {useEffect, useState} from 'react'
-import {canDragStyle, cloverSize, headerHeight} from '../styles'
+import { getDisplayPosition } from '../players/PlayerDisplay'
+import {canDragStyle, cloverSize, headerHeight, opacityKeyframe, playerCloverLeft, playerCloverTop} from '../styles'
 import CloverImage from './CloverImage'
 
 type Props = {
   size: number
   canDraw: boolean
+  activePlayer:number|undefined
+  nbPlayers:number
 }
 
-export default function DrawPile({size, canDraw}: Props) {
+export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props) {
   const play = usePlay()
   const playerId = usePlayerId()
   const [positions, setPositions] = useState<(CssPosition)[]>([...new Array(size)].map(() => ({radius: Math.random(), direction: Math.random(), rotation: Math.random()})))
   const [indexDrew, setIndexDrew] = useState<number>(-1)
+  const [positionDrew, setPositionDrew] = useState<CssPosition>()
   const drawCloverAnimation = useAnimation<DrawView>(animation => isDrawClover(animation.move))
 
   function playDrawMove(index:number){
     play(drawCloverMove, {delayed: true})
     setIndexDrew(index)
+    setPositionDrew(positions[index])
     const newArray = [...positions]
     newArray[index] = {direction:null,radius:null,rotation:null}
     setPositions(newArray)
@@ -30,7 +35,9 @@ export default function DrawPile({size, canDraw}: Props) {
   useEffect(() => {   // We need to remove a clover when other players draw one, which is obviously not guaranted by onClick event
     if(drawCloverAnimation !== undefined && drawCloverAnimation.action.playerId !== playerId){
       const newArray = [...positions]
-      newArray[newArray.filter(isPositionned).length-1] = {direction:null,radius:null,rotation:null}
+      setIndexDrew(newArray.filter(isPositionned).length-1)
+      setPositionDrew(positions[newArray.filter(isPositionned).length-1])
+      newArray[indexDrew] = {direction:null,radius:null,rotation:null}
       setPositions(newArray)
     }
   },[drawCloverAnimation?.duration])
@@ -39,18 +46,25 @@ export default function DrawPile({size, canDraw}: Props) {
   
   return <>
     {positions.map((cssPos, index) =>
-      isPositionned(cssPos) && <CloverImage key={index} onClick={canDraw ? () => playDrawMove(index) : undefined}
-                   css={[style(positions[index]), canDraw && canDragStyle, isCloverDrew(index, drawCloverAnimation, indexDrew)]}/>
+      isPositionned(cssPos) && 
+      <div css={[css`position:absolute; height:${cloverSize}em; width:${cloverSize}em`, style(positions[index]), canDraw && drawCloverAnimation === undefined && feedBackAnimation(positions[index].rotation!)]} >
+        <CloverImage key={index} onClick={canDraw ? () => playDrawMove(index) : undefined}
+                     css={[css`position:absolute; width:100%;height:100%; top:0;left:0;`]} />
+      </div>
     )}
+
+    {drawCloverAnimation !== undefined && positionDrew !== undefined && activePlayer !== undefined &&
+      <div css={[cardWrapper, cloverDrewTranslation(drawCloverAnimation.duration, positionDrew, getDisplayPosition(playerId, activePlayer-1, nbPlayers))]}>
+        <div css={[css`transform:rotateY(0deg);`, cloverFace]} > <CloverImage  /> </div>
+        <div css={[css`transform:rotateY(180deg);`, cloverFace]} > <CloverImage  clover={drawCloverAnimation.move.clover}  /> </div>
+      </div>
+    }  
+
   </>
 }
 
 function isPositionned({direction, radius, rotation}: CssPosition):boolean{
   return direction !== null && radius !== null && rotation !== null
-}
-
-function isCloverDrew(index:number, animation:Animation<DrawView>|undefined, indexDrew:number):boolean{
-  return animation !== undefined && indexDrew === index
 }
 
 type CssPosition = {
@@ -59,8 +73,63 @@ type CssPosition = {
   rotation: number|null
 } 
 
+const cardWrapper = css`
+  position:absolute;
+  transform-style:preserve-3d;
+  width:${cloverSize}em;
+  height:${cloverSize}em; 
+`
+
+const cloverFace = css`
+  position:absolute;
+  top:0;left:0;width:100%;height:100%;
+  transform-style: preserve-3d;
+  backface-visibility:hidden;
+`
+
+const feedBackKeyframes = (rotation:number) => keyframes`
+from{transform:translateX(0em) rotateZ(${rotation! * 90}deg) ;}
+50%{transform:translateX(0.5em) rotateZ(${-rotation! * 90}deg) ;}
+to{transform:translateX(-0.5em) rotateZ(${0}deg) ;}
+`
+
+const feedBackAnimation =(rotation:number) => css`
+transition:transform 0.4s ease-in-out;
+animation: ${opacityKeyframe} 1s ease-in-out alternate infinite;
+&:hover{
+  cursor:pointer;
+  z-index:10;
+  transform:translateZ(0em) rotateZ(0deg);
+}
+`
+
+const cloverDrewTranslation = (duration:number, cssPos:CssPosition, posPlayer:number) => css`
+  z-index:10;
+  animation: ${cloverDrewKeyframes(cssPos, posPlayer)} ${duration}s ease-in-out forwards;
+  transform-style:preserve-3d;
+`
+
+const cloverDrewKeyframes = ({direction, radius, rotation}:CssPosition, posPlayer:number) => keyframes`
+from{
+  left: ${Math.cos(direction! * 2 * Math.PI) * radius! * 24 + (16 / 9 * 100 - cloverSize) / 2}em;
+  top: ${Math.sin(direction! * 2 * Math.PI) * radius! * 24 + 25 + headerHeight + 3}em;
+  transform: rotateZ(${0}deg) rotateY(0deg) translateZ(0em) scale(1);
+}
+30%,60%{
+  left: ${Math.cos(direction! * 2 * Math.PI) * radius! * 24 + (16 / 9 * 100 - cloverSize) / 2}em;
+  top: ${Math.sin(direction! * 2 * Math.PI) * radius! * 24 + 25 + headerHeight + 3}em;
+  transform:rotateZ(${360}deg) rotateY(180deg) translateZ(-10em) scale(1.5) ;
+}
+to{
+  left:${playerCloverLeft(posPlayer)}em;
+  top:${playerCloverTop(posPlayer, 0)}em;
+  transform:rotateZ(${0}deg) rotateY(-180deg) translateZ(0em) scale(1);
+}
+`
+
 const style = ({direction, radius, rotation}: CssPosition) => css`
   left: ${Math.cos(direction! * 2 * Math.PI) * radius! * 24 + (16 / 9 * 100 - cloverSize) / 2}em;
   top: ${Math.sin(direction! * 2 * Math.PI) * radius! * 24 + 25 + headerHeight + 3}em;
-  transform: rotate(${rotation! * 90}deg);
+  transform: rotateZ(${rotation! * 90}deg);
+  transform-style:preserve-3d;
 `

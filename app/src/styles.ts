@@ -2,6 +2,7 @@ import { css, keyframes } from "@emotion/react"
 
 export const headerHeight = 7
 export const cloverSize = 7
+export const boardMargin = 1.7
 
 export const boardTop = (index: number) => (index === 0 || index === 3) ? 58 : 9
 export const boardLeft = (index: number) => index < 2 ? 15 : 128
@@ -22,7 +23,7 @@ export const toAbsolute = css`
   position: absolute;
 `
 
-const opacityKeyframe = keyframes`
+export const opacityKeyframe = keyframes`
   from {
     filter: drop-shadow(0 0 0.1em white) drop-shadow(0 0 0.1em white);
   }
@@ -36,7 +37,15 @@ export const canDragStyle = css`
   animation: ${opacityKeyframe} 1s ease-in-out alternate infinite;
 
   &:hover:after {
-    animation: none;
     filter: drop-shadow(0 0 0.3em white) drop-shadow(0 0 0.3em white);
   }
+`
+
+export const parabolicAnimation = (duration:number) => css`
+animation: ${parabolicKeyframes} ${duration}s infinite cubic-bezier(0,3.75,1,3.75);
+`
+
+export const parabolicKeyframes = keyframes`
+from{transform:translateZ(0em);}
+to{transform:translateZ(5em);}
 `

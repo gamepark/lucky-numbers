@@ -7,7 +7,7 @@ import { Draggable } from '@gamepark/react-components'
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 import { getDisplayPosition } from '../players/PlayerDisplay'
 import { CLOVER } from '../players/CloverDropArea'
-import {canDragStyle, cloverSize, boardTop, boardLeft} from '../styles'
+import {canDragStyle, cloverSize, boardTop, boardLeft, boardMargin} from '../styles'
 import CloverImage from './CloverImage'
 
 type Props = {
@@ -82,8 +82,8 @@ const placeCloverTranslation = (duration:number, playerPos:number, row:number, c
 const discardCloverKeyframes = (playerPos:number, row:number, column:number) => keyframes`
 from{}
 to{
-  top:${boardTop(playerPos) + 1.7 + (cloverSize+1)*row}em;
-  left:${boardLeft(playerPos) + 1.7 + (cloverSize+1)*column}em;
+  top:${boardTop(playerPos) + boardMargin + (cloverSize+1)*row}em;
+  left:${boardLeft(playerPos) + boardMargin + (cloverSize+1)*column}em;
 }
 `
 
