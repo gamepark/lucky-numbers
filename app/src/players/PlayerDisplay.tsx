@@ -84,8 +84,8 @@ to{
 const placeCloverKeyframes = (playerPosition:number, row:number, column:number) => keyframes`
 from{}
 to{
-  left:${boardLeft(playerPosition) + boardMargin + (cloverSize+1)*column}em;
-  top:${boardTop(playerPosition) + boardMargin + (cloverSize+1)*row}em;
+  left:${boardLeft(playerPosition) + boardMargin + (cloverSize+1)*row}em;
+  top:${boardTop(playerPosition) + boardMargin + (cloverSize+1)*column}em;
 }
 `
 

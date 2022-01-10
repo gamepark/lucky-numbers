@@ -9,6 +9,7 @@ import { getDisplayPosition } from '../players/PlayerDisplay'
 import { CLOVER } from '../players/CloverDropArea'
 import {canDragStyle, cloverSize, boardTop, boardLeft, boardMargin} from '../styles'
 import CloverImage from './CloverImage'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   clovers: Clover[]
@@ -19,6 +20,7 @@ type Props = {
 }
 
 export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePlayer, nbPlayers}: Props) {
+  const {t} = useTranslation()
   const play = usePlay()
   const playerId = usePlayerId()
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && clovers.find(clover => isSameClover(clover, animation.move.clover)) !== undefined)
@@ -41,7 +43,7 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
   })
   return (
   <>
-    <div css={[canDrop && discardZoneStyle, isOver && isOverDiscard]} ref={dropRef}></div>
+    <div css={[discardZoneStyle, canDrop && canDropDiscard, isOver && isOverDiscard]} ref={dropRef}>{canDrop && <span css={spanStyle}>{t("Discard here")}</span>}</div>
       {clovers.map((clover, index) => 
       <Draggable key={index} type={CLOVER} item={clover} canDrag={canDrag} drop={play}>
         <CloverImage clover={clover} 
@@ -62,6 +64,14 @@ function isCloverSorted(index:number, discard:Clover[], animation:Animation<Plac
 function isCloverAnimated(clover:Clover, animation:Animation<PlaceClover>|undefined):boolean{
   return animation !== undefined && isSameClover(clover, animation.move.clover)
 }
+
+const spanStyle = css`
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:4em;
+`
 
 const sortClovers = (duration:number, index:number) => css`
   animation: ${sortCloverKeyframes(index)} ${duration}s ease-in-out forwards;
@@ -87,19 +97,30 @@ to{
 }
 `
 
+const fadeInKF = keyframes`
+from{opacity:0;}
+to{opacity:1;}
+`
+
+const canDropDiscard = css`
+  opacity:1;
+  transition:opacity 0.3s linear, background-color 0.3s linear;
+`
+
 const discardZoneStyle = css`
+  opacity:0;
   position:absolute;
   top:65em;
   left:64em;
   width:52em;
   height:25em;
-  border:solid 0.4em red;
+  border:solid 0.4em rgb(109,0,0);
   border-radius:5em;
-  background-color:rgba(225,0,0,0.4);
+  background-color:rgba(255,0,0,0.4);
 `
 
 const isOverDiscard = css`
-  background-color:rgba(225,0,0,0.7);
+  background-color:rgba(255,0,0,0.6);
 `
 
 const position = (index: number) => css`
