@@ -29,7 +29,8 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
           <Fragment key={`${row} ${column}`}>
             {clover && <div css={[css`position:absolute;width:${cloverSize}em;height:${cloverSize}em;`, position(row, column),
                                     isCloverAnimated(row, column, placeCloverAnimation) && placeCloverAnimation!.move.playerId === idGarden+1 && discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length - (cloversDiscarded.find(clover => isSameClover(clover, placeCloverAnimation!.move.clover)) !== undefined ? 1 : 0), playerPosition),
-                                    isWinner(garden) && jumpingAnimation(row+column)
+                                    isWinner(garden) && jumpingAnimation(row+column),
+                                    isWinner(garden) && shinyEffect
                                     ]} ><CloverImage clover={clover} /></div>}
             {isMine && <CloverDropArea canPlaceClover={clover => isValidPosition(garden, clover, row, column, isSetupPhase)}
                                        onDropClover={clover => placeCloverMove(playerId, clover, row, column)}
@@ -61,7 +62,7 @@ const jumpingKeyframes = keyframes`
 `
 
 const jumpingAnimation = (index:number) => css`
-  animation: ${jumpingKeyframes} 1.5s ease-in-out ${index/6}s infinite; 
+  animation: ${jumpingKeyframes} 1.5s ease-in-out ${index/8}s infinite; 
 `
 
 const discardCloverTranslation = (duration:number, nbDiscarded:number, playerPos:number) => css`
@@ -94,4 +95,34 @@ const style = css`
 const position = (row: number, column: number) => css`
   left: ${(cloverSize + 1) * row + 1.7}em;
   top: ${(cloverSize + 1) * column + 1.7}em;
+`
+
+const shinyEffect = css`
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-repeat: no-repeat;
+    opacity: .5;
+    mix-blend-mode: color-dodge;
+    transition: all .33s ease;
+    border-radius:200px;
+    clip-path: polygon(36% 1%, 43% 13%, 57% 13%, 62% 2%, 100% 0, 99% 38%, 87% 43%, 87% 56%, 99% 63%, 100% 100%, 62% 99%, 57% 85%, 43% 85%, 39% 99%, 0 100%, 3% 61%, 14% 56%, 14% 42%, 2% 38%, 0% 0%);
+  }
+
+  &:after {
+    opacity: 1;
+    background-image: url(${Images.shinyBG}), linear-gradient(125deg, #ff008450 15%, #fca40040 30%, #ffff0030 40%, #00ff8a20 60%, #00cfff40 70%, #cc4cfa50 85%) ;
+    background-position: 50% 50%;
+    background-size: 800%,100%;
+    background-blend-mode: overlay;
+    z-index: 2;
+    filter: brightness(1) contrast(1);
+    transition: all .33s ease;
+    mix-blend-mode: color-dodge;
+  }  
 `
