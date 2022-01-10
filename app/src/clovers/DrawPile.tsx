@@ -52,7 +52,7 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
                  style(positions[index]),
                  drawCloverAnimation !== undefined && activePlayer !== undefined && index === indexDrew && cloverDrewTranslation(drawCloverAnimation.duration, cssPos, getDisplayPosition(playerId, activePlayer-1, nbPlayers), playerId === activePlayer-1),
                  canDraw && drawCloverAnimation === undefined && feedBackAnimation(positions[index].rotation!)]}>
-        <div css={[css`transform:rotateY(0deg);`, cloverFace]} > <CloverImage /> </div>
+        <div css={[css`transform:rotateY(0deg);`, cloverFace, canDraw && drawCloverAnimation === undefined && canDragStyle]} > <CloverImage /> </div>
         <div css={[css`transform:rotateY(180deg);`, cloverFace]} > <CloverImage  clover={drawCloverAnimation !== undefined ? drawCloverAnimation.move.clover : undefined}  /> </div>
       </div>
     )}
@@ -92,7 +92,6 @@ to{transform:translateX(-0.5em) rotateZ(${0}deg) ;}
 
 const feedBackAnimation =(rotation:number) => css`
 transition:transform 0.4s ease-in-out;
-animation: ${opacityKeyframe} 1s ease-in-out alternate infinite;
 &:hover{
   cursor:pointer;
   z-index:10;
@@ -128,5 +127,4 @@ const style = ({direction, radius, rotation}: CssPosition) => css`
   left: ${Math.cos(direction! * 2 * Math.PI) * (radius!+0.1) * 24 + (16 / 9 * 100 - cloverSize) / 2}em;
   top: ${Math.sin(direction! * 2 * Math.PI) * (radius!+0.1) * 24 + 25 + headerHeight + 3}em;
   transform: rotateZ(${rotation! * 360}deg);
-  transform-style:preserve-3d;
 `
