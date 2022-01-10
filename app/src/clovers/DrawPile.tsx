@@ -2,6 +2,7 @@
 import {css, keyframes} from '@emotion/react'
 import CloverColor from '@gamepark/lucky-number/material/CloverColor'
 import {drawCloverMove, DrawView, isDrawClover} from '@gamepark/lucky-number/moves/DrawClover'
+import { Garden } from '@gamepark/lucky-number/PlayerState'
 import {Animation, useAnimation, usePlay, usePlayerId} from '@gamepark/react-client'
 import {useEffect, useState} from 'react'
 import { getDisplayPosition } from '../players/PlayerDisplay'
