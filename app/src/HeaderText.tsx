@@ -22,7 +22,7 @@ export default function HeaderText({loading, game}: Props) {
 }
 
 function getPseudo(player: number, players: PlayerInfo<number>[], t: TFunction): string {
-  if (players[player].name === undefined) {
+  if (players[player-1].name === undefined) {
     return getPlayerName(player, t) 
   } else {
       return players.find(p => p.id === player, t)!.name!
@@ -52,18 +52,18 @@ function HeaderOnGoingGameText({game}:{game:GameView}){
       if(game.players.filter(p => p.clovers.length !== 0).length > 1){
         return <> {t("setup.phase.players.place.clovers")} </>
       } else {
-        return <> {t("setup.phase.player.place.clovers", {player:getPseudo(game.players.findIndex(p => p.clovers.length !== 0), players, t)})} </>
+        return <> {t("setup.phase.player.place.clovers", {player:getPseudo(game.players.findIndex(p => p.clovers.length !== 0)+1, players, t)})} </>
       }
     }
   } else {
     if(game.players[game.activePlayer-1].clovers.length === 0){
       return game.activePlayer === playerId 
         ? <> {t("you.choose.clover")} </>
-        : <> {t("player.choose.clover", {player:getPseudo(game.activePlayer-1, players, t)})} </>
+        : <> {t("player.choose.clover", {player:getPseudo(game.activePlayer, players, t)})} </>
     } else {
       return game.activePlayer === playerId 
         ? <> {t("you.place.clover")} </>
-        : <> {t("player.place.clover", {player:getPseudo(game.activePlayer-1, players, t)})} </>
+        : <> {t("player.place.clover", {player:getPseudo(game.activePlayer, players, t)})} </>
     }
   }
 }

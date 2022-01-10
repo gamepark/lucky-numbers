@@ -82,8 +82,8 @@ const placeCloverTranslation = (duration:number, playerPos:number, row:number, c
 const discardCloverKeyframes = (playerPos:number, row:number, column:number) => keyframes`
 from{}
 to{
-  top:${boardTop(playerPos) + boardMargin + (cloverSize+1)*row}em;
-  left:${boardLeft(playerPos) + boardMargin + (cloverSize+1)*column}em;
+  top:${boardTop(playerPos) + boardMargin + (cloverSize+1)*column}em;
+  left:${boardLeft(playerPos) + boardMargin + (cloverSize+1)*row}em;
 }
 `
 
