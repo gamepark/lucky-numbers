@@ -308,7 +308,309 @@ const tutorialDescription: TutorialStepDescription[][] = [
             text: 'tuto.welcome',
             boxTop: 50,
             boxLeft: 50,
-            boxWidth: 70
+            boxWidth: 50
+        },
+        {
+            title: (t: TFunction) => t('title.your.board'),
+            text: 'tuto.your.board',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.your.opponent'),
+            text: 'tuto.your.opponent',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.the.goal'),
+            text: 'tuto.the.goal',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+        {
+            title: (t: TFunction) => t('title.setup.phase.1'),
+            text: 'tuto.setup.phase.1',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+        {
+            title: (t: TFunction) => t('title.setup.phase.2'),
+            text: 'tuto.setup.phase.2',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.placement.rule'),
+            text: 'tuto.placement.rule',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+        {
+            title: (t: TFunction) => t('title.your.first.clover.1'),
+            text: 'tuto.your.first.clover.1',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.your.first.clover.2'),
+            text: 'tuto.your.first.clover.2',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        }
+        
+    ],[
+        {
+            title: (t: TFunction) => t('title.place.second.clover'),
+            text: 'tuto.place.second.clover',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        }
+    ],[
+        {
+            title: (t: TFunction) => t('title.place.third.clover'),
+            text: 'tuto.place.third.clover',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        }
+    ],[
+        {
+            title: (t: TFunction) => t('title.last.clover.is.bad.1'),
+            text: 'tuto.last.clover.is.bad.1',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.last.clover.is.bad.2'),
+            text: 'tuto.last.clover.is.bad.2',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.place.last.clover'),
+            text: 'tuto.place.last.clover',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        }
+    ],[
+        {
+            title: (t: TFunction) => t('title.watch.opponent.setup'),
+            text: 'tuto.watch.opponent.setup',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        }, 
+        {
+            title: (t: TFunction) => t('title.draw.clover.rule'),
+            text: 'tuto.draw.clover.rule',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+        {
+            title: (t: TFunction) => t('title.draw.clover'),
+            text: 'tuto.draw.clover',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+    ],[
+        {
+            title: (t: TFunction) => t('title.place.fifth.clover.1'),
+            text: 'tuto.place.fifth.clover.1',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.place.fifth.clover.2'),
+            text: 'tuto.place.fifth.clover.2',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+    ],[
+        {
+            title: (t: TFunction) => t('title.place.discarded.clover.rule'),
+            text: 'tuto.place.discarded.clover.rule',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.place.sixth.clover.1'),
+            text: 'tuto.place.sixth.clover.1',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.place.sixth.clover.2'),
+            text: 'tuto.place.sixth.clover.2',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+        
+    ],[
+        {
+            title: (t: TFunction) => t('title.draw.again.1'),
+            text: 'tuto.draw.again.1',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+    ],
+    [
+        {
+            title: (t: TFunction) => t('title.place.and.discard.rule'),
+            text: 'tuto.place.and.discard.rule',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+        {
+            title: (t: TFunction) => t('title.place.and.discard'),
+            text: 'tuto.place.and.discard',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+    ],[
+        {
+            title: (t: TFunction) => t('title.draw.again.1'),
+            text: 'tuto.draw.again.1',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        }
+    ],[
+        {
+            title: (t: TFunction) => t('title.discard.rule'),
+            text: 'tuto.discard.rule',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+        {
+            title: (t: TFunction) => t('title.discard.clover'),
+            text: 'tuto.discard.clover',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+    ],[
+        {
+            title: (t: TFunction) => t('title.reminder.goal'),
+            text: 'tuto.reminder.goal',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+        {
+            title: (t: TFunction) => t('title.end.of.tutorial'),
+            text: 'tuto.end.of.tutorial',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
         },
     ]
       
