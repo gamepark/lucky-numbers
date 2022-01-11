@@ -3,12 +3,13 @@ import {css, keyframes} from '@emotion/react'
 import GameView from '@gamepark/lucky-number/GameView'
 import CloverColor from '@gamepark/lucky-number/material/CloverColor'
 import {usePlayerId} from '@gamepark/react-client'
-import {Letterbox} from '@gamepark/react-components'
+import {Letterbox, Picture} from '@gamepark/react-components'
 import CloverImage from './clovers/CloverImage'
 import DrawPile from './clovers/DrawPile'
 import FaceUpClovers from './clovers/FaceUpClovers'
+import Images from './Images'
 import { isWinner } from './players/Board'
-import PlayerDisplay from './players/PlayerDisplay'
+import PlayerDisplay, { getDisplayPosition } from './players/PlayerDisplay'
 import {parabolicAnimation} from './styles'
 
 type Props = {
@@ -45,9 +46,33 @@ export default function GameDisplay({game}: Props) {
           cloversInHand={playerId === undefined ? undefined : game.players[playerId-1].clovers}
           nbPlayers={game.players.length}
           />
+
+        {game.activePlayer !== undefined && <Picture src={Images.ladybug} css={[ladybugStyle(getDisplayPosition(playerId, game.activePlayer-1, game.players.length)) ]} />}
       </div>
     </Letterbox>
   )
+}
+
+const ladybugStyle = (activePlayer:number) => css`
+position:absolute;
+filter: drop-shadow(0 0 0.3em black);
+left:87em;
+top:45.4em;
+height:4.5em;
+transition:transform 1s ease-in-out;
+
+transform:rotateZ(${getLadyBugRotation(activePlayer)}deg) translateX(-73em);
+`
+
+function getLadyBugRotation(index:number):number{
+  console.log(index)
+  switch(index){
+    case 0:return -4
+    case 1:return 4
+    case 2:return 180
+    case 3:return 185
+    default:return 0
+  }
 }
 
 const testTranslation = css`

@@ -81,6 +81,7 @@ import cloverYellow8 from './clovers/images/clover-yellow-8.png'
 import cloverYellow9 from './clovers/images/clover-yellow-9.png'
 import board from './players/board.jpg'
 import shinyBG from './clovers/images/sparkles.gif'
+import ladybug from './players/Ladybug.png';
 
 const Images = {
   board, cloverBack,
@@ -94,7 +95,8 @@ const Images = {
   cloverPurple20,
   cloverGreen1, cloverGreen2, cloverGreen3, cloverGreen4, cloverGreen5, cloverGreen6, cloverGreen7, cloverGreen8, cloverGreen9, cloverGreen10,
   cloverGreen11, cloverGreen12, cloverGreen13, cloverGreen14, cloverGreen15, cloverGreen16, cloverGreen17, cloverGreen18, cloverGreen19, cloverGreen20,
-  shinyBG
+  shinyBG,
+  ladybug
 }
 
 export default Images
