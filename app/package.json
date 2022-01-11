@@ -7,8 +7,8 @@
   "license": "ISC",
   "dependencies": {
     "@emotion/react": "^11.4.1",
-    "@gamepark/react-client": "~5.8.3",
-    "@gamepark/react-components": "~5.8.6",
+    "@gamepark/react-client": "~5.8.10",
+    "@gamepark/react-components": "~5.8.11",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -34,6 +34,7 @@
     "react-i18next": "^11.11.4",
     "react-redux": "^7.2.4",
     "react-scripts": "4.0.3",
+    "react-use": "^17.3.1",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
