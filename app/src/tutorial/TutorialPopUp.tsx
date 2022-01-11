@@ -394,8 +394,20 @@ const tutorialDescription: TutorialStepDescription[][] = [
         
     ],[
         {
-            title: (t: TFunction) => t('title.place.second.clover'),
-            text: 'tuto.place.second.clover',
+            title: (t: TFunction) => t('title.place.second.clover.1'),
+            text: 'tuto.place.second.clover.1',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.place.second.clover.2'),
+            text: 'tuto.place.second.clover.2',
             boxTop: 50,
             boxLeft: 50,
             boxWidth: 50,
@@ -512,6 +524,18 @@ const tutorialDescription: TutorialStepDescription[][] = [
                 left: 50
             }
         },
+        {
+            title: (t: TFunction) => t('title.place.fifth.clover.3'),
+            text: 'tuto.place.fifth.clover.3',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 50,
+                left: 50
+            }
+        },
     ],[
         {
             title: (t: TFunction) => t('title.place.discarded.clover.rule'),
@@ -576,8 +600,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
         },
     ],[
         {
-            title: (t: TFunction) => t('title.draw.again.1'),
-            text: 'tuto.draw.again.1',
+            title: (t: TFunction) => t('title.draw.again.2'),
+            text: 'tuto.draw.again.2',
             boxTop: 50,
             boxLeft: 50,
             boxWidth: 50,
@@ -619,9 +643,9 @@ const tutorialDescription: TutorialStepDescription[][] = [
 const tutorialEndGame = {
     title: (t: TFunction) => t('Congratulations'),
     text: 'tuto.complete',
-    boxTop: 80,
+    boxTop: 20,
     boxLeft: 50,
-    boxWidth: 90
+    boxWidth: 50
 }
 
 
