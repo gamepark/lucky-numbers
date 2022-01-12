@@ -67,7 +67,6 @@ transform:rotateZ(${getLadyBugRotation(activePlayer)}deg) translateX(-73em);
 `
 
 function getLadyBugRotation(index:number):number{
-  console.log(index)
   switch(index){
     case 0:return -4
     case 1:return 4

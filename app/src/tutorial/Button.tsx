@@ -11,12 +11,11 @@ const Button : FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({children, ...prop
 const style = css`
 cursor:pointer;
 --color: #000000;
---background-color: #83b440;
---border-color: darken(#83b440, 7.5%);
+--background-color: #148e00;
+--border-color: darken(#148e00, 7.5%);
 padding: 0.2em 0.5em;
 border-radius: 0.5em;
 color: var(--color);
-font-family: inherit;
 background-color: var(--background-color);
 border: solid 0.1em var(--border-color);
 outline: none;
@@ -60,6 +59,7 @@ const spanBorder = css`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-family: 'Righteous', cursive;
 `
 
 export default Button
