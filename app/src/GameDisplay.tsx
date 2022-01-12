@@ -22,7 +22,7 @@ export default function GameDisplay({game}: Props) {
   const [ladybugPosition, setLadybugPosition] = useState<number>(0)
   useEffect(() => {
     if(game.activePlayer !== undefined)
-    setLadybugPosition(ladybugPosition + getLadyBugIncrement(getDisplayPosition(playerId, game.activePlayer-1 , game.players.length), ladybugPosition))
+    setLadybugPosition(ladybugPosition + getLadyBugIncrement(getDisplayPosition(playerId, game.activePlayer-1 , game.players.length), ladybugPosition, game.players.length))
   },[game.activePlayer])
   return (
     <Letterbox css={letterBoxStyle} top={0}>
@@ -72,7 +72,7 @@ transition:transform 3s ease-in-out;
 transform:rotateZ(${ladyBug}deg) translateX(-73em);
 `
 
-function getLadyBugIncrement(index:number, ladyBug:number):number{
+function getLadyBugIncrement(index:number, ladyBug:number, nbPlayers:number):number{
   if(ladyBug === 0){
     switch(index){
       case 0:return -4
@@ -83,10 +83,10 @@ function getLadyBugIncrement(index:number, ladyBug:number):number{
     }
   } else {
     switch(index){
-      case 0:return 171
+      case 0:return 172
       case 1:return 8
       case 2:return 176
-      case 3:return 5
+      case 3:return nbPlayers === 2 ? 188 : 5
       default:return 0
     }
   }

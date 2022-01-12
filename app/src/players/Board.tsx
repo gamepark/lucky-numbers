@@ -95,10 +95,14 @@ const style = css`
 const position = (row: number, column: number) => css`
   left: ${(cloverSize + 1) * row + 1.7}em;
   top: ${(cloverSize + 1) * column + 1.7}em;
+  &:after {
+    content: "";
+    opacity:0;
+    transition: opacity 1s ease-in-out;
+  }
 `
 
 const shinyEffect = css`
-  &:before,
   &:after {
     content: "";
     position: absolute;
@@ -109,7 +113,6 @@ const shinyEffect = css`
     background-repeat: no-repeat;
     opacity: .5;
     mix-blend-mode: color-dodge;
-    transition: all .33s ease;
     border-radius:200px;
     clip-path: polygon(36% 1%, 43% 13%, 57% 13%, 62% 2%, 100% 0, 99% 38%, 87% 43%, 87% 56%, 99% 63%, 100% 100%, 62% 99%, 57% 85%, 43% 85%, 39% 99%, 0 100%, 3% 61%, 14% 56%, 14% 42%, 2% 38%, 0% 0%);
   }
@@ -122,7 +125,6 @@ const shinyEffect = css`
     background-blend-mode: overlay;
     z-index: 2;
     filter: brightness(1) contrast(1);
-    transition: all .33s ease;
     mix-blend-mode: color-dodge;
   }  
 `
