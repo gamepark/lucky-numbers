@@ -28,7 +28,7 @@ export function isValidPosition(garden: Garden, clover: Clover, row: number, col
       return false
     }
   }
-  return true
+  return clover.color === undefined ? false : true
 }
 
 export enum PlayerColor {

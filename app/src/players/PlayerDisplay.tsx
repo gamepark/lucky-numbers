@@ -11,6 +11,7 @@ import {boardLeft, boardMargin, boardTop, canDragStyle, cloverSize, parabolicAni
 import Board from './Board'
 import {CLOVER} from './CloverDropArea'
 import PlayerPanel from './PlayerPanel'
+import Move from '@gamepark/lucky-number/moves/Move'
 
 type Props = {
   player: PlayerState

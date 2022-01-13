@@ -1,14 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
 import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
+import CloverColor from '@gamepark/lucky-number/material/CloverColor'
+import Move from '@gamepark/lucky-number/moves/Move'
 import PlaceClover, {isPlaceClover, placeCloverMove} from '@gamepark/lucky-number/moves/PlaceClover'
 import {Garden, isValidPosition} from '@gamepark/lucky-number/PlayerState'
-import {Animation, useAnimation, usePlayerId} from '@gamepark/react-client'
+import {Animation, useActions, useAnimation, usePlayerId, useTutorial} from '@gamepark/react-client'
+import { TFunction } from 'i18next'
 import {Fragment, HTMLAttributes} from 'react'
+import { DropTargetMonitor, useDrop } from 'react-dnd'
+import { useTranslation } from 'react-i18next'
 import CloverImage from '../clovers/CloverImage'
 import Images from '../Images'
 import {cloverSize} from '../styles'
-import CloverDropArea from './CloverDropArea'
+import CloverDropArea, { CLOVER } from './CloverDropArea'
 
 type Props = {
   garden: Garden
@@ -20,10 +25,26 @@ type Props = {
 } & HTMLAttributes<HTMLDivElement>
 
 export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDiscarded, playerPosition, ...props}: Props) {
+  const tutorial = useTutorial()
   const playerId = usePlayerId()
+  const actions = useActions<Move, number>()
+  const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && animation.move.column !== -1 && garden[animation.move.row][animation.move.column] !== null)
+  const {t} = useTranslation()
+
+  const [{canDrop}, ref] = useDrop({
+    accept: CLOVER,
+    canDrop: (item:Clover) => {
+      return false
+    },
+    drop: () => {return undefined},
+    collect: (monitor: DropTargetMonitor<Clover>) => ({
+      canDrop: monitor.getItem()
+    })
+  })
+  
   return (
-    <div css={style} {...props}>
+    <div ref={ref} css={[style, isMine && canDrop !== null && !isGoodCloverGoodTime({color:canDrop.color,number:canDrop.number}, actionsNumber) && tutorial !== undefined && wrongCloverTutoStyle(t(actionsNumber === 10 ? "Put in discard !" : "Not good clover !"))]} {...props}>
       {garden.map((line, row) =>
         line.map((clover, column) =>
           <Fragment key={`${row} ${column}`}>
@@ -34,12 +55,60 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
                                     ]} ><CloverImage clover={clover} /></div>}
             {isMine && <CloverDropArea canPlaceClover={clover => isValidPosition(garden, clover, row, column, isSetupPhase)}
                                        onDropClover={clover => placeCloverMove(playerId, clover, row, column)}
+                                       isTutorialHighLight = {tutorial !== undefined && canDrop !== null && isGoodCloverGoodTime({color:canDrop.color,number:canDrop.number},actionsNumber) && isInPlaceAndTime(row, column, actionsNumber)}
                                        css={[position(row, column)]}/>}
           </Fragment>
         )
       )}
     </div>
   )
+}
+
+const wrongCloverTutoStyle = (warning:string) => css`
+  &:after{
+    content:'${warning}';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align:center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width:100%;
+    height:100%;
+    opacity:0.8;
+    border-radius:0.5em;
+    background-color:red;
+    font-size:5em;
+    font-family:'Righteous', cursive;
+  }
+`
+
+function isGoodCloverGoodTime(clover:Clover, action:number):boolean{
+  if(action > 10) return true
+  switch(action){
+    case 0: return clover.color === CloverColor.Yellow && clover.number === 1 
+    case 1: return clover.color === CloverColor.Green && clover.number === 5
+    case 2: return clover.color === CloverColor.Yellow && clover.number === 13
+    case 3: return clover.color === CloverColor.Green && clover.number === 14
+    case 5: return clover.color === CloverColor.Yellow && clover.number === 3
+    case 6: return clover.color === CloverColor.Yellow && clover.number === 4
+    case 8: return clover.color === CloverColor.Green && clover.number === 20
+    default: return false
+  }
+}
+
+function isInPlaceAndTime(row:number, column:number, action:number):boolean{
+  switch(action){
+    case 0: return row === 0 && column === 0 
+    case 1: return row === 1 && column === 1
+    case 2: return row === 2 && column === 2
+    case 3: return row === 3 && column === 3
+    case 5: return row === 0 && column === 1
+    case 6: return row === 1 && column === 0
+    case 8: return row === 3 && column === 3
+    default: return false
+  }
 }
 
 export function isWinner(garden:Garden):boolean{
