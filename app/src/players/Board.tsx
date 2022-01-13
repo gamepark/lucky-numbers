@@ -22,29 +22,19 @@ type Props = {
   isSetupPhase: boolean
   cloversDiscarded:Clover[]
   playerPosition:number
+  itemDrag:Clover
 } & HTMLAttributes<HTMLDivElement>
 
-export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDiscarded, playerPosition, ...props}: Props) {
+export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDiscarded, playerPosition, itemDrag, ...props}: Props) {
   const tutorial = useTutorial()
   const playerId = usePlayerId()
   const actions = useActions<Move, number>()
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && animation.move.column !== -1 && garden[animation.move.row][animation.move.column] !== null)
   const {t} = useTranslation()
-
-  const [{canDrop}, ref] = useDrop({
-    accept: CLOVER,
-    canDrop: (item:Clover) => {
-      return false
-    },
-    drop: () => {return undefined},
-    collect: (monitor: DropTargetMonitor<Clover>) => ({
-      canDrop: monitor.getItem()
-    })
-  })
   
   return (
-    <div ref={ref} css={[style, isMine && canDrop !== null && !isGoodCloverGoodTime({color:canDrop.color,number:canDrop.number}, actionsNumber) && tutorial !== undefined && wrongCloverTutoStyle(t(actionsNumber === 10 ? "Put in discard !" : "Not good clover !"))]} {...props}>
+    <div css={[style, isMine && itemDrag !== null && !isGoodCloverGoodTime({color:itemDrag.color,number:itemDrag.number}, actionsNumber) && tutorial !== undefined && wrongCloverTutoStyle(t(actionsNumber === 10 ? "Put in discard !" : "Not good clover !"))]} {...props}>
       {garden.map((line, row) =>
         line.map((clover, column) =>
           <Fragment key={`${row} ${column}`}>
@@ -55,7 +45,7 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
                                     ]} ><CloverImage clover={clover} /></div>}
             {isMine && <CloverDropArea canPlaceClover={clover => isValidPosition(garden, clover, row, column, isSetupPhase)}
                                        onDropClover={clover => placeCloverMove(playerId, clover, row, column)}
-                                       isTutorialHighLight = {tutorial !== undefined && canDrop !== null && isGoodCloverGoodTime({color:canDrop.color,number:canDrop.number},actionsNumber) && isInPlaceAndTime(row, column, actionsNumber)}
+                                       isTutorialHighLight = {tutorial !== undefined && itemDrag !== null && isGoodCloverGoodTime({color:itemDrag.color,number:itemDrag.number},actionsNumber) && isInPlaceAndTime(row, column, actionsNumber)}
                                        css={[position(row, column)]}/>}
           </Fragment>
         )
