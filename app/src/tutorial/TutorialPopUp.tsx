@@ -156,7 +156,7 @@ export function resetTutorial() {
 }
 
 export const hidePopupStyle = css`
-    transform: translate(157em, 42.5em) translate(-50%, -50%) scale(0.1);
+    transform: translate(155em, 48em) translate(-50%, -50%) scale(0.08);
 `
 
 const buttonTutoStyle = css`
@@ -281,8 +281,8 @@ const showArrowStyle = (top: number, left: number) => css`
 `
 
 const hideArrowStyle = css`
-    top: 90%;
-    left: 90%;
+    top: 150%;
+    left: 150%;
     width: 0;
 `
 
@@ -295,8 +295,8 @@ const imageStyle = css`
 const resetStyle = css`
     position: absolute;
     text-align: center;
-    top: 40%;
-    right: -1%;
+    top: 45%;
+    right: 5%;
     font-size: 3em;
     width: 11em;
     height: fit-content;
