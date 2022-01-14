@@ -45,8 +45,11 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
   const playerInfo = usePlayer(index+1)
   const play = usePlay()
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move))
+  const isAnimation = useAnimation<Move>()
 
   const displayPosition = getDisplayPosition(playerId, index, nbPlayers)
+  const ladybugStart = getLadyBugStart(actionsNumber)
+  const ladybugMove = getLadyBugMove(actionsNumber)
 
   return (
     <>
@@ -68,7 +71,7 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
         </Draggable>
       )}
 
-      {tutorial !== undefined && isMine && getLadyBugStart(actionsNumber) !== undefined && <Picture src={Images.ladybug} css={[ladybugStyle(getLadyBugStart(actionsNumber)!), canDrop && ladyBugMove(getLadyBugMove(actionsNumber)!)]} />}
+      {tutorial !== undefined && isAnimation === undefined && isMine && ladybugStart !== undefined && <Picture src={Images.ladybug} css={[ladybugStyle(ladybugStart), canDrop && ladybugMove !== undefined && ladyBugMoveAnim(ladybugMove)]} />}
 
     </>
   )
@@ -128,6 +131,24 @@ const cloverPosition = (playerIndex: number, index: number) => css`
   transform-style:preserve-3d;
 `
 
+const ladyBugWaitingKF = (top:number) => keyframes`
+  from{
+    transform:rotateZ(0deg) translate(${top === -15 ? 13 : 3}em);
+  }
+  to{
+    transform:rotateZ(-360deg) translate(${top === -15 ? 13 : 3}em);
+  }
+`
+
+const ladyBugEntryKF = keyframes`
+  from{
+    opacity:0;
+  }
+  to{
+    opacity:1;
+  }
+`
+
 const ladybugStyle = (pos:{top:number, left:number}) => css`
   position:absolute;
   pointer-events:none;
@@ -137,19 +158,20 @@ const ladybugStyle = (pos:{top:number, left:number}) => css`
   height:4.5em;
   z-index:10;
   opacity:1;
+  animation:${ladyBugEntryKF} 2s linear, ${ladyBugWaitingKF(pos.top)} 2s linear infinite;
 `
 
 function getLadyBugStart(action:number):{top:number, left:number}|undefined{
   switch(action){
-    case 0: return {top:8,left:40}
-    case 1: return {top:0,left:40}
-    case 2: return {top:0,left:40}
-    case 3: return {top:0,left:40}
+    case 0: return {top:10,left:38}
+    case 1: return {top:2.5,left:38}
+    case 2: return {top:2.5,left:38}
+    case 3: return {top:2.5,left:38}
     case 4: return {top:-15,left:70}
-    case 5: return {top:0,left:40}
-    case 6: return {top:6,left:55}
-    case 8: return {top:0,left:40}
-    case 10: return {top:0,left:40}
+    case 5: return {top:2.5,left:38}
+    case 6: return {top:9,left:53}
+    case 8: return {top:2.5,left:38}
+    case 10: return {top:2.5,left:38}
     default: return undefined
   }
 }
@@ -169,20 +191,20 @@ const ladybugMoveKF = (pos:{X:number, Y:number, rot:number}) => keyframes`
   }
 `
 
-const ladyBugMove = (pos:{X:number, Y:number, rot:number}) => css`
+const ladyBugMoveAnim = (pos:{X:number, Y:number, rot:number}) => css`
   animation:${ladybugMoveKF(pos)} 2s ease-in-out infinite;
 `
 
 function getLadyBugMove(action:number):{X:number, Y:number, rot:number}|undefined{
   switch(action){
-    case 0: return {X:-36, Y:-5, rot:Math.atan(-36/5)*(180/Math.PI)}
-    case 1: return {X:-28, Y:10, rot:180+Math.atan(-28/-10)*(180/Math.PI)}
-    case 2: return {X:-20, Y:18, rot:180+Math.atan(-20/-18)*(180/Math.PI)}
-    case 3: return {X:-12, Y:26, rot:180+Math.atan(-12/-26)*(180/Math.PI)}
-    case 5: return {X:-36, Y:10, rot:180+Math.atan(-36/-10)*(180/Math.PI)}
-    case 6: return {X:-43, Y:-3, rot:Math.atan(-43/3)*(180/Math.PI)}
-    case 8: return {X:-12, Y:26, rot:180+Math.atan(-12/-26)*(180/Math.PI)}
-    case 10: return {X:33, Y:17, rot:180+Math.atan(33/-17)*(180/Math.PI)}
+    case 0: return {X:-35, Y:-7, rot:Math.atan(-35/7)*(180/Math.PI)}
+    case 1: return {X:-26, Y:8, rot:180+Math.atan(-26/-8)*(180/Math.PI)}
+    case 2: return {X:-19, Y:17, rot:180+Math.atan(-19/-17)*(180/Math.PI)}
+    case 3: return {X:-11, Y:25, rot:180+Math.atan(-11/-25)*(180/Math.PI)}
+    case 5: return {X:-35, Y:9, rot:180+Math.atan(-35/-9)*(180/Math.PI)}
+    case 6: return {X:-42, Y:-6, rot:Math.atan(-42/6)*(180/Math.PI)}
+    case 8: return {X:-11, Y:25, rot:180+Math.atan(-11/-25)*(180/Math.PI)}
+    case 10: return {X:34, Y:15, rot:180+Math.atan(34/-15)*(180/Math.PI)}
     default: return undefined
   }
 }
