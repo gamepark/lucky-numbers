@@ -9,6 +9,7 @@ type GameState = {
   activePlayer?: number
   faceDownClovers: Clover[]
   faceUpClovers: Clover[]
+  isBrunoVariation?:boolean
 }
 
 export default GameState
@@ -19,7 +20,8 @@ export function setupNewGame(options: LuckyNumbersOptions) {
   return {
     players: [...new Array(options.players)].map(() => ({garden: emptyGarden, clovers: clovers.splice(0, 4)})),
     faceDownClovers: clovers,
-    faceUpClovers: []
+    faceUpClovers: [],
+    isBrunoVariation: true // WARNING : CHANGE BY "game.isBrunoVariation" WHEN BUG WILL BE RESOLVED
   }
 
 }
