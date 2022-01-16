@@ -1424,10 +1424,10 @@
   resolved "https://registry.yarnpkg.com/@gamepark/avataaars/-/avataaars-2.1.4.tgz#e3dcf61fbc84b428862a70d66b34657f0d8cbc53"
   integrity sha512-MncuVF5RR9Dz7FWKSvd4M9No4EqlpX+l2+CsQUgngxpy/n7E+Zum3vMw952fYeiy7I5F4Nj5QuuUOAXkrjREzA==
 
-"@gamepark/react-client@~5.8.10":
-  version "5.8.10"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.8.10.tgz#003ee8f541855261cfdfe60534ab791b953eb375"
-  integrity sha512-x8QyygQPClvwc+XQft1QkKxiw/hXduxxDc61JHU5E9deZT3jimIKa9UIBw4uM0ifF51+v9Rz/YpffiDizivrrQ==
+"@gamepark/react-client@~5.8.12":
+  version "5.8.12"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.8.12.tgz#a81b0fe96f78944d04b2e8f7fb355d843741f2ab"
+  integrity sha512-bdSvLhXMLDEgM32ayLPq4tF5x8hZkI/PtnE2Lp7Vwax9pAYP1bVK95p2RiIOvrIYiDWjJ38fGYJBN3P7rmNaaQ==
   dependencies:
     "@apollo/client" "^3.1.3"
     "@datadog/browser-logs" "^3.6.11"
