@@ -23,9 +23,10 @@ type Props = {
   nbPlayers:number
   isSetupPhase:boolean
   cloversDiscarded:Clover[]
+  isBrunoVariation:boolean
 }
 
-export default function PlayerDisplay({player, index, isMine, activePlayer, isAnyWinner, nbPlayers, isSetupPhase, cloversDiscarded}: Props) {
+export default function PlayerDisplay({player, index, isMine, activePlayer, isAnyWinner, nbPlayers, isSetupPhase, cloversDiscarded, isBrunoVariation}: Props) {
 
   const tutorial = useTutorial()
   const playerId = usePlayerId()
@@ -110,6 +111,12 @@ to{
   left:${boardLeft(playerPosition) + boardMargin + (cloverSize+1)*row}em;
   top:${boardTop(playerPosition) + boardMargin + (cloverSize+1)*column}em;
 }
+`
+
+const replayKF = keyframes`
+from{filter:drop-shadow(0 0 0em gold) drop-shadow(0 0 0em gold);}
+50%{filter:drop-shadow(0 0 1em gold) drop-shadow(0 0 1em gold);}
+to{filter:drop-shadow(0 0 0em gold) drop-shadow(0 0 0em gold);}
 `
 
 const placeCloverTranslation = (duration:number, playerPosition:number, row:number, column:number) => css`

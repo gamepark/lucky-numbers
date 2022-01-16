@@ -36,7 +36,8 @@ export default function GameDisplay({game}: Props) {
                          isAnyWinner={game.players.some(p => isWinner(p.garden))}
                          nbPlayers={game.players.length} 
                          isSetupPhase={game.activePlayer === undefined}
-                         cloversDiscarded={game.faceUpClovers} />
+                         cloversDiscarded={game.faceUpClovers}
+                         isBrunoVariation={game.isBrunoVariation === true} />
         )}
         <DrawPile 
           size={game.faceDownClovers} 

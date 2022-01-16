@@ -125,7 +125,7 @@ to{
 `
 
 const style = ({direction, radius, rotation}: CssPosition) => css`
-  left: ${Math.cos(direction! * 2 * Math.PI) * (radius!+0.1) * 24 + (16 / 9 * 100 - cloverSize) / 2}em;
-  top: ${Math.sin(direction! * 2 * Math.PI) * (radius!+0.1) * 24 + 25 + headerHeight + 3}em;
+  left: ${Math.cos(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 24 + (16 / 9 * 100 - cloverSize) / 2}em;
+  top: ${Math.sin(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 24 + 25 + headerHeight + 3}em;
   transform: rotateZ(${rotation! * 360}deg);
 `
