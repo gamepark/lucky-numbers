@@ -111,7 +111,6 @@ to{opacity:1;}
 
 const canDropDiscard = css`
   opacity:1;
-  transition:opacity 0.3s linear, background-color 0.3s linear;
 `
 
 const discardZoneStyle = css`
@@ -123,11 +122,12 @@ const discardZoneStyle = css`
   height:25em;
   border:solid 0.4em rgb(109,0,0);
   border-radius:5em;
-  background-color:rgba(255,0,0,0.4);
+  background-color:rgba(150,0,36,0.4);
+  transition:opacity 0.3s linear, background-color 0.3s linear;
 `
 
 const isOverDiscard = css`
-  background-color:rgba(255,0,0,0.6);
+  background-color:rgba(150,0,36,0.6);
 `
 
 const position = (index: number) => css`
