@@ -29,7 +29,6 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && clovers.find(clover => isSameClover(clover, animation.move.clover)) !== undefined)
   const displayPositionOfAnimPlayer = placeCloverAnimation !== undefined && getDisplayPosition(playerId, placeCloverAnimation.move.playerId-1 , nbPlayers)
   const isBrunoVariantAnim = placeCloverAnimation !== undefined && activePlayer !== undefined && isBrunoVariationTrigger(players[activePlayer-1].garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
-console.log(isBrunoVariantAnim)
   const [{canDrop, isOver}, dropRef] = useDrop({
     accept: CLOVER,
     canDrop: (item: Clover) => {
@@ -150,7 +149,6 @@ const isOverDiscard = css`
 
 const position = (index: number) => css`
   position:absolute;
-  transition:none;
   width:${cloverSize}em;
   height:${cloverSize}em;
   left: ${(index%6) * (cloverSize + 1) + 66}em;

@@ -1,5 +1,5 @@
 enum MoveType {
-  DrawClover, PlaceClover
+  DrawClover, PlaceClover, DrawCloverForEveryone
 }
 
 export default MoveType

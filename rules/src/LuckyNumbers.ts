@@ -3,11 +3,12 @@ import GameState, {setupNewGame} from './GameState'
 import GameView from './GameView'
 import {isGameOptions, LuckyNumbersOptions} from './LuckyNumbersOptions'
 import {drawClover, drawCloverMove} from './moves/DrawClover'
+import { drawCloverForEveryone } from './moves/DrawCloverForEveryone'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import PlaceClover, {placeClover, placeCloverMove} from './moves/PlaceClover'
-import {isValidPosition} from './PlayerState'
+import {howManyCloversInGarden, isValidPosition} from './PlayerState'
 
 export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
   implements IncompleteInformation<GameState, GameView, Move, MoveView> {
@@ -88,10 +89,20 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
       case MoveType.PlaceClover:
         placeClover(this.state, move)
         break
+      case MoveType.DrawCloverForEveryone:
+        drawCloverForEveryone(this.state)
+        break
     }
-    if (this.state.activePlayer === undefined && this.state.players.every(player => player.clovers.length === 0)) {
+    if (this.state.activePlayer === undefined && this.state.players.every(player => player.clovers.length === 0) && this.state.players.every(player => howManyCloversInGarden(player.garden) === 4)) {
       this.state.activePlayer = 1
     }
+  }
+
+  getAutomaticMove(): void | Move{
+    if(this.state.isMichaelVariant === true && this.state.players.every(player => player.clovers.length === 0) && this.state.players.every(player => howManyCloversInGarden(player.garden) !== 4 && this.state.activePlayer === undefined)){
+      return {type:MoveType.DrawCloverForEveryone}
+    }
+    return
   }
 
   getView(): GameView {
@@ -101,7 +112,11 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
   getMoveView(move: Move): MoveView {
     if (move.type === MoveType.DrawClover) {
       return {...move, clover: this.state.faceDownClovers[0]}
+    } 
+    if (move.type === MoveType.DrawCloverForEveryone){
+      return {...move, clover: this.state.faceDownClovers.slice(0,this.state.players.length)}
     }
+    
     return move
   }
 }

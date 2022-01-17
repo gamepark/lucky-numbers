@@ -40,3 +40,7 @@ export const playerColors = Object.values(PlayerColor).filter(isPlayerColor)
 function isPlayerColor(arg: string | PlayerColor): arg is PlayerColor {
   return typeof arg === 'number'
 }
+
+export function howManyCloversInGarden(garden:Garden):number{
+ return garden.flat().filter(clover => clover !== null).length
+}

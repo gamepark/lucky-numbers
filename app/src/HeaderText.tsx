@@ -22,10 +22,13 @@ export default function HeaderText({loading, game}: Props) {
 }
 
 function getPseudo(player: number, players: PlayerInfo<number>[], t: TFunction): string {
+  if (player === 0){
+    return "Error Player"
+  }
   if (players[player-1].name === undefined) {
     return getPlayerName(player, t) 
   } else {
-      return players.find(p => p.id === player, t)!.name!
+    return players.find(p => p.id === player, t)!.name!
   }
 }
 
