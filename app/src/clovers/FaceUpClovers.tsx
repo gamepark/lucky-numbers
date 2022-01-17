@@ -4,7 +4,7 @@ import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
 import PlaceClover, { isPlaceClover, placeCloverMove } from '@gamepark/lucky-number/moves/PlaceClover'
 import { Animation, useAnimation, usePlay, usePlayerId } from '@gamepark/react-client'
 import { Draggable } from '@gamepark/react-components'
-import { DropTargetMonitor, useDrop } from 'react-dnd'
+import { DragLayerMonitor, DropTargetMonitor, useDrop } from 'react-dnd'
 import { getDisplayPosition } from '../players/PlayerDisplay'
 import { CLOVER } from '../players/CloverDropArea'
 import {canDragStyle, cloverSize, boardTop, boardLeft, boardMargin} from '../styles'
@@ -41,11 +41,18 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
       })
     }
   })
+
+  function bottomLeftPlayerProjection(monitor: DragLayerMonitor) {
+    let offset = monitor.getDifferenceFromInitialOffset()
+    if (!offset) return offset
+    return {x: offset.x * 0.85, y: offset.y * 0.8}
+  }
+
   return (
   <>
     <div css={[discardZoneStyle, canDrop && canDropDiscard, isOver && isOverDiscard]} ref={dropRef}>{canDrop && <span css={spanStyle}>{t("Discard here")}</span>}</div>
       {clovers.map((clover, index) => 
-      <Draggable key={index} type={CLOVER} item={clover} canDrag={canDrag} drop={play}>
+      <Draggable key={index} type={CLOVER} item={clover} canDrag={canDrag} drop={play} projection={bottomLeftPlayerProjection}>
         <CloverImage clover={clover} 
                      css={[position(index), 
                      canDrag && canDragStyle, 

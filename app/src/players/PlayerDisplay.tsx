@@ -12,7 +12,7 @@ import Board from './Board'
 import {CLOVER} from './CloverDropArea'
 import PlayerPanel from './PlayerPanel'
 import Move from '@gamepark/lucky-number/moves/Move'
-import { DropTargetMonitor, useDrop } from 'react-dnd'
+import { DragLayerMonitor, DropTargetMonitor, useDrop } from 'react-dnd'
 
 type Props = {
   player: PlayerState
@@ -52,12 +52,19 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
   const ladybugStart = getLadyBugStart(actionsNumber)
   const ladybugMove = getLadyBugMove(actionsNumber)
 
+  function bottomLeftPlayerProjection(monitor: DragLayerMonitor) {
+    let offset = monitor.getDifferenceFromInitialOffset()
+    if (!offset) return offset
+    return {x: offset.x * 0.85, y: offset.y * 0.8}
+  }
+
   return (
     <>
       <PlayerPanel playerInfo={playerInfo} index={displayPosition} activePlayer={activePlayer && !isAnyWinner} />
       <Board itemDrag={canDrop} garden={player.garden} idGarden={index} isMine={isMine} isSetupPhase={isSetupPhase} cloversDiscarded={cloversDiscarded} playerPosition={displayPosition} css={boardPosition(displayPosition)}/>
       {player.clovers.map((clover, cloverIndex) =>
         <Draggable key={`${clover.color} ${clover.number}`} 
+        projection={bottomLeftPlayerProjection}
         type={CLOVER} 
         item={clover} 
         css={[cloverPosition(displayPosition, cloverIndex), 

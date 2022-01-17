@@ -21,7 +21,7 @@ export function setupNewGame(options: LuckyNumbersOptions) {
     players: [...new Array(options.players)].map(() => ({garden: emptyGarden, clovers: clovers.splice(0, 4)})),
     faceDownClovers: clovers,
     faceUpClovers: [],
-    isBrunoVariation: true // WARNING : CHANGE BY "game.isBrunoVariation" WHEN BUG WILL BE RESOLVED
+    isBrunoVariation: options.isBrunoVariation
   }
 
 }
