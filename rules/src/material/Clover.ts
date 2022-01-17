@@ -7,6 +7,6 @@ type Clover = {
 
 export default Clover
 
-export function isSameClover(clover1:Clover, clover2:Clover):boolean{
-  return clover1.color === clover2.color && clover1.number === clover2.number
+export function isSameClover(clover1:Clover|null, clover2:Clover|null):boolean{
+  return clover1 !== null && clover2 !== null && clover1.color === clover2.color && clover1.number === clover2.number
 }

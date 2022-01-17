@@ -51,6 +51,8 @@ export default function GameDisplay({game}: Props) {
           activePlayer={game.activePlayer}
           cloversInHand={playerId === undefined ? undefined : game.players[playerId-1].clovers}
           nbPlayers={game.players.length}
+          isBrunoVariant={game.isBrunoVariation === true}
+          players={game.players}
           />
 
         {game.activePlayer !== undefined && <Picture src={Images.ladybug} css={[ladybugStyle(ladybugPosition) ]} />}

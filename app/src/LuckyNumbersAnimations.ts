@@ -11,7 +11,7 @@ const luckyNumbersAnimations : Animations<GameView, MoveView, number> = {
         if (move.type === MoveType.DrawClover){
             return 3
         } else if (move.type === MoveType.PlaceClover){
-            return isBrunoVariationTrigger(state.players[move.playerId-1].garden, move.row, move.column, state.isBrunoVariation === true) === true 
+            return isBrunoVariationTrigger(state.players[move.playerId-1].garden, move.row, move.column, move.clover, state.isBrunoVariation === true) === true 
                 ? (action.playerId === playerId ? 2 : 3) 
                 : (action.playerId === playerId ? 0 : 1)
         }

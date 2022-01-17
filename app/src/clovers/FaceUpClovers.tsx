@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
 import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
-import PlaceClover, { isPlaceClover, placeCloverMove } from '@gamepark/lucky-number/moves/PlaceClover'
+import PlaceClover, { isBrunoVariationTrigger, isPlaceClover, placeCloverMove } from '@gamepark/lucky-number/moves/PlaceClover'
 import { Animation, useAnimation, usePlay, usePlayerId } from '@gamepark/react-client'
 import { Draggable } from '@gamepark/react-components'
 import { DragLayerMonitor, DropTargetMonitor, useDrop } from 'react-dnd'
@@ -10,6 +10,7 @@ import { CLOVER } from '../players/CloverDropArea'
 import {canDragStyle, cloverSize, boardTop, boardLeft, boardMargin} from '../styles'
 import CloverImage from './CloverImage'
 import { useTranslation } from 'react-i18next'
+import PlayerState from '@gamepark/lucky-number/PlayerState'
 
 type Props = {
   clovers: Clover[]
@@ -17,15 +18,18 @@ type Props = {
   cloversInHand:Clover[]|undefined
   activePlayer:number|undefined
   nbPlayers:number
+  isBrunoVariant:boolean
+  players:PlayerState[]
 }
 
-export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePlayer, nbPlayers}: Props) {
+export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePlayer, players, isBrunoVariant, nbPlayers}: Props) {
   const {t} = useTranslation()
   const play = usePlay()
   const playerId = usePlayerId()
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && clovers.find(clover => isSameClover(clover, animation.move.clover)) !== undefined)
   const displayPositionOfAnimPlayer = placeCloverAnimation !== undefined && getDisplayPosition(playerId, placeCloverAnimation.move.playerId-1 , nbPlayers)
-
+  const isBrunoVariantAnim = placeCloverAnimation !== undefined && activePlayer !== undefined && isBrunoVariationTrigger(players[activePlayer-1].garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
+console.log(isBrunoVariantAnim)
   const [{canDrop, isOver}, dropRef] = useDrop({
     accept: CLOVER,
     canDrop: (item: Clover) => {
@@ -52,11 +56,16 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
   <>
     <div css={[discardZoneStyle, canDrop && canDropDiscard, isOver && isOverDiscard]} ref={dropRef}>{canDrop && <span css={spanStyle}>{t("Discard here")}</span>}</div>
       {clovers.map((clover, index) => 
-      <Draggable key={index} type={CLOVER} item={clover} canDrag={canDrag} drop={play} projection={bottomLeftPlayerProjection}>
+      <Draggable key={index} 
+                 type={CLOVER} 
+                 item={clover} 
+                 canDrag={canDrag} 
+                 drop={play} 
+                 projection={bottomLeftPlayerProjection} 
+                 css={[position(index), isCloverAnimated(clover, placeCloverAnimation) && displayPositionOfAnimPlayer !== false && placeCloverTranslation(placeCloverAnimation!.duration, displayPositionOfAnimPlayer, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column, isBrunoVariantAnim && playerId === activePlayer)]}>
         <CloverImage clover={clover} 
-                     css={[position(index), 
-                     canDrag && canDragStyle, 
-                     isCloverAnimated(clover, placeCloverAnimation) && displayPositionOfAnimPlayer !== false && placeCloverTranslation(placeCloverAnimation!.duration, displayPositionOfAnimPlayer, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column),
+                     css={[css`position:absolute;width:100%;height:100%;`,canDrag && placeCloverAnimation === undefined && canDragStyle, 
+                     isCloverAnimated(clover, placeCloverAnimation) && isBrunoVariantAnim && replayAnimation(placeCloverAnimation!.duration, playerId === activePlayer),
                      isCloverSorted(index, clovers, placeCloverAnimation) && sortClovers(placeCloverAnimation!.duration, index)
                      ]}/>
       </Draggable> )}
@@ -71,6 +80,15 @@ function isCloverSorted(index:number, discard:Clover[], animation:Animation<Plac
 function isCloverAnimated(clover:Clover, animation:Animation<PlaceClover>|undefined):boolean{
   return animation !== undefined && isSameClover(clover, animation.move.clover)
 }
+
+const replayKF = keyframes`
+  from,50%{filter: drop-shadow(0 0 0em gold) drop-shadow(0 0 0em gold);}
+  to{filter: drop-shadow(0 0 0.5em gold) drop-shadow(0 0 0.5em gold) drop-shadow(0 0 0.5em gold);}
+`
+
+const replayAnimation = (duration:number, isPlayerId:boolean) => css`
+  animation: ${replayKF} ${duration/10}s linear ${isPlayerId ? 0 : 1 }s infinite alternate;
+`
 
 const spanStyle = css`
   position:absolute;
@@ -92,11 +110,11 @@ to{
 }
 `
 
-const placeCloverTranslation = (duration:number, playerPos:number, row:number, column:number) => css`
-  animation: ${discardCloverKeyframes(playerPos, row, column)} ${duration}s ease-in-out infinite;
+const placeCloverTranslation = (duration:number, playerPos:number, row:number, column:number, isBrunoVariant:boolean) => css`
+  animation: ${placeCloverKeyframes(playerPos, row, column)} ${duration}s ease-in-out ${isBrunoVariant === true ? -duration : 0}s forwards;
 `
 
-const discardCloverKeyframes = (playerPos:number, row:number, column:number) => keyframes`
+const placeCloverKeyframes = (playerPos:number, row:number, column:number) => keyframes`
 from{}
 to{
   top:${boardTop(playerPos) + boardMargin + (cloverSize+1)*column}em;
@@ -131,6 +149,10 @@ const isOverDiscard = css`
 `
 
 const position = (index: number) => css`
+  position:absolute;
+  transition:none;
+  width:${cloverSize}em;
+  height:${cloverSize}em;
   left: ${(index%6) * (cloverSize + 1) + 66}em;
   top: ${Math.floor(index/6)*(cloverSize +1) + 66}em;
 `

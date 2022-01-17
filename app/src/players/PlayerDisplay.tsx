@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
 import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
-import PlaceClover, { isPlaceClover } from '@gamepark/lucky-number/moves/PlaceClover'
+import PlaceClover, { isBrunoVariationTrigger, isPlaceClover } from '@gamepark/lucky-number/moves/PlaceClover'
 import PlayerState from '@gamepark/lucky-number/PlayerState'
 import {Animation, useActions, useAnimation, usePlay, usePlayer, usePlayerId, useTutorial} from '@gamepark/react-client'
 import {Draggable, Picture} from '@gamepark/react-components'
@@ -48,6 +48,8 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move))
   const isAnimation = useAnimation<Move>()
 
+  const isBrunoVariantAnim = placeCloverAnimation !== undefined && isBrunoVariationTrigger(player.garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariation)
+
   const displayPosition = getDisplayPosition(playerId, index, nbPlayers)
   const ladybugStart = getLadyBugStart(actionsNumber)
   const ladybugMove = getLadyBugMove(actionsNumber)
@@ -61,7 +63,7 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
   return (
     <>
       <PlayerPanel playerInfo={playerInfo} index={displayPosition} activePlayer={activePlayer && !isAnyWinner} />
-      <Board itemDrag={canDrop} garden={player.garden} idGarden={index} isMine={isMine} isSetupPhase={isSetupPhase} cloversDiscarded={cloversDiscarded} playerPosition={displayPosition} css={boardPosition(displayPosition)}/>
+      <Board itemDrag={canDrop} garden={player.garden} idGarden={index} isMine={isMine} isSetupPhase={isSetupPhase} cloversDiscarded={cloversDiscarded} playerPosition={displayPosition} isBrunoVariant={isBrunoVariation} css={boardPosition(displayPosition)}/>
       {player.clovers.map((clover, cloverIndex) =>
         <Draggable key={`${clover.color} ${clover.number}`} 
         projection={bottomLeftPlayerProjection}
@@ -70,12 +72,14 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
         css={[cloverPosition(displayPosition, cloverIndex), 
               (isCloverAnimated(clover, placeCloverAnimation)) && (placeCloverAnimation!.move.row === -1
                 ? discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length) 
-                : placeCloverTranslation(placeCloverAnimation!.duration, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column))
+                : placeCloverTranslation(placeCloverAnimation!.duration, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column, isBrunoVariantAnim && displayPosition === 0))
               ]} 
         canDrag={isMine} 
         drop={play}>
           <CloverImage clover={clover} 
-                       css={[isMine && canDragStyle]} />
+                       css={[isMine && !isAnimation && canDragStyle,
+                             isCloverAnimated(clover, placeCloverAnimation) && isBrunoVariantAnim && replayAnimation(placeCloverAnimation!.duration, displayPosition === 0)
+                            ]} />
         </Draggable>
       )}
 
@@ -121,13 +125,17 @@ to{
 `
 
 const replayKF = keyframes`
-from{filter:drop-shadow(0 0 0em gold) drop-shadow(0 0 0em gold);}
-50%{filter:drop-shadow(0 0 1em gold) drop-shadow(0 0 1em gold);}
-to{filter:drop-shadow(0 0 0em gold) drop-shadow(0 0 0em gold);}
+  from,50%{filter: drop-shadow(0 0 0em gold) drop-shadow(0 0 0em gold);}
+  to{filter: drop-shadow(0 0 0.5em gold) drop-shadow(0 0 0.5em gold) drop-shadow(0 0 0.5em gold);}
 `
 
-const placeCloverTranslation = (duration:number, playerPosition:number, row:number, column:number) => css`
-  animation: ${placeCloverKeyframes(playerPosition, row, column)} ${duration}s ease-in-out forwards;
+const replayAnimation = (duration:number, isPlayerId:boolean) => css`
+  animation: ${replayKF} ${duration/10}s linear ${isPlayerId ? 0 : 1 }s infinite alternate;
+`
+
+
+const placeCloverTranslation = (duration:number, playerPosition:number, row:number, column:number, isBrunoVariant:boolean) => css`
+  animation: ${placeCloverKeyframes(playerPosition, row, column)} ${duration}s ease-in-out ${isBrunoVariant === true ? -duration : 0}s forwards;
 `
 
 const boardPosition = (index: number) => css`

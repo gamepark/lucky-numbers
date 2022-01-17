@@ -3,7 +3,7 @@ import {css, keyframes} from '@emotion/react'
 import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
 import CloverColor from '@gamepark/lucky-number/material/CloverColor'
 import Move from '@gamepark/lucky-number/moves/Move'
-import PlaceClover, {isPlaceClover, placeCloverMove} from '@gamepark/lucky-number/moves/PlaceClover'
+import PlaceClover, {isBrunoVariationTrigger, isPlaceClover, placeCloverMove} from '@gamepark/lucky-number/moves/PlaceClover'
 import {Garden, isValidPosition} from '@gamepark/lucky-number/PlayerState'
 import {Animation, useActions, useAnimation, usePlayerId, useTutorial} from '@gamepark/react-client'
 import { TFunction } from 'i18next'
@@ -23,14 +23,23 @@ type Props = {
   cloversDiscarded:Clover[]
   playerPosition:number
   itemDrag:Clover
+  isBrunoVariant:boolean
 } & HTMLAttributes<HTMLDivElement>
 
-export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDiscarded, playerPosition, itemDrag, ...props}: Props) {
+export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDiscarded, playerPosition, itemDrag, isBrunoVariant, ...props}: Props) {
   const tutorial = useTutorial()
   const playerId = usePlayerId()
   const actions = useActions<Move, number>()
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && animation.move.column !== -1 && garden[animation.move.row][animation.move.column] !== null)
+  const isBrunoVariantAnim = placeCloverAnimation !== undefined && isBrunoVariationTrigger(garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
+
+  function isDiagAdjacentSameClover(clover:Clover|null, animClover:Clover, animRow:number, animColumn:number):boolean{
+    const cloverBelow:Clover|null = animRow-1>=0 && animColumn+1<=3 ? garden[animRow-1][animColumn+1] : null
+    const cloverOver:Clover|null = animRow+1<=3 && animColumn-1>=0 ? garden[animRow+1][animColumn-1] : null
+    return clover !== null && (clover.number === cloverBelow?.number || clover.number === cloverOver?.number) && clover.number === animClover.number
+  }
+
   const {t} = useTranslation()
   
   return (
@@ -40,6 +49,7 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
           <Fragment key={`${row} ${column}`}>
             {clover && <div css={[css`position:absolute;width:${cloverSize}em;height:${cloverSize}em;`, position(row, column),
                                     isCloverAnimated(row, column, placeCloverAnimation) && placeCloverAnimation!.move.playerId === idGarden+1 && discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length - (cloversDiscarded.find(clover => isSameClover(clover, placeCloverAnimation!.move.clover)) !== undefined ? 1 : 0), playerPosition),
+                                    isBrunoVariantAnim && isDiagAdjacentSameClover(clover, placeCloverAnimation.move.clover, placeCloverAnimation.move.row, placeCloverAnimation.move.column) && replayAnimation(placeCloverAnimation.duration, isMine === true),
                                     isWinner(garden) && jumpingAnimation(row+column),
                                     isWinner(garden) && shinyEffect
                                     ]} ><CloverImage clover={clover} /></div>}
@@ -53,6 +63,15 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
     </div>
   )
 }
+
+const replayKF = keyframes`
+  from,50%{filter: drop-shadow(0 0 0em gold) drop-shadow(0 0 0em gold);}
+  to{filter: drop-shadow(0 0 0.5em gold) drop-shadow(0 0 0.5em gold) drop-shadow(0 0 0.5em gold);}
+`
+
+const replayAnimation = (duration:number, isPlayerId:boolean) => css`
+  animation: ${replayKF} ${duration/10}s linear ${isPlayerId ? 0 : 1 }s infinite alternate;
+`
 
 const wrongCloverTutoStyle = (warning:string) => css`
   &:after{
