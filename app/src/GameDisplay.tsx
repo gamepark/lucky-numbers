@@ -84,10 +84,10 @@ function getLadyBugIncrement(index:number, ladyBug:number, nbPlayers:number):num
     }
   } else {
     switch(index){
-      case 0:return 172
+      case 0:return nbPlayers === 3 ? 176 : 172
       case 1:return 8
       case 2:return 176
-      case 3:return nbPlayers === 2 ? 188 : 5
+      case 3:return nbPlayers === 2 ? 188 : 4
       default:return 0
     }
   }
