@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import GameView from '@gamepark/lucky-number/GameView'
 import {useTranslation} from 'react-i18next'
-import {Player as PlayerInfo, usePlayerId, usePlayers} from '@gamepark/react-client'
+import {Player as PlayerInfo, useAnimation, usePlayerId, usePlayers} from '@gamepark/react-client'
 import { getPlayerName } from '@gamepark/lucky-number/LuckyNumbersOptions'
 import { TFunction } from 'i18next'
+import PlaceClover, { isBrunoVariantTrigger, isPlaceClover } from '@gamepark/lucky-number/moves/PlaceClover'
 
 type Props = {
   loading: boolean
@@ -47,6 +48,7 @@ function HeaderOnGoingGameText({game}:{game:GameView}){
   const {t} = useTranslation()
   const playerId = usePlayerId<number>()
   const players = usePlayers<number>()
+  const placeCloverAndReplayAnim = useAnimation<PlaceClover>(anim => isPlaceClover(anim.move) && isBrunoVariantTrigger(game.players[anim.move.playerId-1].garden,anim.move.row,anim.move.column,anim.move.clover,game.isBrunoVariant===true))
 
   if(game.activePlayer === undefined){
     if(playerId !== undefined && game.players[playerId-1].clovers.length !== 0){
@@ -54,11 +56,18 @@ function HeaderOnGoingGameText({game}:{game:GameView}){
     } else {
       if(game.players.filter(p => p.clovers.length !== 0).length > 1){
         return <> {t("setup.phase.players.place.clovers")} </>
-      } else {
+      } else if (game.players.findIndex(p => p.clovers.length !== 0) !== -1){
         return <> {t("setup.phase.player.place.clovers", {player:getPseudo(game.players.findIndex(p => p.clovers.length !== 0)+1, players, t)})} </>
-      }
+      } else if (game.isMichaelVariant === true){
+        return <> {t("setup.michael.variant")} </>
+      } else return <> {t("Please wait...")} </>
     }
   } else {
+    if(placeCloverAndReplayAnim !== undefined){
+      return game.activePlayer === playerId 
+        ? <> {t("you.place.and.replay")} </>
+        : <> {t("player.place.and.replay", {player:getPseudo(game.activePlayer, players, t)})} </>
+    }
     if(game.players[game.activePlayer-1].clovers.length === 0){
       return game.activePlayer === playerId 
         ? <> {t("you.choose.clover")} </>
