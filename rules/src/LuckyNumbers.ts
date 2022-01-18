@@ -1,4 +1,4 @@
-import {IncompleteInformation, SimultaneousGame} from '@gamepark/rules-api'
+import {IncompleteInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
 import GameState, {setupNewGame} from './GameState'
 import GameView from './GameView'
 import {isGameOptions, LuckyNumbersOptions} from './LuckyNumbersOptions'
@@ -11,7 +11,7 @@ import PlaceClover, {placeClover, placeCloverMove} from './moves/PlaceClover'
 import {howManyCloversInGarden, isValidPosition} from './PlayerState'
 
 export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
-  implements IncompleteInformation<GameState, GameView, Move, MoveView> {
+  implements IncompleteInformation<GameState, GameView, Move, MoveView>, TimeLimit<GameState, Move> {
   constructor(state: GameState)
   constructor(options: LuckyNumbersOptions)
   constructor(arg: GameState | LuckyNumbersOptions) {
@@ -118,5 +118,13 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
     }
     
     return move
+  }
+
+  giveTime(playerId: number): number {
+    if(this.state.activePlayer === undefined){
+      return 60
+    } else {
+      return 10
+    }
   }
 }
