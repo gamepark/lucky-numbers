@@ -22,7 +22,7 @@ export function setupNewGame(options: LuckyNumbersOptions) {
     players: [...new Array(options.players)].map(() => ({garden: emptyGarden, clovers: clovers.splice(0, options.isMichaelVariant ? 1 : 4)})),
     faceDownClovers: clovers,
     faceUpClovers: [],
-    isBrunoVariant: options.isBrunoVariation,
+    isBrunoVariant: options.isBrunoVariant,
     isMichaelVariant: options.isMichaelVariant
   }
 

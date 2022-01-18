@@ -4,7 +4,7 @@ import GameState from './GameState'
 
 export type LuckyNumbersOptions = {
   players:number
-  isBrunoVariation:boolean
+  isBrunoVariant:boolean
   isMichaelVariant:boolean
 }
 
@@ -13,7 +13,7 @@ export function isGameOptions(arg: GameState | LuckyNumbersOptions): arg is Luck
 }
 
 export const LuckyNumbersOptionsSpec: OptionsSpec<LuckyNumbersOptions> = {
-  isBrunoVariation:{
+  isBrunoVariant:{
     label:(t:Function) => t('Bruno Variant'),
     help:t => t('bruno.variant.help')
   },

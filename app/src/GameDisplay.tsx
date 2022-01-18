@@ -10,6 +10,7 @@ import Images from './Images'
 import { isWinner } from './players/Board'
 import PlayerDisplay, { getDisplayPosition } from './players/PlayerDisplay'
 import TutorialPopup from './tutorial/TutorialPopUp'
+import WelcomePopUp from './WelcomePopup'
 
 type Props = {
   game: GameView
@@ -20,6 +21,9 @@ export default function GameDisplay({game}: Props) {
   const tutorial = useTutorial()
 
   const [ladybugPosition, setLadybugPosition] = useState<number>(0)
+  const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(tutorial ? true : game.activePlayer !== undefined)
+  const showWelcomePopup = !welcomePopUpClosed
+
   useEffect(() => {
     if(game.activePlayer !== undefined)
     setLadybugPosition(ladybugPosition + getLadyBugIncrement(getDisplayPosition(playerId, game.activePlayer-1 , game.players.length), ladybugPosition, game.players.length))
@@ -56,7 +60,10 @@ export default function GameDisplay({game}: Props) {
           />
 
         {game.activePlayer !== undefined && <Picture src={Images.ladybug} css={[ladybugStyle(ladybugPosition) ]} />}
+        
       </div>
+
+      {(game.isBrunoVariant === true || game.isMichaelVariant === true) && showWelcomePopup && <WelcomePopUp isBruno={game.isBrunoVariant === true} isMichael={game.isMichaelVariant === true} close={() => setWelcomePopUpClosed(true)} /> }
 
       {tutorial && <TutorialPopup game={game} tutorial={tutorial}/>}
 
