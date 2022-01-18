@@ -7,7 +7,7 @@ import {Animation, useActions, useAnimation, usePlay, usePlayer, usePlayerId, us
 import {Draggable, Picture} from '@gamepark/react-components'
 import Images from '../Images'
 import CloverImage from '../clovers/CloverImage'
-import {boardLeft, boardMargin, boardTop, canDragStyle, cloverSize, parabolicAnimation, parabolicKeyframes, playerCloverLeft, playerCloverTop} from '../styles'
+import {boardLeft, boardMargin, boardTop, canDragStyle, cloverSize, playerCloverLeft, playerCloverTop} from '../styles'
 import Board from './Board'
 import {CLOVER} from './CloverDropArea'
 import PlayerPanel from './PlayerPanel'
@@ -26,7 +26,7 @@ type Props = {
   isBrunoVariant:boolean
 }
 
-export default function PlayerDisplay({player, index, isMine, activePlayer, isAnyWinner, nbPlayers, isSetupPhase, cloversDiscarded, isBrunoVariant: isBrunoVariant}: Props) {
+export default function PlayerDisplay({player, index, isMine, activePlayer, isAnyWinner, nbPlayers, isSetupPhase, cloversDiscarded, isBrunoVariant}: Props) {
 
   const tutorial = useTutorial()
   const playerId = usePlayerId()

@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import {usePlayer, usePlayerId} from "@gamepark/react-client"
-import {FC, useState} from "react"
+import {FC} from "react"
 import {useTranslation} from "react-i18next/"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
-import GameView from "@gamepark/lucky-number/GameView"
 import { css } from "@emotion/react"
 import Button from "./tutorial/Button"
 

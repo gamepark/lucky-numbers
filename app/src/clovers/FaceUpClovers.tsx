@@ -121,11 +121,6 @@ to{
 }
 `
 
-const fadeInKF = keyframes`
-from{opacity:0;}
-to{opacity:1;}
-`
-
 const canDropDiscard = css`
   opacity:1;
 `

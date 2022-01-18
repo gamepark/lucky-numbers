@@ -6,14 +6,12 @@ import Move from '@gamepark/lucky-number/moves/Move'
 import PlaceClover, {isBrunoVariantTrigger, isPlaceClover, placeCloverMove} from '@gamepark/lucky-number/moves/PlaceClover'
 import {Garden, isValidPosition} from '@gamepark/lucky-number/PlayerState'
 import {Animation, useActions, useAnimation, usePlayerId, useTutorial} from '@gamepark/react-client'
-import { TFunction } from 'i18next'
 import {Fragment, HTMLAttributes} from 'react'
-import { DropTargetMonitor, useDrop } from 'react-dnd'
 import { useTranslation } from 'react-i18next'
 import CloverImage from '../clovers/CloverImage'
 import Images from '../Images'
 import {cloverSize} from '../styles'
-import CloverDropArea, { CLOVER } from './CloverDropArea'
+import CloverDropArea from './CloverDropArea'
 
 type Props = {
   garden: Garden
