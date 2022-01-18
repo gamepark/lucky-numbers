@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
 import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
-import PlaceClover, { isBrunoVariationTrigger, isPlaceClover } from '@gamepark/lucky-number/moves/PlaceClover'
+import PlaceClover, { isBrunoVariantTrigger, isPlaceClover } from '@gamepark/lucky-number/moves/PlaceClover'
 import PlayerState from '@gamepark/lucky-number/PlayerState'
 import {Animation, useActions, useAnimation, usePlay, usePlayer, usePlayerId, useTutorial} from '@gamepark/react-client'
 import {Draggable, Picture} from '@gamepark/react-components'
@@ -23,10 +23,10 @@ type Props = {
   nbPlayers:number
   isSetupPhase:boolean
   cloversDiscarded:Clover[]
-  isBrunoVariation:boolean
+  isBrunoVariant:boolean
 }
 
-export default function PlayerDisplay({player, index, isMine, activePlayer, isAnyWinner, nbPlayers, isSetupPhase, cloversDiscarded, isBrunoVariation}: Props) {
+export default function PlayerDisplay({player, index, isMine, activePlayer, isAnyWinner, nbPlayers, isSetupPhase, cloversDiscarded, isBrunoVariant: isBrunoVariant}: Props) {
 
   const tutorial = useTutorial()
   const playerId = usePlayerId()
@@ -48,7 +48,7 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move))
   const isAnimation = useAnimation<Move>()
 
-  const isBrunoVariantAnim = placeCloverAnimation !== undefined && isBrunoVariationTrigger(player.garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariation)
+  const isBrunoVariantAnim = placeCloverAnimation !== undefined && isBrunoVariantTrigger(player.garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
 
   const displayPosition = getDisplayPosition(playerId, index, nbPlayers)
   const ladybugStart = getLadyBugStart(actionsNumber)
@@ -63,7 +63,7 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
   return (
     <>
       <PlayerPanel playerInfo={playerInfo} index={displayPosition} activePlayer={activePlayer && !isAnyWinner} />
-      <Board itemDrag={canDrop} garden={player.garden} idGarden={index} isMine={isMine} isSetupPhase={isSetupPhase} cloversDiscarded={cloversDiscarded} playerPosition={displayPosition} isBrunoVariant={isBrunoVariation} css={boardPosition(displayPosition)}/>
+      <Board itemDrag={canDrop} garden={player.garden} idGarden={index} isMine={isMine} isSetupPhase={isSetupPhase} cloversDiscarded={cloversDiscarded} playerPosition={displayPosition} isBrunoVariant={isBrunoVariant} css={boardPosition(displayPosition)}/>
       {player.clovers.map((clover, cloverIndex) =>
         <Draggable key={`${clover.color} ${clover.number}`} 
         projection={bottomLeftPlayerProjection}

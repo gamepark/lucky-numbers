@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
 import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
-import PlaceClover, { isBrunoVariationTrigger, isPlaceClover, placeCloverMove } from '@gamepark/lucky-number/moves/PlaceClover'
+import PlaceClover, { isBrunoVariantTrigger, isPlaceClover, placeCloverMove } from '@gamepark/lucky-number/moves/PlaceClover'
 import { Animation, useAnimation, usePlay, usePlayerId } from '@gamepark/react-client'
 import { Draggable } from '@gamepark/react-components'
 import { DragLayerMonitor, DropTargetMonitor, useDrop } from 'react-dnd'
@@ -28,7 +28,7 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
   const playerId = usePlayerId()
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && clovers.find(clover => isSameClover(clover, animation.move.clover)) !== undefined)
   const displayPositionOfAnimPlayer = placeCloverAnimation !== undefined && getDisplayPosition(playerId, placeCloverAnimation.move.playerId-1 , nbPlayers)
-  const isBrunoVariantAnim = placeCloverAnimation !== undefined && activePlayer !== undefined && isBrunoVariationTrigger(players[activePlayer-1].garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
+  const isBrunoVariantAnim = placeCloverAnimation !== undefined && activePlayer !== undefined && isBrunoVariantTrigger(players[activePlayer-1].garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
   const [{canDrop, isOver}, dropRef] = useDrop({
     accept: CLOVER,
     canDrop: (item: Clover) => {

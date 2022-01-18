@@ -37,7 +37,7 @@ export function placeClover(state: GameState | GameView, move: PlaceClover) {
   }
 
   if (state.activePlayer !== undefined) {
-    if(state.isBrunoVariation !== true || !isBrunoVariationTrigger(player.garden, move.row, move.column, move.clover, state.isBrunoVariation)){
+    if(state.isBrunoVariant !== true || !isBrunoVariantTrigger(player.garden, move.row, move.column, move.clover, state.isBrunoVariant)){
       state.activePlayer = (state.activePlayer % state.players.length) + 1
     }
   }
@@ -47,7 +47,7 @@ export function isPlaceClover(move: Move): move is PlaceClover {
   return move.type === MoveType.PlaceClover
 }
 
-export function isBrunoVariationTrigger(garden:Garden, row:number, column:number, cloverPlaced:Clover, isVariation:boolean):boolean{
+export function isBrunoVariantTrigger(garden:Garden, row:number, column:number, cloverPlaced:Clover, isVariation:boolean):boolean{
   if(isVariation !== true || row === -1) return false
   const neighbourClovers:[(Clover|null),(Clover|null)] = [(row+1<=3 && column-1>=0) ? garden[row+1][column-1] : null,(row-1>=0 && column+1<=3) ? garden[row-1][column+1] : null]
   return neighbourClovers.some(clover => clover !== null && clover.number === cloverPlaced.number)

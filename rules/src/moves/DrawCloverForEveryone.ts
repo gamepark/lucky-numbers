@@ -28,6 +28,6 @@ export function drawCloverForEveryoneInView(state: GameView, move: DrawForEveryo
   })
 }
 
-export function isDrawClover(move: Move | MoveView): move is DrawCloverForEveryone {
+export function isDrawCloverForEveryone(move: Move | MoveView): move is DrawCloverForEveryone {
   return move.type === MoveType.DrawCloverForEveryone
 }

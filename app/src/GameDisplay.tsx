@@ -37,7 +37,7 @@ export default function GameDisplay({game}: Props) {
                          nbPlayers={game.players.length} 
                          isSetupPhase={game.activePlayer === undefined}
                          cloversDiscarded={game.faceUpClovers}
-                         isBrunoVariation={game.isBrunoVariation === true} />
+                         isBrunoVariant={game.isBrunoVariant === true} />
         )}
         <DrawPile 
           size={game.faceDownClovers} 
@@ -51,7 +51,7 @@ export default function GameDisplay({game}: Props) {
           activePlayer={game.activePlayer}
           cloversInHand={playerId === undefined ? undefined : game.players[playerId-1].clovers}
           nbPlayers={game.players.length}
-          isBrunoVariant={game.isBrunoVariation === true}
+          isBrunoVariant={game.isBrunoVariant === true}
           players={game.players}
           />
 

@@ -16,7 +16,7 @@ export const emptyGarden = [
 
 export function isValidPosition(garden: Garden, clover: Clover, row: number, column: number, isSetupPhase:boolean) {
   if(isSetupPhase){
-    return (row === 0 && column === 0) || (row === 1 && column === 1) || (row === 2 && column === 2) || (row === 3 && column === 3)
+    return ((row === 0 && column === 0) || (row === 1 && column === 1) || (row === 2 && column === 2) || (row === 3 && column === 3)) && garden[row][column] === null
   }
   for (let i = 0; i < 4; i++) {
     const rowSpace = garden[row][i]

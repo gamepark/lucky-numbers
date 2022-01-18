@@ -3,7 +3,7 @@ import {css, keyframes} from '@emotion/react'
 import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
 import CloverColor from '@gamepark/lucky-number/material/CloverColor'
 import Move from '@gamepark/lucky-number/moves/Move'
-import PlaceClover, {isBrunoVariationTrigger, isPlaceClover, placeCloverMove} from '@gamepark/lucky-number/moves/PlaceClover'
+import PlaceClover, {isBrunoVariantTrigger, isPlaceClover, placeCloverMove} from '@gamepark/lucky-number/moves/PlaceClover'
 import {Garden, isValidPosition} from '@gamepark/lucky-number/PlayerState'
 import {Animation, useActions, useAnimation, usePlayerId, useTutorial} from '@gamepark/react-client'
 import { TFunction } from 'i18next'
@@ -32,7 +32,7 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
   const actions = useActions<Move, number>()
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && animation.move.column !== -1 && garden[animation.move.row][animation.move.column] !== null)
-  const isBrunoVariantAnim = placeCloverAnimation !== undefined && isBrunoVariationTrigger(garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
+  const isBrunoVariantAnim = placeCloverAnimation !== undefined && isBrunoVariantTrigger(garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
 
   function isDiagAdjacentSameClover(clover:Clover|null, animClover:Clover, animRow:number, animColumn:number):boolean{
     const cloverBelow:Clover|null = animRow-1>=0 && animColumn+1<=3 ? garden[animRow-1][animColumn+1] : null

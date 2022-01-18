@@ -2,9 +2,10 @@
 import {css, keyframes} from '@emotion/react'
 import CloverColor from '@gamepark/lucky-number/material/CloverColor'
 import {drawCloverMove, DrawView, isDrawClover} from '@gamepark/lucky-number/moves/DrawClover'
+import DrawCloverForEveryone, { DrawForEveryoneView, isDrawCloverForEveryone } from '@gamepark/lucky-number/moves/DrawCloverForEveryone'
 import { Garden } from '@gamepark/lucky-number/PlayerState'
 import {Animation, useAnimation, usePlay, usePlayerId} from '@gamepark/react-client'
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import { getDisplayPosition } from '../players/PlayerDisplay'
 import {canDragStyle, cloverSize, headerHeight, opacityKeyframe, playerCloverLeft, playerCloverTop} from '../styles'
 import CloverImage from './CloverImage'
@@ -22,6 +23,9 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
   const [positions, setPositions] = useState<(CssPosition)[]>([...new Array(size)].map(() => ({radius: Math.random(), direction: Math.random(), rotation: Math.random()})))
   const [indexDrew, setIndexDrew] = useState(-10)
   const drawCloverAnimation = useAnimation<DrawView>(animation => isDrawClover(animation.move))
+  const drawCloverForEveryoneAnimation = useAnimation<DrawForEveryoneView>(animation => isDrawCloverForEveryone(animation.move))
+  const firstNonNullIndexes = indexesAmongFirstsClovers(positions, nbPlayers)
+  const firstRender = useRef(true)
 
   function playDrawMove(index:number){
     setIndexDrew(index)
@@ -44,7 +48,20 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
       setIndexDrew(newArray.findIndex(isPositionned))
     }
   },[drawCloverAnimation?.duration])
-  
+
+  useEffect(() => {   // Michael Variant : We have to refresh the position array after animation
+    if(drawCloverForEveryoneAnimation === undefined){
+      if(firstRender.current){
+        firstRender.current = false
+        return
+      }
+      const newArray = [...positions]
+      firstNonNullIndexes.forEach(i => {
+        newArray[i] = {direction:null,radius:null,rotation:null}
+      })
+      setPositions(newArray)
+    }
+  },[drawCloverForEveryoneAnimation?.duration])
   return <>
     {positions.map((cssPos, index) => isPositionned(cssPos) && 
       <div key={index} 
@@ -52,13 +69,27 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
            css={[cardWrapper,
                  style(positions[index]),
                  drawCloverAnimation !== undefined && activePlayer !== undefined && index === indexDrew && cloverDrewTranslation(drawCloverAnimation.duration, cssPos, getDisplayPosition(playerId, activePlayer-1, nbPlayers), playerId === activePlayer-1),
+                 drawCloverForEveryoneAnimation !== undefined && firstNonNullIndexes.includes(index) && cloverDrewTranslation(drawCloverForEveryoneAnimation!.duration, cssPos, getDisplayPosition(playerId, indexesAmongFirstsClovers(positions, nbPlayers).findIndex(i => i === index) , nbPlayers), false),
                  canDraw && drawCloverAnimation === undefined && feedBackAnimation(positions[index].rotation!)]}>
         <div css={[css`transform:rotateY(0deg);`, cloverFace, canDraw && drawCloverAnimation === undefined && canDragStyle]} > <CloverImage /> </div>
-        <div css={[css`transform:rotateY(180deg);`, cloverFace]} > <CloverImage  clover={drawCloverAnimation !== undefined ? drawCloverAnimation.move.clover : undefined}  /> </div>
+        <div css={[css`transform:rotateY(180deg);`, cloverFace]} > <CloverImage  clover={drawCloverAnimation !== undefined ? drawCloverAnimation.move.clover : (drawCloverForEveryoneAnimation ? drawCloverForEveryoneAnimation.move.clover[indexesAmongFirstsClovers(positions, nbPlayers).findIndex(i => i === index)] : undefined)}  /> </div>
       </div>
     )}
 
   </>
+}
+
+function indexesAmongFirstsClovers(positions:CssPosition[] , nbPlayers:number):number[]{
+  let index:number = 0
+  const result:number[] = []
+  for(const pos of positions){
+    if(isPositionned(pos)) {
+      result.push(index)
+    }
+    index++
+    if(result.length === nbPlayers) {break}
+  }
+  return result
 }
 
 function isPositionned({direction, radius, rotation}: CssPosition):boolean{
