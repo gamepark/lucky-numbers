@@ -10,6 +10,7 @@ import LuckyNumbersView from './LuckyNumbersView'
 import translations from './translations.json'
 import luckyNumbersAnimations from './LuckyNumbersAnimations'
 import LuckyNumbersTutorial from './tutorial/Tutorial'
+import { ai } from './tutorial/TutorialAI.worker'
 
 setupTranslation(translations, {debug: false})
 
@@ -68,6 +69,7 @@ ReactDOM.render(
                   optionsSpec={LuckyNumbersOptionsSpec}
                   animations={luckyNumbersAnimations}
                   tutorial={LuckyNumbersTutorial}
+                  
     >
       <App/>
     </GameProvider>
