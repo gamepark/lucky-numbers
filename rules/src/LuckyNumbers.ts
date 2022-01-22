@@ -1,4 +1,4 @@
-import {IncompleteInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
+import {Competitive, IncompleteInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
 import GameState, {setupNewGame} from './GameState'
 import GameView from './GameView'
 import {isGameOptions, LuckyNumbersOptions} from './LuckyNumbersOptions'
@@ -11,7 +11,7 @@ import PlaceClover, {placeClover, placeCloverMove} from './moves/PlaceClover'
 import {howManyCloversInGarden, isValidPosition} from './PlayerState'
 
 export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
-  implements IncompleteInformation<GameState, GameView, Move, MoveView>, TimeLimit<GameState, Move> {
+  implements IncompleteInformation<GameState, GameView, Move, MoveView>, TimeLimit<GameState, Move>, Competitive<GameState, Move> {
   constructor(state: GameState)
   constructor(options: LuckyNumbersOptions)
   constructor(arg: GameState | LuckyNumbersOptions) {
@@ -130,5 +130,11 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
     } else {
       return 10
     }
+  }
+
+  rankPlayers(playerA:number, playerB:number):number{
+    const playedTokensA = howManyCloversInGarden(this.state.players[playerA-1].garden)
+    const playedTokenB = howManyCloversInGarden(this.state.players[playerB-1].garden)
+    return playedTokenB - playedTokensA
   }
 }
