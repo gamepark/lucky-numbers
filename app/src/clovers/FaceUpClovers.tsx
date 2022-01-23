@@ -61,11 +61,14 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
                  canDrag={canDrag} 
                  drop={play} 
                  projection={bottomLeftPlayerProjection} 
-                 css={[position(index), isCloverAnimated(clover, placeCloverAnimation) && displayPositionOfAnimPlayer !== false && placeCloverTranslation(placeCloverAnimation!.duration, displayPositionOfAnimPlayer, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column, isBrunoVariantAnim && playerId === activePlayer)]}>
+                 css={[position(index),
+                  isCloverAnimated(clover, placeCloverAnimation) && displayPositionOfAnimPlayer !== false && placeCloverTranslation(placeCloverAnimation!.duration, displayPositionOfAnimPlayer, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column, isBrunoVariantAnim && playerId === activePlayer),
+                  isCloverSorted(index, clovers, placeCloverAnimation) && sortClovers(placeCloverAnimation!.duration, index)]}>
         <CloverImage clover={clover} 
-                     css={[css`position:absolute;width:100%;height:100%;`,canDrag && placeCloverAnimation === undefined && canDragStyle, 
-                     isCloverAnimated(clover, placeCloverAnimation) && isBrunoVariantAnim && replayAnimation(placeCloverAnimation!.duration, playerId === activePlayer),
-                     isCloverSorted(index, clovers, placeCloverAnimation) && sortClovers(placeCloverAnimation!.duration, index)
+                     css={[css`position:absolute;width:100%;height:100%;`,
+                           canDrag && placeCloverAnimation === undefined && canDragStyle, 
+                           isCloverAnimated(clover, placeCloverAnimation) && isBrunoVariantAnim && replayAnimation(placeCloverAnimation!.duration, playerId === activePlayer),
+                           
                      ]}/>
       </Draggable> )}
   </>
@@ -98,7 +101,7 @@ const spanStyle = css`
 `
 
 const sortClovers = (duration:number, index:number) => css`
-  animation: ${sortCloverKeyframes(index)} ${duration}s ease-in-out forwards;
+  animation: ${sortCloverKeyframes(index)} ${duration}s ease-in-out 0s forwards;
 `
 
 const sortCloverKeyframes = (index:number) => keyframes`

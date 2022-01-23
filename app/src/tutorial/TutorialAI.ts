@@ -1,21 +1,16 @@
 import GameState from '@gamepark/lucky-number/GameState';
+import LuckyNumbers from '@gamepark/lucky-number/LuckyNumbers';
 import Move from '@gamepark/lucky-number/moves/Move';
+import MoveType from '@gamepark/lucky-number/moves/MoveType';
 import PlaceClover from '@gamepark/lucky-number/moves/PlaceClover';
 import { Garden, howManyCloversInGarden } from '@gamepark/lucky-number/PlayerState';
 
-export default class TutorialAI {
-    private timeLimit : number = 0
-    private readonly playerId: number
+export default async function tutorialAI(game:GameState, playerId:number):Promise<Move[]> {
 
-    public constructor(playerId: number){
-        this.playerId = playerId
-    }
+    new LuckyNumbers(game).getLegalMoves(playerId)
 
-    play(game:GameState):Move[]{
-        const player = game.players[this.playerId-1]
-        return []
-        
-    }
+    return [{type:MoveType.DrawClover}]
+
 }
 
 function isSlotEmpty(garden:Garden, row:number, column:number):boolean{
