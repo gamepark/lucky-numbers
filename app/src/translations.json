@@ -2,7 +2,6 @@
     "en": {
         "translation": {
             "Name": "Lucky Numbers",
-            "Player": "Player",
             "Game loading...": "Game loading...",
             "game.over.you.win": "Victory! You completed your board first, and you won the game!",
             "game.over.player.win": "No luck! {player} completed his board first and wins the game!",
@@ -161,7 +160,6 @@
     "fr": {
         "translation": {
             "Name": "Lucky Numbers",
-            "Player": "Joueur",
             "Game loading...": "Chargement de la partie...",
             "game.over.you.win": "Victoire ! Vous avez complété votre plateau le premier, et vous remportez la partie !",
             "game.over.player.win": "Pas de chance ! {player} a complété son plateau le premier et remporte la partie !",

@@ -1,11 +1,10 @@
 import {OptionsSpec} from '@gamepark/rules-api'
-import { TFunction } from 'i18next'
 import GameState from './GameState'
 
 export type LuckyNumbersOptions = {
-  players:number
-  isBrunoVariant:boolean
-  isMichaelVariant:boolean
+  players: number
+  isBrunoVariant: boolean
+  isMichaelVariant: boolean
 }
 
 export function isGameOptions(arg: GameState | LuckyNumbersOptions): arg is LuckyNumbersOptions {
@@ -13,19 +12,14 @@ export function isGameOptions(arg: GameState | LuckyNumbersOptions): arg is Luck
 }
 
 export const LuckyNumbersOptionsSpec: OptionsSpec<LuckyNumbersOptions> = {
-  isBrunoVariant:{
-    label:(t:Function) => t('Bruno Variant'),
-    help:t => t('bruno.variant.help'),
+  isBrunoVariant: {
+    label: (t: Function) => t('Bruno Variant'),
+    help: t => t('bruno.variant.help'),
     subscriberRequired: true
   },
-  isMichaelVariant:{
-    label:(t:Function) => t('Michael Variant'),
-    help:t => t('michael.variant.help'),
+  isMichaelVariant: {
+    label: (t: Function) => t('Michael Variant'),
+    help: t => t('michael.variant.help'),
     subscriberRequired: true
   }
-}
-
-
-export function getPlayerName(playerId: number, t: TFunction) {
-  return t('Player').concat(" n° ", String(playerId)) 
 }

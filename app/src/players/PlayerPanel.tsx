@@ -1,11 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { getPlayerName } from "@gamepark/lucky-number/LuckyNumbersOptions";
-import { Player, PlayerTimer } from "@gamepark/react-client";
-import { FC } from "react";
-import { useTranslation } from "react-i18next";
-import { panelBGTop, panelLeft, panelTop, toAbsolute } from "../styles";
-import AvatarPanel from "./AvatarPanel";
+import {css} from '@emotion/react'
+import {Player, PlayerTimer} from '@gamepark/react-client'
+import {FC} from 'react'
+import {useTranslation} from 'react-i18next'
+import {panelBGTop, panelLeft, panelTop, toAbsolute} from '../styles'
+import AvatarPanel from './AvatarPanel'
 
 type Props = {
     playerInfo:Player|undefined
@@ -24,7 +23,7 @@ const PlayerPanel : FC<Props> = ({playerInfo, index, activePlayer}) => {
 
         <div css={[panelPosition(index)]}>
             <AvatarPanel playerInfo={playerInfo}/>
-            <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? getPlayerName(playerInfo?.id, t) : playerInfo?.name}</h1>
+            <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? t('Player {number}', {number: playerInfo?.id}) : playerInfo?.name}</h1>
             <PlayerTimer playerId={index} css={[toAbsolute,timerStyle]}/>
         </div>
     

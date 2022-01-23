@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import GameView from '@gamepark/lucky-number/GameView'
-import {useTranslation} from 'react-i18next'
+import PlaceClover, {isBrunoVariantTrigger, isPlaceClover} from '@gamepark/lucky-number/moves/PlaceClover'
 import {Player as PlayerInfo, useAnimation, usePlayerId, usePlayers} from '@gamepark/react-client'
-import { getPlayerName } from '@gamepark/lucky-number/LuckyNumbersOptions'
-import { TFunction } from 'i18next'
-import PlaceClover, { isBrunoVariantTrigger, isPlaceClover } from '@gamepark/lucky-number/moves/PlaceClover'
+import {TFunction} from 'i18next'
+import {useTranslation} from 'react-i18next'
 
 type Props = {
   loading: boolean
@@ -27,7 +26,7 @@ function getPseudo(player: number, players: PlayerInfo<number>[], t: TFunction):
     return "Error Player"
   }
   if (players[player-1].name === undefined) {
-    return getPlayerName(player, t) 
+    return t('Player {number}', {number: player})
   } else {
     return players.find(p => p.id === player, t)!.name!
   }
