@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import GameView from '@gamepark/lucky-number/GameView'
+import GameView from '@gamepark/lucky-numbers/GameView'
 import {usePlayerId, useTutorial} from '@gamepark/react-client'
 import {Letterbox, Picture} from '@gamepark/react-components'
 import { useEffect, useState } from 'react'

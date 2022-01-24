@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
-import Clover from '@gamepark/lucky-number/material/Clover'
-import CloverColor from '@gamepark/lucky-number/material/CloverColor'
+import Clover from '@gamepark/lucky-numbers/material/Clover'
+import CloverColor from '@gamepark/lucky-numbers/material/CloverColor'
 import {Picture, PictureAttributes} from '@gamepark/react-components'
 import Images from '../Images'
 import {cloverSize} from '../styles'

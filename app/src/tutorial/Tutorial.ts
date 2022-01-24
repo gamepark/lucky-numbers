@@ -1,9 +1,9 @@
-import GameState from "@gamepark/lucky-number/GameState";
-import Clover from "@gamepark/lucky-number/material/Clover";
-import CloverColor from "@gamepark/lucky-number/material/CloverColor";
-import Move from "@gamepark/lucky-number/moves/Move";
-import MoveType from "@gamepark/lucky-number/moves/MoveType";
-import { emptyGarden } from "@gamepark/lucky-number/PlayerState";
+import GameState from "@gamepark/lucky-numbers/GameState";
+import Clover from "@gamepark/lucky-numbers/material/Clover";
+import CloverColor from "@gamepark/lucky-numbers/material/CloverColor";
+import Move from "@gamepark/lucky-numbers/moves/Move";
+import MoveType from "@gamepark/lucky-numbers/moves/MoveType";
+import { emptyGarden } from "@gamepark/lucky-numbers/PlayerState";
 import { TutorialDescription } from "@gamepark/react-client";
 
 const startingClovers:Clover[][] = [[{color:CloverColor.Green, number:5}, {color:CloverColor.Yellow, number:1}, {color:CloverColor.Yellow, number:13}, {color:CloverColor.Green, number:14}],

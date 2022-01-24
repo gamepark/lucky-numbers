@@ -1,10 +1,10 @@
-import GameView from '@gamepark/lucky-number/GameView'
-import {drawCloverInView} from '@gamepark/lucky-number/moves/DrawClover'
-import { drawCloverForEveryoneInView } from '@gamepark/lucky-number/moves/DrawCloverForEveryone'
-import MoveType from '@gamepark/lucky-number/moves/MoveType'
-import MoveView from '@gamepark/lucky-number/moves/MoveView'
-import {placeClover} from '@gamepark/lucky-number/moves/PlaceClover'
-import { howManyCloversInGarden } from '@gamepark/lucky-number/PlayerState'
+import GameView from '@gamepark/lucky-numbers/GameView'
+import {drawCloverInView} from '@gamepark/lucky-numbers/moves/DrawClover'
+import { drawCloverForEveryoneInView } from '@gamepark/lucky-numbers/moves/DrawCloverForEveryone'
+import MoveType from '@gamepark/lucky-numbers/moves/MoveType'
+import MoveView from '@gamepark/lucky-numbers/moves/MoveView'
+import {placeClover} from '@gamepark/lucky-numbers/moves/PlaceClover'
+import { howManyCloversInGarden } from '@gamepark/lucky-numbers/PlayerState'
 import {Game} from '@gamepark/rules-api'
 
 export default class LuckyNumbersView implements Game<GameView, MoveView> {

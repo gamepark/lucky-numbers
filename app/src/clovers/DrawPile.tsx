@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import {drawCloverMove, DrawView, isDrawClover} from '@gamepark/lucky-number/moves/DrawClover'
-import { DrawForEveryoneView, isDrawCloverForEveryone } from '@gamepark/lucky-number/moves/DrawCloverForEveryone'
+import {drawCloverMove, DrawView, isDrawClover} from '@gamepark/lucky-numbers/moves/DrawClover'
+import { DrawForEveryoneView, isDrawCloverForEveryone } from '@gamepark/lucky-numbers/moves/DrawCloverForEveryone'
 import {useAnimation, usePlay, usePlayerId} from '@gamepark/react-client'
 import {useEffect, useRef, useState} from 'react'
 import { getDisplayPosition } from '../players/PlayerDisplay'

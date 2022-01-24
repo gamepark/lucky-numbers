@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import GameView from '@gamepark/lucky-number/GameView'
+import GameView from '@gamepark/lucky-numbers/GameView'
 import {FailuresDialog, FullscreenDialog, Menu, useGame} from '@gamepark/react-client'
 import {Header, ImagesLoader, LoadingScreen} from '@gamepark/react-components'
 import {useEffect, useState} from 'react'

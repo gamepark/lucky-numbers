@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@gamepark/lucky-number/*": ["../rules/src/*"]
+      "@gamepark/lucky-numbers/*": ["../rules/src/*"]
     }
   }
 }

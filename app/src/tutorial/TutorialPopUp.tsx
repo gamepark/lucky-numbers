@@ -2,8 +2,8 @@
 import {css} from "@emotion/react";
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import GameView from "@gamepark/lucky-number/GameView";
-import Move from "@gamepark/lucky-number/moves/Move";
+import GameView from "@gamepark/lucky-numbers/GameView";
+import Move from "@gamepark/lucky-numbers/moves/Move";
 import {Failure, Tutorial, useActions, useAnimation, useFailures, usePlayerId} from "@gamepark/react-client";
 import {Picture} from '@gamepark/react-components'
 import {TFunction} from "i18next";

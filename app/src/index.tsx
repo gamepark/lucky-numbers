@@ -1,6 +1,6 @@
 import {css, Global} from '@emotion/react'
-import {LuckyNumbersOptionsSpec} from '@gamepark/lucky-number/LuckyNumbersOptions'
-import LuckyNumbers from '@gamepark/lucky-number/LuckyNumbers'
+import {LuckyNumbersOptionsSpec} from '@gamepark/lucky-numbers/LuckyNumbersOptions'
+import LuckyNumbers from '@gamepark/lucky-numbers/LuckyNumbers'
 import {GameProvider, setupTranslation} from '@gamepark/react-client'
 import normalize from 'emotion-normalize'
 import {StrictMode} from 'react'

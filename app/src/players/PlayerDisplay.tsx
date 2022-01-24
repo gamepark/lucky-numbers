@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
-import PlaceClover, { isBrunoVariantTrigger, isPlaceClover } from '@gamepark/lucky-number/moves/PlaceClover'
-import PlayerState from '@gamepark/lucky-number/PlayerState'
+import Clover, { isSameClover } from '@gamepark/lucky-numbers/material/Clover'
+import PlaceClover, { isBrunoVariantTrigger, isPlaceClover } from '@gamepark/lucky-numbers/moves/PlaceClover'
+import PlayerState from '@gamepark/lucky-numbers/PlayerState'
 import {Animation, useActions, useAnimation, usePlay, usePlayer, usePlayerId, useTutorial} from '@gamepark/react-client'
 import {Draggable, Picture} from '@gamepark/react-components'
 import Images from '../Images'
@@ -11,7 +11,7 @@ import {boardLeft, boardMargin, boardTop, canDragStyle, cloverSize, playerClover
 import Board from './Board'
 import {CLOVER} from './CloverDropArea'
 import PlayerPanel from './PlayerPanel'
-import Move from '@gamepark/lucky-number/moves/Move'
+import Move from '@gamepark/lucky-numbers/moves/Move'
 import { DragLayerMonitor, DropTargetMonitor, useDrop } from 'react-dnd'
 
 type Props = {

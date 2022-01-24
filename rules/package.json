@@ -1,5 +1,5 @@
 {
-  "name": "@gamepark/lucky-number",
+  "name": "@gamepark/lucky-numbers",
   "version": "0.1.0",
   "description": "Lucky Number rules for Game Park",
   "main": "dist/index.js",

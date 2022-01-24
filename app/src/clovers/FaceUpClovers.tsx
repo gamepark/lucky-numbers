@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import Clover, { isSameClover } from '@gamepark/lucky-number/material/Clover'
-import PlaceClover, { isBrunoVariantTrigger, isPlaceClover, placeCloverMove } from '@gamepark/lucky-number/moves/PlaceClover'
+import Clover, { isSameClover } from '@gamepark/lucky-numbers/material/Clover'
+import PlaceClover, { isBrunoVariantTrigger, isPlaceClover, placeCloverMove } from '@gamepark/lucky-numbers/moves/PlaceClover'
 import { Animation, useAnimation, usePlay, usePlayerId } from '@gamepark/react-client'
 import { Draggable } from '@gamepark/react-components'
 import { DragLayerMonitor, DropTargetMonitor, useDrop } from 'react-dnd'
@@ -10,7 +10,7 @@ import { CLOVER } from '../players/CloverDropArea'
 import {canDragStyle, cloverSize, boardTop, boardLeft, boardMargin} from '../styles'
 import CloverImage from './CloverImage'
 import { useTranslation } from 'react-i18next'
-import PlayerState from '@gamepark/lucky-number/PlayerState'
+import PlayerState from '@gamepark/lucky-numbers/PlayerState'
 
 type Props = {
   clovers: Clover[]

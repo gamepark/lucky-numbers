@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import GameView from '@gamepark/lucky-number/GameView'
-import PlaceClover, {isBrunoVariantTrigger, isPlaceClover} from '@gamepark/lucky-number/moves/PlaceClover'
+import GameView from '@gamepark/lucky-numbers/GameView'
+import PlaceClover, {isBrunoVariantTrigger, isPlaceClover} from '@gamepark/lucky-numbers/moves/PlaceClover'
 import {Player as PlayerInfo, useAnimation, usePlayerId, usePlayers} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
 import {useTranslation} from 'react-i18next'

@@ -1,7 +1,7 @@
-import GameView from "@gamepark/lucky-number/GameView";
-import MoveType from "@gamepark/lucky-number/moves/MoveType";
-import MoveView from "@gamepark/lucky-number/moves/MoveView";
-import { isBrunoVariantTrigger } from "@gamepark/lucky-number/moves/PlaceClover";
+import GameView from "@gamepark/lucky-numbers/GameView";
+import MoveType from "@gamepark/lucky-numbers/moves/MoveType";
+import MoveView from "@gamepark/lucky-numbers/moves/MoveView";
+import { isBrunoVariantTrigger } from "@gamepark/lucky-numbers/moves/PlaceClover";
 import { Animations } from "@gamepark/react-client";
 
 const luckyNumbersAnimations : Animations<GameView, MoveView, number> = {

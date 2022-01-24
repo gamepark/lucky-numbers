@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import Clover from '@gamepark/lucky-number/material/Clover'
-import PlaceClover from '@gamepark/lucky-number/moves/PlaceClover'
+import Clover from '@gamepark/lucky-numbers/material/Clover'
+import PlaceClover from '@gamepark/lucky-numbers/moves/PlaceClover'
 import {HTMLAttributes} from 'react'
 import {DropTargetMonitor, useDrop} from 'react-dnd'
 import {cloverSize} from '../styles'
