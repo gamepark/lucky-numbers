@@ -18,55 +18,53 @@ type Props = {
 export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props) {
   const play = usePlay()
   const playerId = usePlayerId()
-  const [positions, setPositions] = useState<(CssPosition)[]>([...new Array(size)].map(() => ({radius: Math.random(), direction: Math.random(), rotation: Math.random()})))
-  const [indexDrew, setIndexDrew] = useState(-10)
+  const [positions, setPositions] = useState<(CssPosition)[]>([...new Array(size)].map((_, index) => ({key:index, radius: Math.random(), direction: Math.random(), rotation: Math.random()})))
+  const [keyDrew, setKeyDrew] = useState<number|undefined>()
+  const [cloverDrew, setCloverDrew] = useState(false)
   const drawCloverAnimation = useAnimation<DrawView>(animation => isDrawClover(animation.move))
   const drawCloverForEveryoneAnimation = useAnimation<DrawForEveryoneView>(animation => isDrawCloverForEveryone(animation.move))
   const firstNonNullIndexes = indexesAmongFirstsClovers(positions, nbPlayers)
   const firstRender = useRef(true)
 
-  function playDrawMove(index:number){
-    setIndexDrew(index)
+  function playDrawMove(key:number){
+    setKeyDrew(key)
     play(drawCloverMove, {delayed: true})
   }
 
   useEffect(() => { // We have to refresh the position array and removing the good clover, as it was the array on which clovers are mapped for display.
-    if(drawCloverAnimation === undefined){
-      const newArray = [...positions]
-      if(indexDrew !== -10){
-        newArray[indexDrew] = {direction:null,radius:null,rotation:null}
-        setPositions(newArray)
+    if(drawCloverAnimation !== undefined){
+      setCloverDrew(true)
+    } else if(cloverDrew){
+      setCloverDrew(false)
+      if(keyDrew === undefined){
+        setPositions(positions => positions.slice(0, -1))
+      } else {
+        setKeyDrew(undefined)
+        setPositions(positions => positions.filter(position => position.key !== keyDrew))
       }
     }
-  },[drawCloverAnimation?.duration])
+  },[drawCloverAnimation, cloverDrew, keyDrew])
 
-  useEffect(() => {   // We need to get a clover index when other players draw one, which is obviously not guaranted by onClick event
-    if(drawCloverAnimation !== undefined && drawCloverAnimation.action.playerId !== playerId){
-      const newArray = positions.slice()
-      setIndexDrew(newArray.findIndex(isPositionned))
-    }
-  },[drawCloverAnimation?.duration])
-
-  useEffect(() => {   // Michael Variant : We have to refresh the position array after animation
-    if(drawCloverForEveryoneAnimation === undefined){
-      if(firstRender.current){
-        firstRender.current = false
-        return
-      }
-      const newArray = [...positions]
-      firstNonNullIndexes.forEach(i => {
-        newArray[i] = {direction:null,radius:null,rotation:null}
-      })
-      setPositions(newArray)
-    }
-  },[drawCloverForEveryoneAnimation?.duration])
+  // useEffect(() => {   // Michael Variant : We have to refresh the position array after animation
+  //   if(drawCloverForEveryoneAnimation === undefined){
+  //     if(firstRender.current){
+  //       firstRender.current = false
+  //       return
+  //     }
+  //     const newArray = [...positions]
+  //     firstNonNullIndexes.forEach(i => {
+  //       newArray[i] = {direction:null,radius:null,rotation:null}
+  //     })
+  //     setPositions(newArray)
+  //   }
+  // },[drawCloverForEveryoneAnimation?.duration])
   return <>
-    {positions.map((cssPos, index) => isPositionned(cssPos) && 
-      <div key={index} 
-           onClick={canDraw ? () => playDrawMove(index) : undefined}
+    {positions.map((cssPos, index) => (drawCloverAnimation !== undefined || cloverDrew === false || (keyDrew == undefined ? index !== positions.length-1 : keyDrew !== cssPos.key ) ) &&
+      <div key={cssPos.key} 
+           onClick={canDraw ? () => playDrawMove(cssPos.key) : undefined}
            css={[cardWrapper,
                  style(positions[index]),
-                 drawCloverAnimation !== undefined && activePlayer !== undefined && index === indexDrew && cloverDrewTranslation(drawCloverAnimation.duration, cssPos, getDisplayPosition(playerId, activePlayer-1, nbPlayers), playerId === activePlayer-1),
+                 drawCloverAnimation !== undefined && activePlayer !== undefined && (keyDrew === undefined ? index === positions.length-1 : keyDrew === cssPos.key ) && cloverDrewTranslation(drawCloverAnimation.duration, cssPos, getDisplayPosition(playerId, activePlayer-1, nbPlayers), playerId === activePlayer-1),
                  drawCloverForEveryoneAnimation !== undefined && firstNonNullIndexes.includes(index) && cloverDrewTranslation(drawCloverForEveryoneAnimation!.duration, cssPos, getDisplayPosition(playerId, indexesAmongFirstsClovers(positions, nbPlayers).findIndex(i => i === index) , nbPlayers), false),
                  canDraw && drawCloverAnimation === undefined && feedBackAnimation]}>
         <div css={[css`transform:rotateY(0deg);`, cloverFace, canDraw && drawCloverAnimation === undefined && canDragStyle]} > <CloverImage /> </div>
@@ -95,6 +93,7 @@ function isPositionned({direction, radius, rotation}: CssPosition):boolean{
 }
 
 type CssPosition = {
+  key:number
   radius: number|null
   direction: number|null
   rotation: number|null

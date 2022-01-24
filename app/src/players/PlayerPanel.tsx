@@ -60,6 +60,8 @@ const panelPosition = (index:number) => css`
 `
 
 const nameStyle = css`
+    position:absolute;
+    left:2.5em;
     width:7.8em;
     font-size: 2.5em;
     white-space: nowrap;

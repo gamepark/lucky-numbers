@@ -2,7 +2,7 @@ import GameState from '@gamepark/lucky-numbers/GameState';
 import LuckyNumbers from '@gamepark/lucky-numbers/LuckyNumbers';
 import Move from '@gamepark/lucky-numbers/moves/Move';
 import MoveType from '@gamepark/lucky-numbers/moves/MoveType';
-import PlaceClover from '@gamepark/lucky-numbers/moves/PlaceClover';
+import PlaceClover, { placeClover } from '@gamepark/lucky-numbers/moves/PlaceClover';
 import { Garden, howManyCloversInGarden } from '@gamepark/lucky-numbers/PlayerState';
 
 export default async function tutorialAI(game:GameState, playerId:number):Promise<Move[]> {
@@ -20,11 +20,15 @@ export default async function tutorialAI(game:GameState, playerId:number):Promis
         }, player.clovers[0])
         return [{type:MoveType.PlaceClover,clover:smallerClover,playerId, column:16-emptySlots, row:16-emptySlots}]
     } else {
-        if(legalMoves.includes({type:MoveType.DrawClover})){
+        console.log(legalMoves)
+        if(legalMoves.find(move => move.type === MoveType.DrawClover) !== undefined){
             const placeCloverMoves:PlaceClover[] = legalMoves.filter(move => move.type === MoveType.PlaceClover && move.row !== -1) as PlaceClover[] ;
             if(placeCloverMoves.length === 0){return [{type:MoveType.DrawClover}]}
             const ratedMoves:{move:PlaceClover, note:number}[] = placeCloverMoves.map((move) => ({move, note:ratePlaceCloverMove(move, player.garden)})  )
             const bestPlaceMove:{move:PlaceClover, note:number} = ratedMoves.find(ratedMove => ratedMove.note === Math.max(...ratedMoves.map(ratedMove => ratedMove.note)))! ;
+            
+            console.log("best move if can Draw : ", bestPlaceMove.move, bestPlaceMove.note)
+            
             if(shallDraw(bestPlaceMove.note, emptySlots)){
                 return [{type:MoveType.DrawClover}]
             } else {
@@ -38,6 +42,8 @@ export default async function tutorialAI(game:GameState, playerId:number):Promis
             const ratedMoves:{move:PlaceClover, note:number}[] = placeCloverMoves.map((move) => ({move, note:ratePlaceCloverMove(move, player.garden)})  )
             const bestPlaceMove:{move:PlaceClover, note:number} = ratedMoves.find(ratedMove => ratedMove.note === Math.max(...ratedMoves.map(ratedMove => ratedMove.note)))! ;
     
+            console.log("best move if no draw : ", bestPlaceMove.move, bestPlaceMove.note)
+
             if(shallDiscard(bestPlaceMove.note, emptySlots)){
                 return [legalMoves.find(move => move.type === MoveType.PlaceClover && move.row === -1)!]
             } else {
@@ -75,9 +81,13 @@ function ratePlaceCloverMove(move:PlaceClover, garden:Garden):number{
     } else {
         const placedClover = garden[move.row][move.column]!.number
         if(move.row+move.column < 3){
-            return placedClover - cloverNumber > 0 ? 0.5 + (placedClover - cloverNumber)/10 : 0
+            const extremeValue:number = extremeLowTable[move.row][move.column]!
+            if (cloverNumber < extremeValue) return 0
+            return placedClover - cloverNumber > 0 ? (placedClover - cloverNumber)/10 : 0
         } else if (move.row+move.column > 3){
-            return cloverNumber - placedClover > 0 ? 0.5 + (cloverNumber - placedClover)/10 : 0
+            const extremeValue:number = extremeHighTable[move.row][move.column]!
+            if (cloverNumber > extremeValue) return 0
+            return cloverNumber - placedClover > 0 ? (cloverNumber - placedClover)/10 : 0
         } else {
             return 1 - (16-howManyCloversInGarden(garden))/12
         }

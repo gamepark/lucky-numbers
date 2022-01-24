@@ -66,12 +66,12 @@ const style = css`
 
 const display = css`
   &:before{
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.5);
   }
 `
 
 const highlight = css`
   &:before{
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.95);
   }
 `

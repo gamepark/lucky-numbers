@@ -29,6 +29,7 @@ const AvatarPanel : FC<Props> = ({playerInfo}) => {
 }
 
 const avatarStyle = css`
+    position:absolute;
     float:left;
     margin:0.8em 0.8em;
     height:5em;
