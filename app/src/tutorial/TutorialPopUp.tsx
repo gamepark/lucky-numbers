@@ -101,7 +101,6 @@ const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutori
     const currentMessage = tutorialMessage(tutorialIndex)
 
     const displayPopup = tutorialDisplay && !animation && currentMessage !== undefined && !failures.length && (game.activePlayer === undefined ? (actions === undefined || actions.length < 5 || (actions.length === 4 && tutorialIndex === 1)) : game.activePlayer === playerId)
-    console.log(actionsNumber)
     return (
         <>
 

@@ -13,7 +13,7 @@ const luckyNumbersAnimations : Animations<GameView, MoveView, number> = {
         } else if (move.type === MoveType.PlaceClover){
             return isBrunoVariantTrigger(state.players[move.playerId-1].garden, move.row, move.column, move.clover, state.isBrunoVariant === true) === true 
                 ? (action.playerId === playerId ? 2 : 3) 
-                : (action.playerId === playerId ? 0 : 1)
+                : (action.playerId === playerId ? 0 : (1))
         } 
         return 0
     }

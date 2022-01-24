@@ -69,7 +69,7 @@ ReactDOM.render(
                   optionsSpec={LuckyNumbersOptionsSpec}
                   animations={luckyNumbersAnimations}
                   tutorial={LuckyNumbersTutorial}
-                  //ai={tutorialAI}
+                  ai={tutorialAI}
     >
       <App/>
     </GameProvider>

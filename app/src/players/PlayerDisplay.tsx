@@ -180,7 +180,7 @@ const ladybugStyle = (pos:{top:number, left:number}) => css`
   height:4.5em;
   z-index:10;
   opacity:1;
-  animation:${ladyBugEntryKF} 2s linear, ${ladyBugWaitingKF(pos.top)} 2s linear infinite;
+  animation:${ladyBugEntryKF} 2s linear, ${ladyBugWaitingKF(pos.top)} 3s linear infinite;
 `
 
 function getLadyBugStart(action:number):{top:number, left:number}|undefined{

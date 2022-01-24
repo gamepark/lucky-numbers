@@ -7,10 +7,44 @@ import { Garden, howManyCloversInGarden } from '@gamepark/lucky-numbers/PlayerSt
 
 export default async function tutorialAI(game:GameState, playerId:number):Promise<Move[]> {
 
-    new LuckyNumbers(game).getLegalMoves(playerId)
+    const legalMoves = new LuckyNumbers(game).getLegalMoves(playerId)
+    const player = game.players[playerId-1]
+    const emptySlots = 16 - howManyCloversInGarden(player.garden)
 
-    return [{type:MoveType.DrawClover}]
+    console.log("I'm here !")
 
+    if(!game.activePlayer){
+        const smallerClover = player.clovers.reduce((prevClover, actualClover) => {
+            if(actualClover.number < prevClover.number){return actualClover}
+            else {return prevClover}
+        }, player.clovers[0])
+        return [{type:MoveType.PlaceClover,clover:smallerClover,playerId, column:16-emptySlots, row:16-emptySlots}]
+    } else {
+        if(legalMoves.includes({type:MoveType.DrawClover})){
+            const placeCloverMoves:PlaceClover[] = legalMoves.filter(move => move.type === MoveType.PlaceClover && move.row !== -1) as PlaceClover[] ;
+            if(placeCloverMoves.length === 0){return [{type:MoveType.DrawClover}]}
+            const ratedMoves:{move:PlaceClover, note:number}[] = placeCloverMoves.map((move) => ({move, note:ratePlaceCloverMove(move, player.garden)})  )
+            const bestPlaceMove:{move:PlaceClover, note:number} = ratedMoves.find(ratedMove => ratedMove.note === Math.max(...ratedMoves.map(ratedMove => ratedMove.note)))! ;
+            if(shallDraw(bestPlaceMove.note, emptySlots)){
+                return [{type:MoveType.DrawClover}]
+            } else {
+                return [bestPlaceMove.move]
+            }
+        } else {
+            if(legalMoves.length === 1){
+                return [legalMoves[0]]
+            }
+            const placeCloverMoves:PlaceClover[] = legalMoves.filter(move => move.type === MoveType.PlaceClover && move.row !== -1) as PlaceClover[] ;
+            const ratedMoves:{move:PlaceClover, note:number}[] = placeCloverMoves.map((move) => ({move, note:ratePlaceCloverMove(move, player.garden)})  )
+            const bestPlaceMove:{move:PlaceClover, note:number} = ratedMoves.find(ratedMove => ratedMove.note === Math.max(...ratedMoves.map(ratedMove => ratedMove.note)))! ;
+    
+            if(shallDiscard(bestPlaceMove.note, emptySlots)){
+                return [legalMoves.find(move => move.type === MoveType.PlaceClover && move.row === -1)!]
+            } else {
+                return [ratedMoves.find(ratedMove => ratedMove.note === Math.max(...ratedMoves.map(ratedMove => ratedMove.note)))!.move]
+            }
+        }
+    }
 }
 
 function isSlotEmpty(garden:Garden, row:number, column:number):boolean{
@@ -56,6 +90,10 @@ function isNumberinInterval(value:number, interval:[number,number]):boolean{
 
 function shallDraw(bestMoveRate:number, nbEmptySlots:number):boolean{
     return bestMoveRate > getShallDrawCoeff(nbEmptySlots)
+}
+
+function shallDiscard(bestMoveRate:number, nbEmptySlots:number):boolean{
+    return bestMoveRate < 0.2
 }
 
 function getShallDrawCoeff(nbEmptySlots:number){
