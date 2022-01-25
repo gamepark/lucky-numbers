@@ -11,6 +11,7 @@ type GameState = {
   faceUpClovers: Clover[]
   isBrunoVariant?:boolean
   isMichaelVariant?:boolean
+  isTutorial?:boolean
 }
 
 export default GameState
@@ -23,7 +24,8 @@ export function setupNewGame(options: LuckyNumbersOptions) {
     faceDownClovers: clovers,
     faceUpClovers: [],
     isBrunoVariant: options.isBrunoVariant,
-    isMichaelVariant: options.isMichaelVariant
+    isMichaelVariant: options.isMichaelVariant,
+    isTutorial:false
   }
 
 }

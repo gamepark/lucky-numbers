@@ -46,7 +46,8 @@ const LuckyNumbersTutorial: TutorialDescription<GameState, Move> = {
             {color:CloverColor.Green, number:18},
             {color:CloverColor.Yellow, number:17}
         ],
-        players:[{garden:emptyGarden, clovers:startingClovers[0]}, {garden:emptyGarden, clovers:startingClovers[1]}]
+        players:[{garden:emptyGarden, clovers:startingClovers[0]}, {garden:emptyGarden, clovers:startingClovers[1]}],
+        isTutorial:true
     }, [1,2]],
 
     expectedMoves:() => [

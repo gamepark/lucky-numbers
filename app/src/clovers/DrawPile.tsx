@@ -3,7 +3,7 @@ import {css, keyframes} from '@emotion/react'
 import {drawCloverMove, DrawView, isDrawClover} from '@gamepark/lucky-numbers/moves/DrawClover'
 import { DrawForEveryoneView, isDrawCloverForEveryone } from '@gamepark/lucky-numbers/moves/DrawCloverForEveryone'
 import {useAnimation, usePlay, usePlayerId} from '@gamepark/react-client'
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useState} from 'react'
 import { getDisplayPosition } from '../players/PlayerDisplay'
 import {canDragStyle, cloverSize, headerHeight, playerCloverLeft, playerCloverTop} from '../styles'
 import CloverImage from './CloverImage'
@@ -23,7 +23,6 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
   const [cloverDrew, setCloverDrew] = useState(false)
   const drawCloverAnimation = useAnimation<DrawView>(animation => isDrawClover(animation.move))
   const drawCloverForEveryoneAnimation = useAnimation<DrawForEveryoneView>(animation => isDrawCloverForEveryone(animation.move))
-  const firstNonNullIndexes = indexesAmongFirstsClovers(positions, nbPlayers)
 
   function playDrawMove(key:number){
     setKeyDrew(key)
@@ -31,7 +30,6 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
   }
 
   useEffect(() => { // We have to refresh the position array and removing the good clover, as it was the array on which clovers are mapped for display.
-    console.log("coucou")
     if(drawCloverAnimation !== undefined || drawCloverForEveryoneAnimation !== undefined){
       setCloverDrew(true)
     } else if(cloverDrew){
@@ -47,19 +45,6 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
     }
   },[drawCloverAnimation, drawCloverForEveryoneAnimation, cloverDrew, keyDrew])
 
-  // useEffect(() => {   // Michael Variant : We have to refresh the position array after animation
-  //   if(drawCloverForEveryoneAnimation === undefined){
-  //     if(firstRender.current){
-  //       firstRender.current = false
-  //       return
-  //     }
-  //     const newArray = [...positions]
-  //     firstNonNullIndexes.forEach(i => {
-  //       newArray[i] = {direction:null,radius:null,rotation:null}
-  //     })
-  //     setPositions(newArray)
-  //   }
-  // },[drawCloverForEveryoneAnimation?.duration])
   return <>
     {positions.map((cssPos, index) => (drawCloverAnimation !== undefined || drawCloverForEveryoneAnimation !== undefined || cloverDrew === false || (keyDrew === undefined ? (drawCloverForEveryoneAnimation !== undefined ? index < positions.length-nbPlayers : index !== positions.length-1) : keyDrew !== cssPos.key ) ) &&
       <div key={cssPos.key} 
@@ -77,28 +62,11 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
   </>
 }
 
-function indexesAmongFirstsClovers(positions:CssPosition[] , nbPlayers:number):number[]{
-  let index:number = 0
-  const result:number[] = []
-  for(const pos of positions){
-    if(isPositionned(pos)) {
-      result.push(index)
-    }
-    index++
-    if(result.length === nbPlayers) {break}
-  }
-  return result
-}
-
-function isPositionned({direction, radius, rotation}: CssPosition):boolean{
-  return direction !== null && radius !== null && rotation !== null
-}
-
 type CssPosition = {
   key:number
-  radius: number|null
-  direction: number|null
-  rotation: number|null
+  radius: number
+  direction: number
+  rotation: number
 } 
 
 const cardWrapper = css`
