@@ -61,7 +61,7 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
   return <>
     {positions.map((cssPos, index) => (drawCloverAnimation !== undefined || cloverDrew === false || (keyDrew == undefined ? index !== positions.length-1 : keyDrew !== cssPos.key ) ) &&
       <div key={cssPos.key} 
-           onClick={canDraw ? () => playDrawMove(cssPos.key) : undefined}
+           onClick={(canDraw && keyDrew === undefined) ? () => playDrawMove(cssPos.key) : undefined}
            css={[cardWrapper,
                  style(positions[index]),
                  drawCloverAnimation !== undefined && activePlayer !== undefined && (keyDrew === undefined ? index === positions.length-1 : keyDrew === cssPos.key ) && cloverDrewTranslation(drawCloverAnimation.duration, cssPos, getDisplayPosition(playerId, activePlayer-1, nbPlayers), playerId === activePlayer-1),
