@@ -9,12 +9,14 @@ import AvatarPanel from './AvatarPanel'
 type Props = {
     playerInfo:Player|undefined
     index:number
-    activePlayer:boolean;
+    activePlayer:boolean
+    indexPlayer:number
 }
 
-const PlayerPanel : FC<Props> = ({playerInfo, index, activePlayer}) => {
+const PlayerPanel : FC<Props> = ({playerInfo, index, indexPlayer, activePlayer}) => {
     const {t} = useTranslation()
     const isTuto = useTutorial()
+    console.log("for player n°", indexPlayer, ", display is : ", index)
 
     return(
 
@@ -23,7 +25,7 @@ const PlayerPanel : FC<Props> = ({playerInfo, index, activePlayer}) => {
         <div css={[panelBGStyle(index, activePlayer)]}></div>
 
         <div css={[panelPosition(index)]}>
-            <AvatarPanel playerInfo={playerInfo}/>
+            <AvatarPanel playerInfo={playerInfo} playerId={indexPlayer} display={index} />
             {isTuto 
                 ? <h1 css={[nameStyle]}>{index === 0 ? t("You") : t("Your Opponent")}</h1>
                 : <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? t('Player {number}', {number: playerInfo?.id}) : playerInfo?.name}</h1>
