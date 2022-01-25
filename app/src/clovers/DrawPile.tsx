@@ -24,7 +24,6 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
   const drawCloverAnimation = useAnimation<DrawView>(animation => isDrawClover(animation.move))
   const drawCloverForEveryoneAnimation = useAnimation<DrawForEveryoneView>(animation => isDrawCloverForEveryone(animation.move))
   const firstNonNullIndexes = indexesAmongFirstsClovers(positions, nbPlayers)
-  const firstRender = useRef(true)
 
   function playDrawMove(key:number){
     setKeyDrew(key)
@@ -32,18 +31,21 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
   }
 
   useEffect(() => { // We have to refresh the position array and removing the good clover, as it was the array on which clovers are mapped for display.
-    if(drawCloverAnimation !== undefined){
+    console.log("coucou")
+    if(drawCloverAnimation !== undefined || drawCloverForEveryoneAnimation !== undefined){
       setCloverDrew(true)
     } else if(cloverDrew){
       setCloverDrew(false)
       if(keyDrew === undefined){
-        setPositions(positions => positions.slice(0, -1))
+        drawCloverForEveryoneAnimation !== undefined 
+          ? setPositions(positions => positions.slice(0, -1))
+          : setPositions(positions => positions.slice(0, -nbPlayers))
       } else {
         setKeyDrew(undefined)
         setPositions(positions => positions.filter(position => position.key !== keyDrew))
       }
     }
-  },[drawCloverAnimation, cloverDrew, keyDrew])
+  },[drawCloverAnimation, drawCloverForEveryoneAnimation, cloverDrew, keyDrew])
 
   // useEffect(() => {   // Michael Variant : We have to refresh the position array after animation
   //   if(drawCloverForEveryoneAnimation === undefined){
@@ -59,16 +61,16 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
   //   }
   // },[drawCloverForEveryoneAnimation?.duration])
   return <>
-    {positions.map((cssPos, index) => (drawCloverAnimation !== undefined || cloverDrew === false || (keyDrew == undefined ? index !== positions.length-1 : keyDrew !== cssPos.key ) ) &&
+    {positions.map((cssPos, index) => (drawCloverAnimation !== undefined || drawCloverForEveryoneAnimation !== undefined || cloverDrew === false || (keyDrew === undefined ? (drawCloverForEveryoneAnimation !== undefined ? index < positions.length-nbPlayers : index !== positions.length-1) : keyDrew !== cssPos.key ) ) &&
       <div key={cssPos.key} 
            onClick={(canDraw && keyDrew === undefined) ? () => playDrawMove(cssPos.key) : undefined}
            css={[cardWrapper,
                  style(positions[index]),
                  drawCloverAnimation !== undefined && activePlayer !== undefined && (keyDrew === undefined ? index === positions.length-1 : keyDrew === cssPos.key ) && cloverDrewTranslation(drawCloverAnimation.duration, cssPos, getDisplayPosition(playerId, activePlayer-1, nbPlayers), playerId === activePlayer-1),
-                 drawCloverForEveryoneAnimation !== undefined && firstNonNullIndexes.includes(index) && cloverDrewTranslation(drawCloverForEveryoneAnimation!.duration, cssPos, getDisplayPosition(playerId, indexesAmongFirstsClovers(positions, nbPlayers).findIndex(i => i === index) , nbPlayers), false),
+                 drawCloverForEveryoneAnimation !== undefined && index >= positions.length-nbPlayers && cloverDrewTranslation(drawCloverForEveryoneAnimation!.duration, cssPos, getDisplayPosition(playerId, positions.length-index-1 , nbPlayers), false),
                  canDraw && drawCloverAnimation === undefined && feedBackAnimation]}>
         <div css={[css`transform:rotateY(0deg);`, cloverFace, canDraw && drawCloverAnimation === undefined && canDragStyle]} > <CloverImage /> </div>
-        <div css={[css`transform:rotateY(180deg);`, cloverFace]} > <CloverImage  clover={drawCloverAnimation !== undefined ? drawCloverAnimation.move.clover : (drawCloverForEveryoneAnimation ? drawCloverForEveryoneAnimation.move.clover[indexesAmongFirstsClovers(positions, nbPlayers).findIndex(i => i === index)] : undefined)}  /> </div>
+        <div css={[css`transform:rotateY(180deg);`, cloverFace]} > <CloverImage  clover={drawCloverAnimation !== undefined ? drawCloverAnimation.move.clover : (drawCloverForEveryoneAnimation ? drawCloverForEveryoneAnimation.move.clover[positions.length-index-1] : undefined)}  /> </div>
       </div>
     )}
 
