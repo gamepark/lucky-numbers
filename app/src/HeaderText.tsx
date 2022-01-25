@@ -39,7 +39,7 @@ function HeaderGameOverText({winner}:{winner: number}){
   if(winner+1 === playerId){
     return <> {t("game.over.you.win")} </>
   } else {
-    return <> {t("game.over.player.win",{player:getPseudo(winner, players,t)})} </>
+    return <> {t("game.over.player.win",{player:getPseudo(winner+1, players,t)})} </>
   }
 }
 

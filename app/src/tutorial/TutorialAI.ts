@@ -11,8 +11,6 @@ export default async function tutorialAI(game:GameState, playerId:number):Promis
     const player = game.players[playerId-1]
     const emptySlots = 16 - howManyCloversInGarden(player.garden)
 
-    console.log("I'm here !")
-
     if(!game.activePlayer){
         const smallerClover = player.clovers.reduce((prevClover, actualClover) => {
             if(actualClover.number < prevClover.number){return actualClover}
@@ -59,23 +57,35 @@ function isSlotEmpty(garden:Garden, row:number, column:number):boolean{
 
 function ratePlaceCloverMove(move:PlaceClover, garden:Garden):number{
     const cloverNumber = move.clover.number
+    const emptySlots = 16 - howManyCloversInGarden(garden)
     if(isSlotEmpty(garden, move.row, move.column)){   
         if(move.row+move.column <= 3){
             const extremeValue:number = extremeLowTable[move.row][move.column]!
             if (cloverNumber < extremeValue) return 0
-        } else {
+        } 
+        if(move.row+move.column >= 3) {
             const extremeValue:number = extremeHighTable[move.row][move.column]!
             if (cloverNumber > extremeValue) return 0
         }
         if(cloverNumber === extremeHighTable[move.row][move.column] || cloverNumber === extremeLowTable[move.row][move.column]){
-            return 1
+            if(cloverNumber === extremeHighTable[move.row][move.column]){ return 0.4 + (move.row+move.column)/10 }
+            else { return 1 - (move.row+move.column)/10 }
         } else {
             const averageValues = AverageTable[move.row][move.column]
-            if (isNumberinInterval(cloverNumber, averageValues)){
-                return 1 - Math.abs(cloverNumber - (averageValues[0]+averageValues[1])/2)/10
+            if(emptySlots<4){
+                if (isNumberinInterval(cloverNumber, averageValues)){
+                    return 1.4 - Math.abs(cloverNumber - (averageValues[0]+averageValues[1])/2)/10
+                } else {
+                    return 1.2 - (cloverNumber < averageValues[0] ? (averageValues[0]-cloverNumber)/10 : (cloverNumber-averageValues[1])/10)
+                }
             } else {
-                return 0.6 - (cloverNumber < averageValues[0] ? (averageValues[0]-cloverNumber)/10 : (cloverNumber-averageValues[1])/10)
+                if (isNumberinInterval(cloverNumber, averageValues)){
+                    return 1 - Math.abs(cloverNumber - (averageValues[0]+averageValues[1])/2)/10
+                } else {
+                    return 0.6 - (cloverNumber < averageValues[0] ? (averageValues[0]-cloverNumber)/10 : (cloverNumber-averageValues[1])/10)
+                }
             }
+
         }
         
     } else {
@@ -83,12 +93,13 @@ function ratePlaceCloverMove(move:PlaceClover, garden:Garden):number{
         if(move.row+move.column < 3){
             const extremeValue:number = extremeLowTable[move.row][move.column]!
             if (cloverNumber < extremeValue) return 0
-            return placedClover - cloverNumber > 0 ? (placedClover - cloverNumber)/10 : 0
+            return placedClover - cloverNumber > 0 ? 0.2+(placedClover - cloverNumber)/10 + (move.row === move.column ? 0.2 : 0) : 0
         } else if (move.row+move.column > 3){
             const extremeValue:number = extremeHighTable[move.row][move.column]!
             if (cloverNumber > extremeValue) return 0
-            return cloverNumber - placedClover > 0 ? (cloverNumber - placedClover)/10 : 0
+            return cloverNumber - placedClover > 0 ? 0.2+(cloverNumber - placedClover)/10 : 0
         } else {
+            if(cloverNumber > AverageTable[move.row][move.column][0] && cloverNumber < AverageTable[move.row][move.column][1]){return 0.6 - (16-howManyCloversInGarden(garden))/12}
             return 1 - (16-howManyCloversInGarden(garden))/12
         }
     }
@@ -99,7 +110,7 @@ function isNumberinInterval(value:number, interval:[number,number]):boolean{
 }
 
 function shallDraw(bestMoveRate:number, nbEmptySlots:number):boolean{
-    return bestMoveRate > getShallDrawCoeff(nbEmptySlots)
+    return bestMoveRate < getShallDrawCoeff(nbEmptySlots)
 }
 
 function shallDiscard(bestMoveRate:number, nbEmptySlots:number):boolean{
@@ -110,7 +121,7 @@ function getShallDrawCoeff(nbEmptySlots:number){
     switch(nbEmptySlots){
         case 1:
         case 2:
-            return 0
+            return 0.1
         case 12:
         case 11:
             return 0.9
@@ -134,7 +145,7 @@ const extremeHighTable:(number|null)[][] = [
 
 const AverageTable:([number, number])[][] = [
     [[1,4]  , [3,6]  , [5,8]  , [7,14]],
-    [[3,6]  , [5,9]  , [9,12]  , [13,16]],
+    [[3,6]  , [6,9]  , [9,12]  , [13,16]],
     [[5,8]  , [9,12]  , [11,15]  , [15,18]],
     [[7,14]  , [13,16]  , [15,18]  , [17,20]]
 ]

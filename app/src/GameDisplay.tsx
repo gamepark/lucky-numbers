@@ -45,7 +45,7 @@ export default function GameDisplay({game}: Props) {
         )}
         <DrawPile 
           size={game.faceDownClovers} 
-          canDraw={playerId !== undefined && game.activePlayer === playerId && game.players[playerId - 1].clovers.length === 0}
+          canDraw={playerId !== undefined && game.activePlayer === playerId && game.players[playerId - 1].clovers.length === 0 && game.players.find(p => isWinner(p.garden)) === undefined}
           activePlayer={game.activePlayer}
           nbPlayers={game.players.length}
           />
