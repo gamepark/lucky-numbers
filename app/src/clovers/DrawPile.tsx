@@ -35,7 +35,6 @@ export default function DrawPile({size, canDraw, activePlayer, nbPlayers}: Props
     } else if(cloverDrew){
       setCloverDrew(false)
       if(keyDrew === undefined){
-        console.log("retrait d'un trèfle")
         drawCloverForEveryoneAnimation !== undefined 
           ? setPositions(positions => positions.slice(0, -nbPlayers)) 
           : setPositions(positions => positions.slice(0, -1))
