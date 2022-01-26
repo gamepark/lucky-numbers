@@ -51,7 +51,7 @@ export default function GameDisplay({game}: Props) {
           />
         <FaceUpClovers 
           clovers={game.faceUpClovers} 
-          canDrag={playerId !== undefined && game.activePlayer === playerId && game.players[playerId-1].clovers.length === 0} 
+          canDrag={playerId !== undefined && game.activePlayer === playerId && game.players[playerId-1].clovers.length === 0 && game.players.find(p => isWinner(p.garden)) === undefined} 
           activePlayer={game.activePlayer}
           cloversInHand={playerId === undefined ? undefined : game.players[playerId-1].clovers}
           nbPlayers={game.players.length}
