@@ -5,9 +5,10 @@ import CloverColor from '@gamepark/lucky-numbers/material/CloverColor'
 import Move from '@gamepark/lucky-numbers/moves/Move'
 import PlaceClover, {isBrunoVariantTrigger, isPlaceClover, placeCloverMove} from '@gamepark/lucky-numbers/moves/PlaceClover'
 import {Garden, isValidPosition} from '@gamepark/lucky-numbers/PlayerState'
-import {Animation, useActions, useAnimation, usePlayerId, useTutorial} from '@gamepark/react-client'
+import {Animation, useActions, useAnimation, usePlay, usePlayerId, useTutorial} from '@gamepark/react-client'
 import {Fragment, HTMLAttributes} from 'react'
 import { useTranslation } from 'react-i18next'
+import { ResetSelectedClover, resetSelectedCloverMove } from '../localMoves/setSelectedClover'
 import CloverImage from '../clovers/CloverImage'
 import Images from '../Images'
 import {cloverSize} from '../styles'
@@ -22,20 +23,28 @@ type Props = {
   playerPosition:number
   itemDrag:Clover
   isBrunoVariant:boolean
+  selectedClover?:Clover
 } & HTMLAttributes<HTMLDivElement>
 
-export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDiscarded, playerPosition, itemDrag, isBrunoVariant, ...props}: Props) {
+export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDiscarded, playerPosition, itemDrag, isBrunoVariant, selectedClover, ...props}: Props) {
   const tutorial = useTutorial()
   const playerId = usePlayerId()
   const actions = useActions<Move, number>()
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && animation.move.column !== -1)
   const isBrunoVariantAnim = placeCloverAnimation !== undefined && placeCloverAnimation.move.playerId === idGarden+1 && isBrunoVariantTrigger(garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
+  
+  const playResetSelectedClover = usePlay<ResetSelectedClover>()
 
   function isDiagAdjacentSameClover(clover:Clover|null, animClover:Clover, animRow:number, animColumn:number):boolean{
     const cloverBelow:Clover|null = animRow-1>=0 && animColumn+1<=3 ? garden[animRow-1][animColumn+1] : null
     const cloverOver:Clover|null = animRow+1<=3 && animColumn-1>=0 ? garden[animRow+1][animColumn-1] : null
     return clover !== null && (clover.number === cloverBelow?.number || clover.number === cloverOver?.number) && clover.number === animClover.number
+  }
+
+  function playPlaceClover(playerId:number, clover:Clover, row:number, column:number):PlaceClover{
+    playResetSelectedClover(resetSelectedCloverMove(), {local:true})
+    return placeCloverMove(playerId, clover, row, column)
   }
 
   const {t} = useTranslation()
@@ -52,8 +61,9 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
                                     isWinner(garden) && shinyEffect
                                     ]} ><CloverImage clover={clover} /></div>}
             {isMine && <CloverDropArea canPlaceClover={clover => isValidPosition(garden, clover, row, column, isSetupPhase)}
-                                       onDropClover={clover => placeCloverMove(playerId, clover, row, column)}
+                                       onDropClover={clover => playPlaceClover(playerId, clover, row, column)}
                                        isTutorialHighLight = {tutorial !== undefined && itemDrag !== null && isGoodCloverGoodTime({color:itemDrag.color,number:itemDrag.number},actionsNumber) && isInPlaceAndTime(row, column, actionsNumber)}
+                                       cloverSelected={selectedClover}
                                        css={[position(row, column)]}/>}
           </Fragment>
         )

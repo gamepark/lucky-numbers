@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import GameView from '@gamepark/lucky-numbers/GameView'
 import {usePlayerId, useTutorial} from '@gamepark/react-client'
 import {Letterbox, Picture} from '@gamepark/react-components'
 import { useEffect, useState } from 'react'
 import DrawPile from './clovers/DrawPile'
 import FaceUpClovers from './clovers/FaceUpClovers'
+import GameLocalView from './GameLocalView'
 import Images from './Images'
 import { isWinner } from './players/Board'
 import PlayerDisplay, { getDisplayPosition } from './players/PlayerDisplay'
@@ -13,7 +13,7 @@ import TutorialPopup from './tutorial/TutorialPopUp'
 import WelcomePopUp from './WelcomePopup'
 
 type Props = {
-  game: GameView
+  game: GameLocalView
 }
 
 export default function GameDisplay({game}: Props) {
@@ -41,7 +41,8 @@ export default function GameDisplay({game}: Props) {
                          nbPlayers={game.players.length} 
                          isSetupPhase={game.activePlayer === undefined}
                          cloversDiscarded={game.faceUpClovers}
-                         isBrunoVariant={game.isBrunoVariant === true} />
+                         isBrunoVariant={game.isBrunoVariant === true} 
+                         cloverSelected={game.selectedClover} />
         )}
         <DrawPile 
           size={game.faceDownClovers} 
@@ -56,6 +57,7 @@ export default function GameDisplay({game}: Props) {
           cloversInHand={playerId === undefined ? undefined : game.players[playerId-1].clovers}
           nbPlayers={game.players.length}
           isBrunoVariant={game.isBrunoVariant === true}
+          cloverSelected={game.selectedClover}
           players={game.players}
           />
 

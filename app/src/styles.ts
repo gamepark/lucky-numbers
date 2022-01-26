@@ -49,3 +49,18 @@ export const parabolicKeyframes = keyframes`
 from{transform:translateZ(0em);}
 to{transform:translateZ(5em);}
 `
+
+export const opacitySelectedKeyframe = keyframes`
+  from {
+    filter: drop-shadow(0 0 0.1em lime) drop-shadow(0 0 0.1em lime);
+  }
+  to {
+    filter: drop-shadow(0 0 0.4em lime) drop-shadow(0 0 0.4em lime);
+  }
+`
+
+export const selectedStyle = css`
+  transform:translateZ(4em) scale(1.25);
+  animation: ${opacitySelectedKeyframe} 1s ease-in-out alternate infinite;
+`
+

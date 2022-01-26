@@ -7,12 +7,13 @@ import {Animation, useActions, useAnimation, usePlay, usePlayer, usePlayerId, us
 import {Draggable, Picture} from '@gamepark/react-components'
 import Images from '../Images'
 import CloverImage from '../clovers/CloverImage'
-import {boardLeft, boardMargin, boardTop, canDragStyle, cloverSize, playerCloverLeft, playerCloverTop} from '../styles'
+import {boardLeft, boardMargin, boardTop, canDragStyle, cloverSize, playerCloverLeft, playerCloverTop, selectedStyle} from '../styles'
 import Board from './Board'
 import {CLOVER} from './CloverDropArea'
 import PlayerPanel from './PlayerPanel'
 import Move from '@gamepark/lucky-numbers/moves/Move'
 import { DragLayerMonitor, DropTargetMonitor, useDrop } from 'react-dnd'
+import SetSelectedClover, { setSelectedCloverMove } from '../localMoves/setSelectedClover'
 
 type Props = {
   player: PlayerState
@@ -24,15 +25,18 @@ type Props = {
   isSetupPhase:boolean
   cloversDiscarded:Clover[]
   isBrunoVariant:boolean
+  cloverSelected?:Clover
 }
 
-export default function PlayerDisplay({player, index, isMine, activePlayer, isAnyWinner, nbPlayers, isSetupPhase, cloversDiscarded, isBrunoVariant}: Props) {
+export default function PlayerDisplay({player, index, isMine, activePlayer, isAnyWinner, nbPlayers, isSetupPhase, cloversDiscarded, isBrunoVariant, cloverSelected}: Props) {
 
   const tutorial = useTutorial()
   const playerId = usePlayerId()
   const actions = useActions<Move, number>()
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
 
+  console.log(cloverSelected)
+  
   const [{canDrop}] = useDrop({
     accept: CLOVER,
     canDrop: (item:Clover) => {
@@ -45,6 +49,7 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
 
   const playerInfo = usePlayer(index+1)
   const play = usePlay()
+  const playSetSelectedClover = usePlay<SetSelectedClover>()
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move))
   const isAnimation = useAnimation<Move>()
 
@@ -63,13 +68,15 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
   return (
     <>
       <PlayerPanel playerInfo={playerInfo} indexPlayer={index+1} index={displayPosition} activePlayer={activePlayer && !isAnyWinner} />
-      <Board itemDrag={canDrop} garden={player.garden} idGarden={index} isMine={isMine} isSetupPhase={isSetupPhase} cloversDiscarded={cloversDiscarded} playerPosition={displayPosition} isBrunoVariant={isBrunoVariant} css={boardPosition(displayPosition)}/>
+      <Board itemDrag={canDrop} garden={player.garden} idGarden={index} isMine={isMine} isSetupPhase={isSetupPhase} cloversDiscarded={cloversDiscarded} playerPosition={displayPosition} isBrunoVariant={isBrunoVariant} css={boardPosition(displayPosition)} selectedClover={cloverSelected} />
       {player.clovers.map((clover, cloverIndex) =>
         <Draggable key={`${clover.color} ${clover.number}`} 
+        onClick={() => isMine && playSetSelectedClover(setSelectedCloverMove(clover), {local:true})}
         projection={bottomLeftPlayerProjection}
         type={CLOVER} 
         item={clover} 
         css={[cloverPosition(displayPosition, cloverIndex), 
+              cloverSelected && isSameClover(clover, cloverSelected) && selectedStyle,
               (isCloverAnimated(clover, placeCloverAnimation)) && (placeCloverAnimation!.move.row === -1
                 ? discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length) 
                 : placeCloverTranslation(placeCloverAnimation!.duration, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column, isBrunoVariantAnim && displayPosition === 0))
@@ -100,8 +107,6 @@ export function getDisplayPosition(playerId:number|undefined, index:number, nbPl
     return nbPlayers === 2 ? ((index -playerId+1+nbPlayers)%nbPlayers)*3 : (index -playerId+1+nbPlayers)%nbPlayers
   } 
 }
-
-
 
 const discardCloverTranslation = (duration:number, nbDiscarded:number) => css`
   transition:all 0.2s linear;

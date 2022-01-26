@@ -1,20 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
 import Clover from '@gamepark/lucky-numbers/material/Clover'
-import PlaceClover from '@gamepark/lucky-numbers/moves/PlaceClover'
+import { usePlay } from '@gamepark/react-client'
 import {HTMLAttributes} from 'react'
 import {DropTargetMonitor, useDrop} from 'react-dnd'
 import {cloverSize} from '../styles'
 
 type Props = {
   canPlaceClover: (clover: Clover) => boolean
-  onDropClover: (clover: Clover) => PlaceClover
+  onDropClover: (clover: Clover) => void
   isTutorialHighLight : boolean
+  cloverSelected?:Clover
 } & HTMLAttributes<HTMLDivElement>
 
 export const CLOVER = 'CLOVER'
 
-export default function CloverDropArea({canPlaceClover, onDropClover, isTutorialHighLight, ...props}: Props) {
+export default function CloverDropArea({canPlaceClover, onDropClover, isTutorialHighLight, cloverSelected, ...props}: Props) {
   const [{canDrop, over}, ref] = useDrop({
     accept: CLOVER,
     canDrop: canPlaceClover,
@@ -24,8 +25,29 @@ export default function CloverDropArea({canPlaceClover, onDropClover, isTutorial
       over: monitor.isOver()
     })
   })
-  return <div ref={ref} css={[style, canDrop && (over ? (isTutorialHighLight === true ? tutoHighlight : highlight) : (isTutorialHighLight === true ? tutoDisplay : display))]} {...props}/>
+
+  const play = usePlay()
+
+  return <div ref={ref} css={[
+    style,
+    !canDrop && cloverSelected && canPlaceClover(cloverSelected) && cursorDisplay,
+    canDrop && (over 
+      ? (isTutorialHighLight === true ? tutoHighlight : highlight) 
+      : (isTutorialHighLight === true ? tutoDisplay : display))
+    ]}
+    onClick={() => {cloverSelected && play(onDropClover(cloverSelected))}}
+    {...props}/>
 }
+
+const cursorDisplay = css`
+cursor:pointer;
+&:before{
+  background-color: rgba(255, 255, 255, 0.5);
+}
+&:hover:before{
+  background-color: rgba(255, 255, 255, 0.95);
+}
+`
 
 const tutoAnimKF = keyframes`
   from,20%{background-color: rgba(0, 255, 0, 0.9);}

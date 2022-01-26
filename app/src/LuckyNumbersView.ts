@@ -6,6 +6,9 @@ import MoveView from '@gamepark/lucky-numbers/moves/MoveView'
 import {placeClover} from '@gamepark/lucky-numbers/moves/PlaceClover'
 import { howManyCloversInGarden } from '@gamepark/lucky-numbers/PlayerState'
 import {Game} from '@gamepark/rules-api'
+import SetSelectedClover, { resetSelectedClover, ResetSelectedClover, RESET_SELECTED_CLOVER, setSelectedClover, SET_SELECTED_CLOVER } from './localMoves/setSelectedClover'
+
+type LocalMove = MoveView | SetSelectedClover | ResetSelectedClover
 
 export default class LuckyNumbersView implements Game<GameView, MoveView> {
   state: GameView
@@ -14,7 +17,7 @@ export default class LuckyNumbersView implements Game<GameView, MoveView> {
     this.state = state
   }
 
-  play(move: MoveView): void {
+  play(move: LocalMove): void {
     switch (move.type) {
       case MoveType.DrawClover:
         drawCloverInView(this.state, move)
@@ -24,6 +27,12 @@ export default class LuckyNumbersView implements Game<GameView, MoveView> {
         break
       case MoveType.DrawCloverForEveryone:
         drawCloverForEveryoneInView(this.state, move)
+        break
+      case SET_SELECTED_CLOVER:
+        setSelectedClover(this.state, move)
+        break
+      case RESET_SELECTED_CLOVER:
+        resetSelectedClover(this.state)
         break
     }
     if (this.state.activePlayer === undefined && this.state.players.every(player => player.clovers.length === 0) && this.state.players.every(player => howManyCloversInGarden(player.garden) === 4)) {
