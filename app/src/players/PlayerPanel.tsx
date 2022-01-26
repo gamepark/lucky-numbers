@@ -16,7 +16,6 @@ type Props = {
 const PlayerPanel : FC<Props> = ({playerInfo, index, indexPlayer, activePlayer}) => {
     const {t} = useTranslation()
     const isTuto = useTutorial()
-    console.log("for player n°", indexPlayer, ", display is : ", index)
 
     return(
 
@@ -31,7 +30,7 @@ const PlayerPanel : FC<Props> = ({playerInfo, index, indexPlayer, activePlayer})
                 : <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? t('Player {number}', {number: playerInfo?.id}) : playerInfo?.name}</h1>
             }
             
-            <PlayerTimer playerId={index} css={[toAbsolute,timerStyle]}/>
+            <PlayerTimer playerId={indexPlayer} css={[toAbsolute,timerStyle]}/>
         </div>
     
 

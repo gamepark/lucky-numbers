@@ -79,7 +79,7 @@ top:45.4em;
 height:4.5em;
 transition:transform 3s ease-in-out;
 
-transform:rotateZ(${ladyBug}deg) translateX(-73em);
+transform:rotateZ(${ladyBug}deg) translateX(-73em) translateZ(0.02em);
 `
 
 function getLadyBugIncrement(index:number, ladyBug:number, nbPlayers:number):number{
