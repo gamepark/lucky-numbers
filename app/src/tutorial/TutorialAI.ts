@@ -18,14 +18,11 @@ export default async function tutorialAI(game:GameState, playerId:number):Promis
         }, player.clovers[0])
         return [{type:MoveType.PlaceClover,clover:smallerClover,playerId, column:16-emptySlots, row:16-emptySlots}]
     } else {
-        console.log(legalMoves)
         if(legalMoves.find(move => move.type === MoveType.DrawClover) !== undefined){
             const placeCloverMoves:PlaceClover[] = legalMoves.filter(move => move.type === MoveType.PlaceClover && move.row !== -1) as PlaceClover[] ;
             if(placeCloverMoves.length === 0){return [{type:MoveType.DrawClover}]}
             const ratedMoves:{move:PlaceClover, note:number}[] = placeCloverMoves.map((move) => ({move, note:ratePlaceCloverMove(move, player.garden)})  )
             const bestPlaceMove:{move:PlaceClover, note:number} = ratedMoves.find(ratedMove => ratedMove.note === Math.max(...ratedMoves.map(ratedMove => ratedMove.note)))! ;
-            
-            console.log("best move if can Draw : ", bestPlaceMove.move, bestPlaceMove.note)
             
             if(shallDraw(bestPlaceMove.note, emptySlots)){
                 return [{type:MoveType.DrawClover}]
@@ -39,8 +36,6 @@ export default async function tutorialAI(game:GameState, playerId:number):Promis
             const placeCloverMoves:PlaceClover[] = legalMoves.filter(move => move.type === MoveType.PlaceClover && move.row !== -1) as PlaceClover[] ;
             const ratedMoves:{move:PlaceClover, note:number}[] = placeCloverMoves.map((move) => ({move, note:ratePlaceCloverMove(move, player.garden)})  )
             const bestPlaceMove:{move:PlaceClover, note:number} = ratedMoves.find(ratedMove => ratedMove.note === Math.max(...ratedMoves.map(ratedMove => ratedMove.note)))! ;
-    
-            console.log("best move if no draw : ", bestPlaceMove.move, bestPlaceMove.note)
 
             if(shallDiscard(bestPlaceMove.note, emptySlots)){
                 return [legalMoves.find(move => move.type === MoveType.PlaceClover && move.row === -1)!]
