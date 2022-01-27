@@ -84,7 +84,7 @@ filter: drop-shadow(0 0 0.3em black);
 left:87em;
 top:45.4em;
 height:4.5em;
-transition:transform 3s ease-in-out;
+transition:transform 2s ease-in-out;
 
 transform:rotateZ(${ladyBug}deg) translateX(-73em) translateZ(0.02em);
 `
