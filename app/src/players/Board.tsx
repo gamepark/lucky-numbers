@@ -180,6 +180,7 @@ const style = css`
   background-size: cover;
   border-radius: 3em;
   box-shadow: 0 0 0.3em black, 0 0 0.3em black, 0 0 0.3em black;
+  transform:translateZ(0em);
   transform-style:preserve-3d;
 `
 
