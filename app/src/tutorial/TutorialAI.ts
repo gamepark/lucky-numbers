@@ -2,7 +2,7 @@ import GameState from '@gamepark/lucky-numbers/GameState';
 import LuckyNumbers from '@gamepark/lucky-numbers/LuckyNumbers';
 import Move from '@gamepark/lucky-numbers/moves/Move';
 import MoveType from '@gamepark/lucky-numbers/moves/MoveType';
-import PlaceClover, { placeClover } from '@gamepark/lucky-numbers/moves/PlaceClover';
+import PlaceClover from '@gamepark/lucky-numbers/moves/PlaceClover';
 import { Garden, howManyCloversInGarden } from '@gamepark/lucky-numbers/PlayerState';
 
 export default async function tutorialAI(game:GameState, playerId:number):Promise<Move[]> {

@@ -66,7 +66,7 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
   return (
   <>
     <div css={[discardZoneStyle, (canDrop || cloversInHand?.some(c => cloverSelected && isSameClover(cloverSelected, c)) ) && canDropDiscard, isOver && isOverDiscard]} ref={dropRef}>{canDrop && <span css={spanStyle}>{t("Discard here")}</span>}
-      {cloversInHand?.some(c => cloverSelected && isSameClover(cloverSelected, c)) && <Button onClick={() => playClickDiscard(placeCloverMove(playerId, cloverSelected!, -1,-1))} css={[`position:absolute;bottom:5%;left:50%;transform:translate(-50%,-50%);font-size:3em;`]} > {t("Discard Selected Clover")} </Button>}
+      {cloversInHand?.some(c => cloverSelected && isSameClover(cloverSelected, c)) && <Button styleArg={"discard"} onClick={() => playClickDiscard(placeCloverMove(playerId, cloverSelected!, -1,-1))} css={[`position:absolute;bottom:0%;left:50%;transform:translate(-50%,-50%);font-size:3em;`]} > {t("Discard Selected Clover")} </Button>}
     </div>
       {clovers.map((clover, index) => 
       <Draggable key={index} 

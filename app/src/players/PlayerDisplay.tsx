@@ -34,8 +34,6 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
   const playerId = usePlayerId()
   const actions = useActions<Move, number>()
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
-
-  console.log(cloverSelected)
   
   const [{canDrop}] = useDrop({
     accept: CLOVER,

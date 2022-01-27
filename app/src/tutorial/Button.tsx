@@ -2,17 +2,21 @@
 import {css} from '@emotion/react'
 import {ButtonHTMLAttributes, FC} from 'react'
 
-const Button : FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({children, ...props}) => {
+type Props = {
+  styleArg?:string
+}
+
+const Button : FC<ButtonHTMLAttributes<HTMLButtonElement> & Props> = ({children, styleArg, ...props}) => {
     
-    return <button css={[style]} {...props}> <span css={spanBorder}> {children}</span> </button>
+    return <button css={[style(styleArg)]} {...props}> <span css={spanBorder}> {children}</span> </button>
 
 }
 
-const style = css`
+const style = (styleArg:string|undefined) => css`
 cursor:pointer;
 --color: #000000;
---background-color: #148e00;
---border-color: darken(#148e00, 7.5%);
+--background-color: ${styleArg ==='discard' ? '#8e0700' : '#148e00'};
+--border-color: darken(${styleArg ==='discard' ? '#8e0700' : '#148e00'}, 7.5%);
 padding: 0.2em 0.5em;
 border-radius: 0.5em;
 color: var(--color);
