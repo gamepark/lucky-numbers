@@ -9,14 +9,17 @@ import GameLocalView from './GameLocalView'
 import Images from './Images'
 import { isWinner } from './players/Board'
 import PlayerDisplay, { getDisplayPosition } from './players/PlayerDisplay'
+import { AudioLoader } from './sounds/AudioLoader'
+import LuckyNumbersSounds from './sounds/LuckyNumbersSounds'
 import TutorialPopup from './tutorial/TutorialPopUp'
 import WelcomePopUp from './WelcomePopup'
 
 type Props = {
   game: GameLocalView
+  audioLoader: AudioLoader
 }
 
-export default function GameDisplay({game}: Props) {
+export default function GameDisplay({game, audioLoader}: Props) {
   const playerId = usePlayerId<number>()
   const tutorial = useTutorial()
 
@@ -68,6 +71,8 @@ export default function GameDisplay({game}: Props) {
       {(game.isBrunoVariant === true || game.isMichaelVariant === true) && showWelcomePopup && <WelcomePopUp isBruno={game.isBrunoVariant === true} isMichael={game.isMichaelVariant === true} close={() => setWelcomePopUpClosed(true)} /> }
 
       {tutorial && <TutorialPopup game={game} tutorial={tutorial}/>}
+
+      <LuckyNumbersSounds audioLoader={audioLoader} game={game} />
 
     </Letterbox>
   )

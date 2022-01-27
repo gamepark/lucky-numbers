@@ -2,7 +2,7 @@
 import {css, keyframes} from '@emotion/react'
 import Clover, { isSameClover } from '@gamepark/lucky-numbers/material/Clover'
 import PlaceClover, { isBrunoVariantTrigger, isPlaceClover, placeCloverMove } from '@gamepark/lucky-numbers/moves/PlaceClover'
-import { Animation, useAnimation, usePlay, usePlayerId } from '@gamepark/react-client'
+import { Animation, useAnimation, usePlay, usePlayerId, useSound } from '@gamepark/react-client'
 import { Draggable } from '@gamepark/react-components'
 import { DragLayerMonitor, DropTargetMonitor, useDrop } from 'react-dnd'
 import { getDisplayPosition } from '../players/PlayerDisplay'
@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import PlayerState from '@gamepark/lucky-numbers/PlayerState'
 import SetSelectedClover, { ResetSelectedClover, resetSelectedCloverMove, setSelectedCloverMove } from '../localMoves/setSelectedClover'
 import Button from '../tutorial/Button'
+import moveSound from '../sounds/moveTile.mp3';
 
 type Props = {
   clovers: Clover[]
@@ -33,6 +34,10 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && clovers.find(clover => isSameClover(clover, animation.move.clover)) !== undefined)
   const displayPositionOfAnimPlayer = placeCloverAnimation !== undefined && getDisplayPosition(playerId, placeCloverAnimation.move.playerId-1 , nbPlayers)
   const isBrunoVariantAnim = placeCloverAnimation !== undefined && activePlayer !== undefined && isBrunoVariantTrigger(players[activePlayer-1].garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
+  
+  const moveCloverSound = useSound(moveSound)
+  moveCloverSound.volume = 0.6
+  
   const [{canDrop, isOver}, dropRef] = useDrop({
     accept: CLOVER,
     canDrop: (item: Clover) => {
@@ -40,6 +45,7 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
     },
     drop: (item: Clover) => {
       playResetSelectedClover(resetSelectedCloverMove(), {local:true})
+      moveCloverSound.play()
       return placeCloverMove(playerId, {color:item.color, number:item.number}, -1,-1)
     },
     collect: (monitor: DropTargetMonitor<Clover>) => {
@@ -52,6 +58,7 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
 
   function playClickDiscard(move:PlaceClover){
     playResetSelectedClover(resetSelectedCloverMove(), {local:true})
+    moveCloverSound.play()
     play(move)
   }
 

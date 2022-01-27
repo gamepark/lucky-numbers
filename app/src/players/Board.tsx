@@ -5,7 +5,7 @@ import CloverColor from '@gamepark/lucky-numbers/material/CloverColor'
 import Move from '@gamepark/lucky-numbers/moves/Move'
 import PlaceClover, {isBrunoVariantTrigger, isPlaceClover, placeCloverMove} from '@gamepark/lucky-numbers/moves/PlaceClover'
 import {Garden, isValidPosition} from '@gamepark/lucky-numbers/PlayerState'
-import {Animation, useActions, useAnimation, usePlay, usePlayerId, useTutorial} from '@gamepark/react-client'
+import {Animation, useActions, useAnimation, usePlay, usePlayerId, useSound, useTutorial} from '@gamepark/react-client'
 import {Fragment, HTMLAttributes} from 'react'
 import { useTranslation } from 'react-i18next'
 import { ResetSelectedClover, resetSelectedCloverMove } from '../localMoves/setSelectedClover'
@@ -13,6 +13,7 @@ import CloverImage from '../clovers/CloverImage'
 import Images from '../Images'
 import {cloverSize} from '../styles'
 import CloverDropArea from './CloverDropArea'
+import moveSound from '../sounds/moveTile.mp3';
 
 type Props = {
   garden: Garden
@@ -34,6 +35,9 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && animation.move.column !== -1)
   const isBrunoVariantAnim = placeCloverAnimation !== undefined && placeCloverAnimation.move.playerId === idGarden+1 && isBrunoVariantTrigger(garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
   
+  const moveCloverSound = useSound(moveSound)
+  moveCloverSound.volume = 0.6
+
   const playResetSelectedClover = usePlay<ResetSelectedClover>()
 
   function isDiagAdjacentSameClover(clover:Clover|null, animClover:Clover, animRow:number, animColumn:number):boolean{
@@ -43,6 +47,7 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
   }
 
   function playPlaceClover(playerId:number, clover:Clover, row:number, column:number):PlaceClover{
+    moveCloverSound.play()
     playResetSelectedClover(resetSelectedCloverMove(), {local:true})
     return placeCloverMove(playerId, clover, row, column)
   }
