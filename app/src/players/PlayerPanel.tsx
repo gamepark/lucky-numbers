@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
-import {Player, PlayerTimer, useTutorial} from '@gamepark/react-client'
+import {GamePoints, Player, PlayerTimer, useTutorial} from '@gamepark/react-client'
 import {FC} from 'react'
 import {useTranslation} from 'react-i18next'
 import {panelBGTop, panelLeft, panelTop, toAbsolute} from '../styles'
@@ -11,9 +11,10 @@ type Props = {
     index:number
     activePlayer:boolean
     indexPlayer:number
+    isWinner:boolean
 }
 
-const PlayerPanel : FC<Props> = ({playerInfo, index, indexPlayer, activePlayer}) => {
+const PlayerPanel : FC<Props> = ({playerInfo, index, indexPlayer, activePlayer, isWinner}) => {
     const {t} = useTranslation()
     const isTuto = useTutorial()
 
@@ -30,7 +31,8 @@ const PlayerPanel : FC<Props> = ({playerInfo, index, indexPlayer, activePlayer})
                 : <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? t('Player {number}', {number: playerInfo?.id}) : playerInfo?.name}</h1>
             }
             
-            <PlayerTimer playerId={indexPlayer} css={[toAbsolute,timerStyle]}/>
+            {isWinner && <PlayerTimer playerId={indexPlayer} css={[toAbsolute, timerStyle]}/>}
+            {!isWinner && <GamePoints playerId={indexPlayer} css={css`flex-shrink: 0`}/>}
         </div>
     
 

@@ -65,7 +65,7 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
 
   return (
     <>
-      <PlayerPanel playerInfo={playerInfo} indexPlayer={index+1} index={displayPosition} activePlayer={activePlayer && !isAnyWinner} />
+      <PlayerPanel playerInfo={playerInfo} indexPlayer={index+1} index={displayPosition} activePlayer={activePlayer && !isAnyWinner} isWinner={isAnyWinner} />
       <Board itemDrag={canDrop} 
              garden={player.garden} 
              idGarden={index} 
