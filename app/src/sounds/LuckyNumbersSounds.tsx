@@ -23,26 +23,26 @@ const LuckyNumbersSounds : FC<Props> = ({audioLoader, game}) => {
 
     useEffect(() => {
         if (drawAnim) {
-          audioLoader.play(fiipSound, false, 0.6)
+          audioLoader.play(fiipSound, false, 0.4)
         }
       }, [drawAnim?.move])
 
     useEffect(() => {
         if(moveAnim){
-            audioLoader.play(moveSound, false, 0.6)
+            audioLoader.play(moveSound, false, 0.4)
         }
     }, [moveAnim?.move] )
     
     useEffect(() => {
         const activePlayer:PlayerState|undefined = game.activePlayer ? game.players[game.activePlayer-1] : undefined
         if(moveAnim && activePlayer && isBrunoVariantTrigger(activePlayer?.garden, moveAnim.move.row, moveAnim.move.column, moveAnim.move.clover, game.isBrunoVariant === true)){
-            audioLoader.play(brunoVariantSound, false, 0.6)
+            audioLoader.play(brunoVariantSound, false, 0.4)
         }
     }, [moveAnim?.move])
 
     useEffect(() => {
         if(game.players.some(p => isWinner(p.garden))){
-            audioLoader.play(winSound, false, 0.7)
+            audioLoader.play(winSound, false, 0.6)
         }
     }, [game.players.some(p => isWinner(p.garden))] )
 
