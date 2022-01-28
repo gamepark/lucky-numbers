@@ -11,11 +11,14 @@ type Props = {
   onDropClover: (clover: Clover) => void
   isTutorialHighLight : boolean
   cloverSelected?:Clover
+  cloversInHand:Clover[]
+  isSetupPhase:boolean
+  getBestSetupClover:Clover
 } & HTMLAttributes<HTMLDivElement>
 
 export const CLOVER = 'CLOVER'
 
-export default function CloverDropArea({canPlaceClover, onDropClover, isTutorialHighLight, cloverSelected, ...props}: Props) {
+export default function CloverDropArea({canPlaceClover, onDropClover, isTutorialHighLight, cloverSelected, cloversInHand, isSetupPhase, getBestSetupClover, ...props}: Props) {
   const [{canDrop, over}, ref] = useDrop({
     accept: CLOVER,
     canDrop: canPlaceClover,
@@ -30,14 +33,27 @@ export default function CloverDropArea({canPlaceClover, onDropClover, isTutorial
 
   return <div ref={ref} css={[
     style,
-    !canDrop && cloverSelected && canPlaceClover(cloverSelected) && cursorDisplay,
+    !canDrop && (isSetupPhase
+      ? cloverSelected ? cloverSelected && canPlaceClover(cloverSelected) && cursorDisplay : getBestSetupClover && canPlaceClover(getBestSetupClover) && hoverOnly
+      : cloverSelected ? cloverSelected && canPlaceClover(cloverSelected) && cursorDisplay : cloversInHand[0] && canPlaceClover(cloversInHand[0]) && hoverOnly),
     canDrop && (over 
       ? (isTutorialHighLight === true ? tutoHighlight : highlight) 
       : (isTutorialHighLight === true ? tutoDisplay : display))
     ]}
-    onClick={() => {cloverSelected && play(onDropClover(cloverSelected))}}
+    onClick={() => {(isSetupPhase
+        ? cloverSelected ? canPlaceClover(cloverSelected) && play(onDropClover(cloverSelected)) : getBestSetupClover && canPlaceClover(getBestSetupClover) && play(onDropClover(getBestSetupClover))
+        : cloverSelected ? canPlaceClover(cloverSelected) && play(onDropClover(cloverSelected)) : cloversInHand[0] && canPlaceClover(cloversInHand[0]) && play(onDropClover(cloversInHand[0])))
+      }
+    }
     {...props}/>
 }
+
+const hoverOnly = css`
+cursor:pointer;
+&:hover:before{
+  background-color: rgba(255,255,255,0.95)
+}
+`
 
 const cursorDisplay = css`
 cursor:pointer;

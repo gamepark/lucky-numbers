@@ -66,7 +66,18 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
   return (
     <>
       <PlayerPanel playerInfo={playerInfo} indexPlayer={index+1} index={displayPosition} activePlayer={activePlayer && !isAnyWinner} />
-      <Board itemDrag={canDrop} garden={player.garden} idGarden={index} isMine={isMine} isSetupPhase={isSetupPhase} cloversDiscarded={cloversDiscarded} playerPosition={displayPosition} isBrunoVariant={isBrunoVariant} css={boardPosition(displayPosition)} selectedClover={cloverSelected} />
+      <Board itemDrag={canDrop} 
+             garden={player.garden} 
+             idGarden={index} 
+             isMine={isMine} 
+             isSetupPhase={isSetupPhase}
+             cloversDiscarded={cloversDiscarded} 
+             playerPosition={displayPosition} 
+             isBrunoVariant={isBrunoVariant} 
+             selectedClover={cloverSelected} 
+             cloverInHand={player.clovers}
+             css={boardPosition(displayPosition)} />
+
       {player.clovers.map((clover, cloverIndex) =>
         <Draggable key={`${clover.color} ${clover.number}`} 
         onClick={() => isMine && playSetSelectedClover(setSelectedCloverMove(clover), {local:true})}

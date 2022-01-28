@@ -30,7 +30,7 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
   const {t} = useTranslation()
   const play = usePlay()
   const playResetSelectedClover = usePlay<ResetSelectedClover>()
-  const playerId = usePlayerId()
+  const playerId = usePlayerId<number>() 
   const placeCloverAnimation = useAnimation<PlaceClover>(animation => isPlaceClover(animation.move) && clovers.find(clover => isSameClover(clover, animation.move.clover)) !== undefined)
   const displayPositionOfAnimPlayer = placeCloverAnimation !== undefined && getDisplayPosition(playerId, placeCloverAnimation.move.playerId-1 , nbPlayers)
   const isBrunoVariantAnim = placeCloverAnimation !== undefined && activePlayer !== undefined && isBrunoVariantTrigger(players[activePlayer-1].garden, placeCloverAnimation.move.row, placeCloverAnimation.move.column, placeCloverAnimation.move.clover, isBrunoVariant)
@@ -46,7 +46,7 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
     drop: (item: Clover) => {
       playResetSelectedClover(resetSelectedCloverMove(), {local:true})
       moveCloverSound.play()
-      return placeCloverMove(playerId, {color:item.color, number:item.number}, -1,-1)
+      return placeCloverMove(playerId!, {color:item.color, number:item.number}, -1,-1)
     },
     collect: (monitor: DropTargetMonitor<Clover>) => {
       return ({
@@ -72,12 +72,12 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
 
   return (
   <>
-    <div css={[discardZoneStyle, (canDrop || cloversInHand?.some(c => cloverSelected && isSameClover(cloverSelected, c)) ) && canDropDiscard, isOver && isOverDiscard]} ref={dropRef}>{canDrop && <span css={spanStyle}>{t("Discard here")}</span>}
-      {cloversInHand?.some(c => cloverSelected && isSameClover(cloverSelected, c)) && <Button styleArg={"discard"} onClick={() => playClickDiscard(placeCloverMove(playerId, cloverSelected!, -1,-1))} css={[`position:absolute;bottom:0%;left:50%;transform:translate(-50%,-50%);font-size:3em;`]} > {t("Discard Selected Clover")} </Button>}
+    <div css={[discardZoneStyle, playerId && activePlayer === playerId && cloversInHand?.length === 1 && canDropDiscard, isOver && isOverDiscard]} ref={dropRef}>{canDrop && <span css={spanStyle}>{t("Discard here")}</span>}
+      {playerId && activePlayer === playerId && cloversInHand?.length === 1 && <Button styleArg={"discard"} onClick={() => playClickDiscard(placeCloverMove(playerId, cloversInHand[0], -1,-1))} css={[`position:absolute;bottom:0%;left:50%;transform:translate(-50%,-50%);font-size:3em;`]} > {t("Discard Clover")} </Button>}
     </div>
       {clovers.map((clover, index) => 
       <Draggable key={index} 
-                 onClick={() => activePlayer === playerId && cloversInHand?.length === 0 && playSetSelectedClover(setSelectedCloverMove(clover), {local:true})}
+                 onClick={() => playerId && activePlayer === playerId && cloversInHand?.length === 0 && playSetSelectedClover(setSelectedCloverMove(clover), {local:true})}
                  type={CLOVER} 
                  item={clover} 
                  canDrag={canDrag} 

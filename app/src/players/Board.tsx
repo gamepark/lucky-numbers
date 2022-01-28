@@ -25,9 +25,10 @@ type Props = {
   itemDrag:Clover
   isBrunoVariant:boolean
   selectedClover?:Clover
+  cloverInHand:Clover[]
 } & HTMLAttributes<HTMLDivElement>
 
-export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDiscarded, playerPosition, itemDrag, isBrunoVariant, selectedClover, ...props}: Props) {
+export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDiscarded, playerPosition, itemDrag, isBrunoVariant, selectedClover, cloverInHand, ...props}: Props) {
   const tutorial = useTutorial()
   const playerId = usePlayerId()
   const actions = useActions<Move, number>()
@@ -52,7 +53,18 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
     return placeCloverMove(playerId, clover, row, column)
   }
 
+  function howManyCloversPlacedBefore(row:number):number{
+    let result:number = 0
+    for(let i=0;i<=row;i++){
+      if(garden[i][i]){
+        result++}
+    }
+    return result
+  }
+
   const {t} = useTranslation()
+
+  const sortedCloversInHand = [...cloverInHand].sort((a:Clover,b:Clover) => a.number-b.number)
   
   return (
     <div css={[style, isMine && itemDrag !== null && !isGoodCloverGoodTime({color:itemDrag.color,number:itemDrag.number}, actionsNumber) && tutorial !== undefined && wrongCloverTutoStyle(t(actionsNumber === 10 ? "Put in discard !" : "Not good clover !"))]} {...props}>
@@ -67,8 +79,11 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
                                     ]} ><CloverImage clover={clover} /></div>}
             {isMine && <CloverDropArea canPlaceClover={clover => isValidPosition(garden, clover, row, column, isSetupPhase)}
                                        onDropClover={clover => playPlaceClover(playerId, clover, row, column)}
+                                       getBestSetupClover={sortedCloversInHand[row-howManyCloversPlacedBefore(row)]}
                                        isTutorialHighLight = {tutorial !== undefined && itemDrag !== null && isGoodCloverGoodTime({color:itemDrag.color,number:itemDrag.number},actionsNumber) && isInPlaceAndTime(row, column, actionsNumber)}
                                        cloverSelected={selectedClover}
+                                       isSetupPhase={isSetupPhase}
+                                       cloversInHand={cloverInHand}
                                        css={[position(row, column)]}/>}
           </Fragment>
         )
