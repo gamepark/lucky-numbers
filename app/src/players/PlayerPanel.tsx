@@ -32,7 +32,7 @@ const PlayerPanel : FC<Props> = ({playerInfo, index, indexPlayer, activePlayer, 
             }
             
             {isWinner && <PlayerTimer playerId={indexPlayer} css={[toAbsolute, timerStyle]}/>}
-            {!isWinner && <GamePoints playerId={indexPlayer} css={css`flex-shrink: 0`}/>}
+            {!isWinner && <GamePoints playerId={indexPlayer} css={[toAbsolute, timerStyle]}/>}
         </div>
     
 
