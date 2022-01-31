@@ -172,6 +172,7 @@ const jumpingAnimation = (index:number) => css`
 `
 
 const discardCloverTranslation = (duration:number, nbDiscarded:number, playerPos:number) => css`
+  z-index:1;
   animation: ${discardCloverKeyframes(nbDiscarded, playerPos)} ${duration}s ease-in-out forwards;
 `
 
