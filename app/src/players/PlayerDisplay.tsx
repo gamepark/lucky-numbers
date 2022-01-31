@@ -78,26 +78,39 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
              cloverInHand={player.clovers}
              css={boardPosition(displayPosition)} />
 
-      {player.clovers.map((clover, cloverIndex) =>
-        <Draggable key={`${clover.color} ${clover.number}`} 
-        onClick={() => isMine && playSetSelectedClover(setSelectedCloverMove(clover), {local:true})}
-        projection={bottomLeftPlayerProjection}
-        type={CLOVER} 
-        item={clover} 
-        css={[cloverPosition(displayPosition, cloverIndex), 
-              cloverSelected && isSameClover(clover, cloverSelected) && selectedStyle,
-              (isCloverAnimated(clover, placeCloverAnimation)) && (placeCloverAnimation!.move.row === -1
-                ? discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length) 
-                : placeCloverTranslation(placeCloverAnimation!.duration, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column, isBrunoVariantAnim && displayPosition === 0))
-              ]} 
-        canDrag={isMine} 
-        drop={play}>
-          <CloverImage clover={clover} 
-                       css={[isMine && !isAnimation && canDragStyle,
-                             isCloverAnimated(clover, placeCloverAnimation) && isBrunoVariantAnim && replayAnimation(placeCloverAnimation!.duration, displayPosition === 0)
-                            ]} />
-        </Draggable>
-      )}
+      {isMine 
+        ? player.clovers.map((clover, cloverIndex) =>
+          <Draggable key={`${clover.color} ${clover.number}`} 
+          onClick={() => isMine && playSetSelectedClover(setSelectedCloverMove(clover), {local:true})}
+          projection={bottomLeftPlayerProjection}
+          type={CLOVER} 
+          item={clover} 
+          css={[cloverPosition(displayPosition, cloverIndex), 
+                cloverSelected && isSameClover(clover, cloverSelected) && selectedStyle,
+                (isCloverAnimated(clover, placeCloverAnimation)) && (placeCloverAnimation!.move.row === -1
+                  ? discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length) 
+                  : placeCloverTranslation(placeCloverAnimation!.duration, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column, isBrunoVariantAnim && displayPosition === 0))
+                ]} 
+          canDrag={isMine} 
+          drop={play}>
+            <CloverImage clover={clover} 
+                         css={[isMine && !isAnimation && canDragStyle,
+                               isCloverAnimated(clover, placeCloverAnimation) && isBrunoVariantAnim && replayAnimation(placeCloverAnimation!.duration, displayPosition === 0)
+                              ]} />
+          </Draggable>
+        )
+
+        : player.clovers.map((clover, cloverIndex) => 
+          <CloverImage key={cloverIndex}
+                        clover={clover} 
+                        css={[cloverPosition(displayPosition, cloverIndex),
+                          (isCloverAnimated(clover, placeCloverAnimation)) && (placeCloverAnimation!.move.row === -1
+                            ? discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length) 
+                            : placeCloverTranslation(placeCloverAnimation!.duration, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column, isBrunoVariantAnim && displayPosition === 0)),
+                              isCloverAnimated(clover, placeCloverAnimation) && isBrunoVariantAnim && replayAnimation(placeCloverAnimation!.duration, displayPosition === 0)
+                            ]} />                   
+        )
+      }
 
       {tutorial !== undefined && isAnimation === undefined && isMine && ladybugStart !== undefined && <Picture src={Images.ladybug} css={[ladybugStyle(ladybugStart), canDrop && ladybugMove !== undefined && ladyBugMoveAnim(ladybugMove)]} />}
 

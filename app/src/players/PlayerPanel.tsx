@@ -76,7 +76,7 @@ const timerStyle = css`
     right:0.5em;
     top:0.7em;
     font-size: 2.8em;
-    font-family:'Reggae One', sans-serif;
+    font-family:'Righteous', sans-serif;
 `
 
 export default PlayerPanel
