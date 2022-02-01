@@ -101,14 +101,15 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
         )
 
         : player.clovers.map((clover, cloverIndex) => 
-          <CloverImage key={cloverIndex}
-                        clover={clover} 
-                        css={[cloverPosition(displayPosition, cloverIndex),
-                          (isCloverAnimated(clover, placeCloverAnimation)) && (placeCloverAnimation!.move.row === -1
-                            ? discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length) 
-                            : placeCloverTranslation(placeCloverAnimation!.duration, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column, isBrunoVariantAnim && displayPosition === 0)),
-                              isCloverAnimated(clover, placeCloverAnimation) && isBrunoVariantAnim && replayAnimation(placeCloverAnimation!.duration, displayPosition === 0)
-                            ]} />                   
+          <div key={cloverIndex}
+               css={[cloverPosition(displayPosition, cloverIndex),
+                    (isCloverAnimated(clover, placeCloverAnimation)) && (placeCloverAnimation!.move.row === -1
+                      ? discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length) 
+                      : placeCloverTranslation(placeCloverAnimation!.duration, displayPosition, placeCloverAnimation!.move.row, placeCloverAnimation!.move.column, isBrunoVariantAnim && displayPosition === 0))
+                  ]} >
+          <CloverImage clover={clover} 
+                       css={[isCloverAnimated(clover, placeCloverAnimation) && isBrunoVariantAnim && replayAnimation(placeCloverAnimation!.duration, displayPosition === 0)]} /> 
+          </div>                  
         )
       }
 

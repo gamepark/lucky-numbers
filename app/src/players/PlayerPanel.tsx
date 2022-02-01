@@ -31,8 +31,8 @@ const PlayerPanel : FC<Props> = ({playerInfo, index, indexPlayer, activePlayer, 
                 : <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? t('Player {number}', {number: playerInfo?.id}) : playerInfo?.name}</h1>
             }
             
-            {isWinner && <PlayerTimer playerId={indexPlayer} css={[toAbsolute, timerStyle]}/>}
-            {!isWinner && <GamePoints playerId={indexPlayer} css={[toAbsolute, timerStyle]}/>}
+            {!isWinner && <PlayerTimer playerId={indexPlayer} css={[toAbsolute, timerStyle]}/>}
+            {isWinner && <GamePoints playerId={indexPlayer} css={[toAbsolute, timerStyle]}/>}
         </div>
     
 
