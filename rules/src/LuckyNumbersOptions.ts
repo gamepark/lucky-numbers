@@ -22,4 +22,5 @@ export const LuckyNumbersOptionsSpec: OptionsSpec<LuckyNumbersOptions> = {
     help: t => t('michael.variant.help'),
     subscriberRequired: true
   }
+
 }

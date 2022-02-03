@@ -1,6 +1,6 @@
 import GameView from "@gamepark/lucky-numbers/GameView"
 import DrawClover, { isDrawClover } from "@gamepark/lucky-numbers/moves/DrawClover"
-import { useAnimation, usePlayerId } from "@gamepark/react-client"
+import { useAnimation } from "@gamepark/react-client"
 import { FC, useEffect } from "react"
 import { AudioLoader } from "./AudioLoader"
 import fiipSound from './flip.mp3';
