@@ -183,7 +183,6 @@ const popupStyle = css`
     top: 0;
     left: 0;
     text-align: center;
-    transform:translateZ(200em);
     z-index: 102;
     border-radius: 1em;
     box-sizing: border-box;
@@ -261,12 +260,12 @@ export const popupWidth = (boxWidth: number) => css`
 `
 
 export const popupPosition = ({boxTop, boxLeft, arrow}: TutorialStepDescription) => css`
-    transform: translate(${boxLeft * 16 / 9}em, ${boxTop}em) translate(-50%, ${!arrow || arrow.angle % 180 !== 0 ? -50 : arrow.angle % 360 === 0 ? 0 : -100}%) translateZ(0em);
+    transform: translate(${boxLeft * 16 / 9}em, ${boxTop}em) translate(-50%, ${!arrow || arrow.angle % 180 !== 0 ? -50 : arrow.angle % 360 === 0 ? 0 : -100}%) translateZ(0.1em);
 `
 
 const arrowStyle = (angle: number) => css`
     position: absolute;
-    transform: rotate(${angle}deg) translateZ(0em);
+    transform: rotate(${angle}deg) translateZ(0.1em);
     will-change: transform;
     z-index: 102;
     transition-property: top, left, transform;

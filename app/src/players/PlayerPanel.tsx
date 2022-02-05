@@ -50,6 +50,7 @@ const panelBGStyle = (index:number, activePlayer:boolean) => css`
     height:12em;
     border:solid 0.6em ${activePlayer ? "gold" : "green"};
     border-radius:2em;
+    transform:translateZ(-0.1em);
     transform-style:preserve-3d;
 `
 
