@@ -152,6 +152,7 @@ const canDropDiscard = css`
 `
 
 const discardZoneStyle = css`
+  transform-style:preserve-3d;
   opacity:0;
   position:absolute;
   top:65em;
