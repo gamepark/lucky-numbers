@@ -29,7 +29,7 @@ const AvatarPanel : FC<Props> = ({playerInfo, playerId, display}) => {
     return(
 
         <div css={[avatarStyle, roundBorders]}>
-            {(playerInfo?.avatar)
+            {(playerInfo?.avatar || true)
                 ? <Avatar playerId={playerId} css={[toFullSize, roundBorders]} speechBubbleProps={{direction: getSpeechPosition(display)}} /> 
                 : <Picture alt={t('Player avatar')} src={Images.cloverBack} css={[toFullSize, roundBorders]} draggable={false} />
             }
@@ -45,7 +45,7 @@ const avatarStyle = css`
     margin:0.8em 0.8em;
     height:5em;
     width:5em;
-    transform:translateZ(0.01em);
+    transform:translateZ(0.0em);
     transform-style:preserve-3d;
 `
 

@@ -1,19 +1,20 @@
 /** @jsxImportSource @emotion/react */
-import {css, keyframes} from '@emotion/react'
+import { css, keyframes } from '@emotion/react'
 import Clover, { isSameClover } from '@gamepark/lucky-numbers/material/Clover'
 import CloverColor from '@gamepark/lucky-numbers/material/CloverColor'
 import Move from '@gamepark/lucky-numbers/moves/Move'
-import PlaceClover, {isBrunoVariantTrigger, isPlaceClover, placeCloverMove} from '@gamepark/lucky-numbers/moves/PlaceClover'
-import {Garden, isValidPosition} from '@gamepark/lucky-numbers/PlayerState'
-import {Animation, useActions, useAnimation, usePlay, usePlayerId, useSound, useTutorial} from '@gamepark/react-client'
-import {Fragment, HTMLAttributes} from 'react'
+import PlaceClover, { isBrunoVariantTrigger, isPlaceClover, placeCloverMove } from '@gamepark/lucky-numbers/moves/PlaceClover'
+import { Garden, isValidPosition } from '@gamepark/lucky-numbers/PlayerState'
+import { Animation, useActions, useAnimation, usePlay, usePlayerId, useSound, useTutorial } from '@gamepark/react-client'
+import { Fragment, HTMLAttributes } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ResetSelectedClover, resetSelectedCloverMove } from '../localMoves/setSelectedClover'
 import CloverImage from '../clovers/CloverImage'
 import Images from '../Images'
-import {cloverSize} from '../styles'
+import { ResetSelectedClover, resetSelectedCloverMove } from '../localMoves/setSelectedClover'
+import moveSound from '../sounds/moveTile.mp3'
+import { cloverSize } from '../styles'
 import CloverDropArea from './CloverDropArea'
-import moveSound from '../sounds/moveTile.mp3';
+import {isMobile} from 'react-device-detect';
 
 type Props = {
   garden: Garden
@@ -67,7 +68,7 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
   const sortedCloversInHand = [...cloverInHand].sort((a:Clover,b:Clover) => a.number-b.number)
   
   return (
-    <div css={[style, isMine && itemDrag !== null && !isGoodCloverGoodTime({color:itemDrag.color,number:itemDrag.number}, actionsNumber) && tutorial !== undefined && wrongCloverTutoStyle(t(actionsNumber === 10 ? "Put in discard !" : "Not good clover !"))]} {...props}>
+    <div css={[style(itemDrag, isMine, isMobile), isMine && itemDrag !== null && !isGoodCloverGoodTime({color:itemDrag.color,number:itemDrag.number}, actionsNumber) && tutorial !== undefined && wrongCloverTutoStyle(t(actionsNumber === 10 ? "Put in discard !" : "Not good clover !"))]} {...props}>
       {garden.map((line, row) =>
         line.map((clover, column) =>
           <Fragment key={`${row} ${column}`}>
@@ -188,7 +189,7 @@ function isCloverAnimated(row:number, column:number, animation:Animation<PlaceCl
   return animation !== undefined && animation && row === animation.move.row && animation.move.column === column
 }
 
-const style = css`
+const style = (itemDrag:Clover, isMine:boolean|undefined, isMobile:boolean) => css`
   position: absolute;
   width: ${cloverSize * 4.9}em;
   height: ${cloverSize * 4.9}em;
@@ -196,7 +197,9 @@ const style = css`
   background-size: cover;
   border-radius: 3em;
   box-shadow: 0 0 0.3em black, 0 0 0.3em black, 0 0 0.3em black;
-  transform:translateZ(0em);
+  transform:translateZ(0em) scale(${itemDrag && isMine && isMobile ? 1.4 : 1});
+  transition:transform 0.3s ease-out;
+  transform-origin:bottom left;
   transform-style:preserve-3d;
 `
 
