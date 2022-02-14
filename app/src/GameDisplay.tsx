@@ -12,6 +12,7 @@ import PlayerDisplay, { getDisplayPosition } from './players/PlayerDisplay'
 import { AudioLoader } from './sounds/AudioLoader'
 import LuckyNumbersSounds from './sounds/LuckyNumbersSounds'
 import TutorialPopup from './tutorial/TutorialPopUp'
+import VariantCard from './VariantCard'
 import WelcomePopUp from './WelcomePopup'
 
 type Props = {
@@ -25,13 +26,18 @@ export default function GameDisplay({game, audioLoader}: Props) {
 
   const [ladybugPosition, setLadybugPosition] = useState<number>(0)
   const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(tutorial ? true : game.activePlayer !== undefined)
+  const [variantCardClosed, setVariantCardClosed] = useState((game.isBrunoVariant === true || game.isMichaelVariant === true) ? false : true)
+  const showVariantCard = !variantCardClosed
   const showWelcomePopup = !welcomePopUpClosed
+
 
   useEffect(() => {
     if(game.activePlayer !== undefined)
     setLadybugPosition(ladybugPosition + getLadyBugIncrement(getDisplayPosition(playerId, game.activePlayer-1 , game.players.length), ladybugPosition, game.players.length))
   },[game.activePlayer])
   return (
+    <>
+    {(game.isBrunoVariant || game.isMichaelVariant) && <VariantCard css={[fadeInAnim]} isHide={showVariantCard === false} isBruno={game.isBrunoVariant === true} isMichael={game.isMichaelVariant === true} close={() => setVariantCardClosed(true)} open={() => setVariantCardClosed(false)} />}
     <Letterbox css={letterBoxStyle} top={0}>
       <div css={givePerspective}>
         {game.players.map((player, index) => 
@@ -68,13 +74,12 @@ export default function GameDisplay({game, audioLoader}: Props) {
         
       </div>
 
-      {(game.isBrunoVariant === true || game.isMichaelVariant === true) && showWelcomePopup && <WelcomePopUp isBruno={game.isBrunoVariant === true} isMichael={game.isMichaelVariant === true} close={() => setWelcomePopUpClosed(true)} /> }
-
       {tutorial && <TutorialPopup game={game} tutorial={tutorial}/>}
 
       <LuckyNumbersSounds audioLoader={audioLoader} game={game} />
 
     </Letterbox>
+    </>
   )
 }
 
@@ -125,6 +130,10 @@ const letterBoxStyle = css`
   > div {
     perspective: 100em;
   }
+`
+
+const fadeInAnim = css`
+  animation: ${fadeIn} 3s ease-in forwards;
 `
 
 const givePerspective = css`
