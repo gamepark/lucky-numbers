@@ -124,12 +124,12 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
   giveTime(playerId: number): number {
     if(this.state.activePlayer === undefined){
       if(this.state.isMichaelVariant === true && this.state.players.every(p => howManyCloversInGarden(p.garden) !== 0)){
-        return 5
+        return 8
       } else {
-        return 5
+        return 8
       }
     } else {
-      return 5
+      return 8
     }
   }
 

@@ -8,16 +8,17 @@ import {cloverSize} from '../styles'
 
 type Props = {
   clover?: Clover
+  isMine?:boolean
 } & PictureAttributes
 
-export default function CloverImage({clover, ...props}: Props) {
+export default function CloverImage({clover, isMine, ...props}: Props) {
   return <Picture src={clover ? clovers[clover.color][clover.number - 1] : Images.cloverBack} css={style} {...props}/>
 }
 
-export const style = css`
+export const style =  css`
   position: absolute;
-  width: ${cloverSize}em;
-  height: ${cloverSize}em;
+  width: ${100}%;
+  height: ${100}%;
   filter: drop-shadow(0 0 0.1em black) drop-shadow(0 0 0.1em black);
   transform-style: preserve-3d;
 `

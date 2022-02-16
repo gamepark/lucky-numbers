@@ -7,7 +7,7 @@ import {Animation, useActions, useAnimation, usePlay, usePlayer, usePlayerId, us
 import {Draggable, Picture} from '@gamepark/react-components'
 import Images from '../Images'
 import CloverImage from '../clovers/CloverImage'
-import {boardLeft, boardMargin, boardTop, canDragStyle, cloverSize, playerCloverLeft, playerCloverTop, selectedStyle} from '../styles'
+import {boardLeft, boardMargin, boardTop, canDragStyle, cloverSize, discardLeft, discardMarginLeft, discardMarginTop, discardTop, playerCloverLeft, playerCloverTop, selectedStyle} from '../styles'
 import Board from './Board'
 import {CLOVER} from './CloverDropArea'
 import PlayerPanel from './PlayerPanel'
@@ -113,6 +113,8 @@ export default function PlayerDisplay({player, index, isMine, activePlayer, isAn
         )
       }
 
+
+
       {tutorial !== undefined && isAnimation === undefined && isMine && ladybugStart !== undefined && <Picture src={Images.ladybug} css={[ladybugStyle(ladybugStart), canDrop && ladybugMove !== undefined && ladyBugMoveAnim(ladybugMove)]} />}
 
     </>
@@ -139,16 +141,16 @@ const discardCloverTranslation = (duration:number, nbDiscarded:number) => css`
 const discardCloverKeyframes = (nbDiscarded:number) => keyframes`
 from{}
 to{
-  left: ${(nbDiscarded%6) * (cloverSize + 1) + 66}em;
-  top: ${Math.floor(nbDiscarded/6)*(cloverSize +1) + 66}em;
+  left: ${(nbDiscarded%6) * (cloverSize + 1) + discardLeft + discardMarginLeft}em;
+  top: ${Math.floor(nbDiscarded/6)*(cloverSize +1) + discardTop + discardMarginTop}em;
 }
 `
 
 const placeCloverKeyframes = (playerPosition:number, row:number, column:number) => keyframes`
 from{}
-to{
-  left:${boardLeft(playerPosition) + boardMargin + (cloverSize+1)*row}em;
-  top:${boardTop(playerPosition) + boardMargin + (cloverSize+1)*column}em;
+80%,to{
+  left:${boardLeft(playerPosition) + boardMargin + (playerPosition === 0 ? 0.5 : 0) + (cloverSize+1)*row * (playerPosition === 0 ? 1.3 : 1)}em;
+  top:${boardTop(playerPosition) + boardMargin + (playerPosition === 0 ? -9.7 : 0) + (cloverSize+1)*column * (playerPosition === 0 ? 1.3 : 1)}em;
 }
 `
 
@@ -174,8 +176,8 @@ const boardPosition = (index: number) => css`
 
 const cloverPosition = (playerIndex: number, index: number) => css`
   position: absolute;
-  width: ${cloverSize}em;
-  height: ${cloverSize}em;
+  width: ${playerIndex === 0 ? cloverSize*1.3 : cloverSize}em;
+  height: ${playerIndex === 0 ? cloverSize*1.3 : cloverSize}em;
   left: ${playerCloverLeft(playerIndex)}em;
   top: ${playerCloverTop(playerIndex, index)}em;
   transform-style:preserve-3d;
@@ -183,10 +185,10 @@ const cloverPosition = (playerIndex: number, index: number) => css`
 
 const ladyBugWaitingKF = (top:number) => keyframes`
   from{
-    transform:rotateZ(0deg) translate(${top === -15 ? 13 : 3}em);
+    transform:rotateZ(0deg) translate(${top === 12 ? 13 : 4}em);
   }
   to{
-    transform:rotateZ(-360deg) translate(${top === -15 ? 13 : 3}em);
+    transform:rotateZ(-360deg) translate(${top === 12 ? 13 : 4}em);
   }
 `
 
@@ -201,7 +203,7 @@ const ladyBugEntryKF = keyframes`
 
 const ladybugStyle = (pos:{top:number, left:number}) => css`
   position:absolute;
-  pointer-events:none;
+  //pointer-events:none;
   filter: drop-shadow(0 0 0.3em black);
   left:${boardLeft(0) + pos.left}em;
   top:${boardTop(0) + pos.top}em;
@@ -213,15 +215,15 @@ const ladybugStyle = (pos:{top:number, left:number}) => css`
 
 function getLadyBugStart(action:number):{top:number, left:number}|undefined{
   switch(action){
-    case 0: return {top:10,left:38}
-    case 1: return {top:2.5,left:38}
-    case 2: return {top:2.5,left:38}
-    case 3: return {top:2.5,left:38}
-    case 4: return {top:-15,left:70}
-    case 5: return {top:2.5,left:38}
-    case 6: return {top:9,left:53}
-    case 8: return {top:2.5,left:38}
-    case 10: return {top:2.5,left:38}
+    case 0: return {top:4.5,left:49.5}
+    case 1: return {top:-5.5,left:49.5}
+    case 2: return {top:-5.5,left:49.5}
+    case 3: return {top:-5.5,left:49.5}
+    case 4: return {top:12,left:78}
+    case 5: return {top:-5.5,left:49.5}
+    case 6: return {top:-45,left:4.5}
+    case 8: return {top:-5.5,left:49.5}
+    case 10: return {top:-5.5,left:49.5}
     default: return undefined
   }
 }
@@ -247,14 +249,14 @@ const ladyBugMoveAnim = (pos:{X:number, Y:number, rot:number}) => css`
 
 function getLadyBugMove(action:number):{X:number, Y:number, rot:number}|undefined{
   switch(action){
-    case 0: return {X:-35, Y:-7, rot:Math.atan(-35/7)*(180/Math.PI)}
-    case 1: return {X:-26, Y:8, rot:180+Math.atan(-26/-8)*(180/Math.PI)}
-    case 2: return {X:-19, Y:17, rot:180+Math.atan(-19/-17)*(180/Math.PI)}
-    case 3: return {X:-11, Y:25, rot:180+Math.atan(-11/-25)*(180/Math.PI)}
-    case 5: return {X:-35, Y:9, rot:180+Math.atan(-35/-9)*(180/Math.PI)}
-    case 6: return {X:-42, Y:-6, rot:Math.atan(-42/6)*(180/Math.PI)}
-    case 8: return {X:-11, Y:25, rot:180+Math.atan(-11/-25)*(180/Math.PI)}
-    case 10: return {X:34, Y:15, rot:180+Math.atan(34/-15)*(180/Math.PI)}
+    case 0: return {X:-44, Y:-10, rot:Math.atan(-44/10)*(180/Math.PI)}
+    case 1: return {X:-35, Y:10, rot:180+Math.atan(-35/-10)*(180/Math.PI)}
+    case 2: return {X:-24, Y:20, rot:180+Math.atan(-24/-20)*(180/Math.PI)}
+    case 3: return {X:-13, Y:31, rot:180+Math.atan(-13/-31)*(180/Math.PI)}
+    case 5: return {X:-44, Y:10, rot:180+Math.atan(-44/-10)*(180/Math.PI)}
+    case 6: return {X:10, Y:39, rot:180+Math.atan(10/-39)*(180/Math.PI)}
+    case 8: return {X:-13, Y:31, rot:180+Math.atan(-13/-31)*(180/Math.PI)}
+    case 10: return {X:-25, Y:-30, rot:Math.atan(25/-30)*(180/Math.PI)}
     default: return undefined
   }
 }

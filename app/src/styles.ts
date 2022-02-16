@@ -4,15 +4,21 @@ export const headerHeight = 7
 export const cloverSize = 7
 export const boardMargin = 1.7
 
+export const discardTop = 9
+export const discardLeft = 15
+export const discardMarginTop = 12
+export const discardMarginLeft = 18
+
+
 export const boardTop = (index: number) => (index === 0 || index === 3) ? 58 : 9
-export const boardLeft = (index: number) => index < 2 ? 15 : 128
+export const boardLeft = (index: number) => index < 2 ? (index === 0 ? 15 : 80) : 128
 
-export const playerCloverTop = (playerIndex: number, index: number) => (playerIndex === 0 || playerIndex === 3) ? 59.5 + index * 8 : 34.5 - index * 8
-export const playerCloverLeft = (playerIndex: number) => playerIndex < 2 ? 51.5 : 118.5
+export const playerCloverTop = (playerIndex: number, index: number) => (playerIndex === 0 || playerIndex === 3) ? (playerIndex === 0 ? 50 + index * 8*1.3  : 59.5 + index * 8) : 34.5 - index * 8
+export const playerCloverLeft = (playerIndex: number) => playerIndex < 2 ? (playerIndex === 0 ? 62 : 70) : 118.5
 
-export const panelTop = (index: number) => (index === 0 || index === 3) ? 52 : 43
-export const panelBGTop = (index: number) => (index === 0 || index === 3) ? 52 : 38
-export const panelLeft = (index: number) => index < 2 ? 15 : 128
+export const panelTop = (index: number) => (index === 0 || index === 3) ? (index === 0 ? 33.5 : 52) : 43
+export const panelBGTop = (index: number) => (index === 0 || index === 3) ? (index === 0 ? 40 : 52) : 38
+export const panelLeft = (index: number) => index < 2 ? (index === 0 ? 15 : 80) : 128
 
 export const toFullSize = css`
   width: 100%;

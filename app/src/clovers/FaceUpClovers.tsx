@@ -7,13 +7,14 @@ import { Draggable } from '@gamepark/react-components'
 import { DragLayerMonitor, DropTargetMonitor, useDrop } from 'react-dnd'
 import { getDisplayPosition } from '../players/PlayerDisplay'
 import { CLOVER } from '../players/CloverDropArea'
-import {canDragStyle, cloverSize, boardTop, boardLeft, boardMargin, selectedStyle} from '../styles'
+import {canDragStyle, cloverSize, boardTop, boardLeft, boardMargin, selectedStyle, discardTop, discardLeft, discardMarginLeft, discardMarginTop} from '../styles'
 import CloverImage from './CloverImage'
 import { useTranslation } from 'react-i18next'
 import PlayerState from '@gamepark/lucky-numbers/PlayerState'
 import SetSelectedClover, { ResetSelectedClover, resetSelectedCloverMove, setSelectedCloverMove } from '../localMoves/setSelectedClover'
 import Button from '../tutorial/Button'
 import moveSound from '../sounds/moveTile.mp3';
+import CloverColor from '@gamepark/lucky-numbers/material/CloverColor'
 
 type Props = {
   clovers: Clover[]
@@ -64,6 +65,8 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
 
   const playSetSelectedClover = usePlay<SetSelectedClover>()
 
+  const arrayTest:Clover[] = new Array(18).fill({color:CloverColor.Green, number:1})
+
   function bottomLeftPlayerProjection(monitor: DragLayerMonitor) {
     let offset = monitor.getDifferenceFromInitialOffset()
     if (!offset) return offset
@@ -73,7 +76,7 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
   return (
   <>
     <div css={[discardZoneStyle, playerId && activePlayer === playerId && cloversInHand?.length === 1 && canDropDiscard, isOver && isOverDiscard]} ref={dropRef}>{canDrop && <span css={spanStyle}>{t("Discard here")}</span>}
-      {playerId && activePlayer === playerId && cloversInHand?.length === 1 && <Button styleArg={"discard"} onClick={() => playClickDiscard(placeCloverMove(playerId, cloversInHand[0], -1,-1))} css={[`position:absolute;bottom:0%;left:50%;transform:translate(-50%,-50%);font-size:3em;`]} > {t("Discard Clover")} </Button>}
+    {playerId && activePlayer === playerId && cloversInHand?.length === 1 && <Button styleArg={"discard"} onClick={() => playClickDiscard(placeCloverMove(playerId, cloversInHand[0], -1,-1))} css={[buttonStyle]} > {t("Discard Clover")} </Button>}
     </div>
       {clovers.map((clover, index) => 
       <Draggable key={index} 
@@ -94,9 +97,18 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
                            
                      ]}/>
       </Draggable> )}
+      
   </>
   )
 }
+
+const buttonStyle = css`
+  position:absolute;
+  bottom:0%;
+  left:50%;
+  transform:translate(-50%,-50%) translateZ(0.1em);
+  font-size:3em;
+`
 
 function isCloverSorted(index:number, discard:Clover[], animation:Animation<PlaceClover>|undefined):boolean{
   return animation !== undefined && discard.findIndex(clover => isSameClover(clover, animation.move.clover)) < index
@@ -130,8 +142,8 @@ const sortClovers = (duration:number, index:number) => css`
 const sortCloverKeyframes = (index:number) => keyframes`
 from{}
 to{
-  left: ${((index-1)%6) * (cloverSize + 1) + 66}em;
-  top: ${Math.floor((index-1)/6)*(cloverSize +1) + 66}em;
+  left: ${((index-1)%6) * (cloverSize + 1) + discardMarginLeft}em;
+  top: ${Math.floor((index-1)/6)*(cloverSize +1) + discardMarginTop}em;
 }
 `
 
@@ -140,10 +152,13 @@ const placeCloverTranslation = (duration:number, playerPos:number, row:number, c
 `
 
 const placeCloverKeyframes = (playerPos:number, row:number, column:number) => keyframes`
-from{}
+from{
+  transform:translateZ(0.1em);
+}
 to{
-  top:${boardTop(playerPos) + boardMargin + (cloverSize+1)*column}em;
-  left:${boardLeft(playerPos) + boardMargin + (cloverSize+1)*row}em;
+  top:${boardTop(playerPos) + boardMargin + (playerPos === 0 ? -8.8 : 0) + (cloverSize+1)*column * (playerPos === 0 ? 1.3 : 1)}em;
+  left:${boardLeft(playerPos) + boardMargin + (playerPos === 0 ? 1.6 : 0) + (cloverSize+1)*row * (playerPos === 0 ? 1.3 : 1)}em;
+  transform:scale(${playerPos === 0 ? 1.3 : 1}) translateZ(0.1em);
 }
 `
 
@@ -155,10 +170,10 @@ const discardZoneStyle = css`
   transform-style:preserve-3d;
   opacity:0;
   position:absolute;
-  top:65em;
-  left:64em;
-  width:52em;
-  height:25em;
+  top:${discardTop}em;
+  left:${discardLeft}em;
+  width:53em;
+  height:30em;
   border:solid 0.4em rgb(109,0,0);
   border-radius:5em;
   background-color:rgba(150,0,36,0.4);
@@ -173,7 +188,7 @@ const position = (index: number) => css`
   position:absolute;
   width:${cloverSize}em;
   height:${cloverSize}em;
-  left: ${(index%6) * (cloverSize + 1) + 66}em;
-  top: ${Math.floor(index/6)*(cloverSize +1) + 66}em;
+  left: ${(index%6) * (cloverSize + 1) + discardMarginLeft}em;
+  top: ${Math.floor(index/6)*(cloverSize +1) + discardMarginTop}em;
 
 `

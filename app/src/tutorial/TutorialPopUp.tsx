@@ -328,25 +328,25 @@ const tutorialDescription: TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.your.board'),
             text: 'tuto.your.board',
-            boxTop: 54,
-            boxLeft: 49,
+            boxTop: 42,
+            boxLeft: 44,
             boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 48,
-                left: 12
+                top: 36,
+                left: 7
             }
         },
         {
             title: (t: TFunction) => t('title.your.opponent'),
             text: 'tuto.your.opponent',
             boxTop: 55,
-            boxLeft: 45,
+            boxLeft: 42,
             boxWidth: 50,
             arrow: {
                 angle: 90,
                 top: 48,
-                left: 65
+                left: 62
             }
         },
         {
@@ -359,25 +359,25 @@ const tutorialDescription: TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.setup.phase.1'),
             text: 'tuto.setup.phase.1',
-            boxTop: 75,
-            boxLeft: 53,
+            boxTop: 70,
+            boxLeft: 61,
             boxWidth: 40,
             arrow: {
                 angle: 270,
-                top: 70,
-                left: 22
+                top: 66,
+                left: 30
             }
         },
         {
             title: (t: TFunction) => t('title.setup.phase.2'),
             text: 'tuto.setup.phase.2',
-            boxTop: 58,
-            boxLeft: 36,
+            boxTop: 52,
+            boxLeft: 38,
             boxWidth: 50,
             arrow: {
                 angle: 225,
-                top: 65,
-                left: 6
+                top: 59,
+                left: 9
             }
         },
         {
@@ -390,25 +390,25 @@ const tutorialDescription: TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.your.first.clover.1'),
             text: 'tuto.your.first.clover.1',
-            boxTop: 72,
-            boxLeft: 59,
+            boxTop: 67,
+            boxLeft: 66,
             boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 65,
-                left: 23
+                top: 59,
+                left: 30
             }
         },
         {
             title: (t: TFunction) => t('title.your.first.clover.2'),
             text: 'tuto.your.first.clover.2',
-            boxTop: 63,
-            boxLeft: 39,
+            boxTop: 55,
+            boxLeft: 42,
             boxWidth: 55,
             arrow: {
                 angle: 270,
-                top: 56,
-                left: 0
+                top: 47,
+                left: 3
             }
         }
         
@@ -416,38 +416,38 @@ const tutorialDescription: TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.place.second.clover.1'),
             text: 'tuto.place.second.clover.1',
-            boxTop: 60,
-            boxLeft: 60,
+            boxTop: 55,
+            boxLeft: 66,
             boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 56,
-                left: 23
+                top: 47,
+                left: 30
             }
         },
         {
             title: (t: TFunction) => t('title.place.second.clover.2'),
             text: 'tuto.place.second.clover.2',
-            boxTop: 71,
-            boxLeft: 44,
+            boxTop: 65,
+            boxLeft: 47,
             boxWidth: 55,
             arrow: {
                 angle: 270,
-                top: 66,
-                left: 5
+                top: 58,
+                left: 8
             }
         }
     ],[
         {
             title: (t: TFunction) => t('title.place.third.clover'),
             text: 'tuto.place.third.clover',
-            boxTop: 80,
-            boxLeft: 49,
+            boxTop: 78,
+            boxLeft: 52,
             boxWidth: 55,
             arrow: {
                 angle: 270,
-                top: 75,
-                left: 10
+                top: 70,
+                left: 13
             }
         }
     ],[
@@ -462,24 +462,24 @@ const tutorialDescription: TutorialStepDescription[][] = [
             title: (t: TFunction) => t('title.last.clover.is.bad.2'),
             text: 'tuto.last.clover.is.bad.2',
             boxTop: 70,
-            boxLeft: 51,
+            boxLeft: 56,
             boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 85,
-                left: 15
+                top: 83,
+                left: 20
             }
         },
         {
             title: (t: TFunction) => t('title.place.last.clover'),
             text: 'tuto.place.last.clover',
             boxTop: 70,
-            boxLeft: 51,
+            boxLeft: 56,
             boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 85,
-                left: 15
+                top: 83,
+                left: 20
             }
         }
     ],[
@@ -498,30 +498,30 @@ const tutorialDescription: TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.player.turn'),
             text: 'tuto.player.turn',
-            boxTop: 52,
-            boxLeft: 38,
+            boxTop: 42,
+            boxLeft: 39,
             boxWidth: 55,
             arrow: {
                 angle: 270,
-                top: 45,
-                left: -1
+                top: 35,
+                left: 0
             }
         }, 
         {
             title: (t: TFunction) => t('title.draw.clover.rule'),
             text: 'tuto.draw.clover.rule',
-            boxTop: 70,
+            boxTop: 30,
             boxLeft: 50,
             boxWidth: 50,
         },
         {
             title: (t: TFunction) => t('title.draw.clover'),
             text: 'tuto.draw.clover',
-            boxTop: 64,
+            boxTop: 50,
             boxLeft: 50,
             boxWidth: 50,
             arrow: {
-                angle: 0,
+                angle: 180,
                 top: 50,
                 left: 40
             }
@@ -530,36 +530,36 @@ const tutorialDescription: TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.place.fifth.clover.1'),
             text: 'tuto.place.fifth.clover.1',
-            boxTop: 62,
-            boxLeft: 60,
-            boxWidth: 52,
+            boxTop: 55,
+            boxLeft: 66,
+            boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 56,
-                left: 23
+                top: 47,
+                left: 30
             }
         },
         {
             title: (t: TFunction) => t('title.place.fifth.clover.2'),
             text: 'tuto.place.fifth.clover.2',
-            boxTop: 62,
-            boxLeft: 60,
-            boxWidth: 52,
+            boxTop: 55,
+            boxLeft: 66,
+            boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 56,
-                left: 23
+                top: 47,
+                left: 30
             }
         },
         {
             title: (t: TFunction) => t('title.place.fifth.clover.3'),
             text: 'tuto.place.fifth.clover.3',
-            boxTop: 70,
+            boxTop: 65,
             boxLeft: 39,
             boxWidth: 55,
             arrow: {
                 angle: 270,
-                top: 66,
+                top: 59,
                 left: 0
             }
         },
@@ -574,25 +574,25 @@ const tutorialDescription: TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.place.sixth.clover.1'),
             text: 'tuto.place.sixth.clover.1',
-            boxTop: 55,
-            boxLeft: 50,
+            boxTop: 28,
+            boxLeft: 30,
             boxWidth: 60,
             arrow: {
-                angle: 180,
-                top: 55,
-                left: 28
+                angle: 0,
+                top: 15,
+                left: 1
             }
         },
         {
             title: (t: TFunction) => t('title.place.sixth.clover.2'),
             text: 'tuto.place.sixth.clover.2',
-            boxTop: 65,
-            boxLeft: 44,
+            boxTop: 55,
+            boxLeft: 47,
             boxWidth: 55,
             arrow: {
                 angle: 270,
-                top: 57,
-                left: 5
+                top: 47,
+                left: 8
             }
         },
         
@@ -621,8 +621,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
             boxWidth: 60,
             arrow: {
                 angle: 180,
-                top: 76,
-                left: 11
+                top: 74,
+                left: 16
             }
         },
     ],[
@@ -644,13 +644,13 @@ const tutorialDescription: TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.discard.clover'),
             text: 'tuto.discard.clover',
-            boxTop: 60,
-            boxLeft: 50,
+            boxTop: 43,
+            boxLeft: 35,
             boxWidth: 50,
             arrow: {
-                angle: 180,
-                top: 60,
-                left: 40
+                angle: 0,
+                top: 30,
+                left: 12
             }
         },
     ],[

@@ -12,7 +12,7 @@ import CloverImage from '../clovers/CloverImage'
 import Images from '../Images'
 import { ResetSelectedClover, resetSelectedCloverMove } from '../localMoves/setSelectedClover'
 import moveSound from '../sounds/moveTile.mp3'
-import { cloverSize } from '../styles'
+import { boardLeft, boardTop, cloverSize, discardLeft, discardMarginLeft, discardMarginTop, discardTop } from '../styles'
 import CloverDropArea from './CloverDropArea'
 import {isMobile} from 'react-device-detect';
 
@@ -72,12 +72,12 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
       {garden.map((line, row) =>
         line.map((clover, column) =>
           <Fragment key={`${row} ${column}`}>
-            {clover && <div css={[css`position:absolute;width:${cloverSize}em;height:${cloverSize}em;`, position(row, column),
-                                    isCloverAnimated(row, column, placeCloverAnimation) && placeCloverAnimation!.move.playerId === idGarden+1 && clover !== null && discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length - (cloversDiscarded.find(clover => isSameClover(clover, placeCloverAnimation!.move.clover)) !== undefined ? 1 : 0), playerPosition),
+            {clover && <div css={[css`position:absolute;width:${cloverSize}em;height:${cloverSize}em;`, position(row, column, isMine === true),
+                                    isCloverAnimated(row, column, placeCloverAnimation) && placeCloverAnimation!.move.playerId === idGarden+1 && clover !== null && discardCloverTranslation(placeCloverAnimation!.duration, cloversDiscarded.length - (cloversDiscarded.find(clover => isSameClover(clover, placeCloverAnimation!.move.clover))!==undefined ? 1 : 0), playerPosition),
                                     isBrunoVariantAnim && isDiagAdjacentSameClover(clover, placeCloverAnimation.move.clover, placeCloverAnimation.move.row, placeCloverAnimation.move.column) && replayAnimation(placeCloverAnimation.duration, isMine === true),
                                     isWinner(garden) && jumpingAnimation(row+column),
                                     isWinner(garden) && shinyEffect
-                                    ]} ><CloverImage clover={clover} /></div>}
+                                    ]} ><CloverImage clover={clover} isMine={isMine}/></div>}
             {isMine && <CloverDropArea canPlaceClover={clover => isValidPosition(garden, clover, row, column, isSetupPhase)}
                                        onDropClover={clover => playPlaceClover(playerId, clover, row, column)}
                                        getBestSetupClover={sortedCloversInHand[row-howManyCloversPlacedBefore(row)]}
@@ -85,11 +85,11 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
                                        cloverSelected={selectedClover}
                                        isSetupPhase={isSetupPhase}
                                        cloversInHand={cloverInHand}
-                                       css={[position(row, column)]}/>}
+                                       css={[position(row, column, isMine === true)]}/>}
           </Fragment>
         )
       )}
-    </div>
+    </div> 
   )
 }
 
@@ -178,10 +178,11 @@ const discardCloverTranslation = (duration:number, nbDiscarded:number, playerPos
 `
 
 const discardCloverKeyframes = (nbDiscarded:number, playerPos:number) => keyframes`
-from{}
+from{transform:translateZ(0.1em);}
 to{
-  top:${((playerPos === 1 || playerPos === 2) ? 57 : 8) + Math.floor(nbDiscarded/6)*(cloverSize +1)}em;
-  left:${0+(playerPos<2 ? (cloverSize+1)*4 + 19: -cloverSize+1 - 56) + (nbDiscarded%6) * (cloverSize + 1)}em;
+  top:${(-boardTop(playerPos)+discardMarginTop) + (playerPos === 0 ? 17.8 : 0) + Math.floor(nbDiscarded/6)*(cloverSize +1)}em;
+  left:${0+(-boardLeft(playerPos)+discardMarginLeft) + (playerPos === 0 ? -1.5 - (nbDiscarded%6)*1.8 : 0) + (nbDiscarded%6) * (cloverSize + 1)}em;
+  transform:translateZ(0.1em) scale(${playerPos === 0 ? 0.8 : 1});
 }
 `
 
@@ -197,13 +198,13 @@ const style = (itemDrag:Clover, isMine:boolean|undefined, isMobile:boolean) => c
   background-size: cover;
   border-radius: 3em;
   box-shadow: 0 0 0.3em black, 0 0 0.3em black, 0 0 0.3em black;
-  transform:translateZ(0em) scale(${itemDrag && isMine && isMobile ? 1.4 : 1});
+  transform:translateZ(0em) scale(${isMine ? 1.3 : 1});
   transition:transform 0.3s ease-out;
   transform-origin:bottom left;
   transform-style:preserve-3d;
 `
 
-const position = (row: number, column: number) => css`
+const position = (row: number, column: number, isMine:boolean) => css`
   left: ${(cloverSize + 1) * row + 1.7}em;
   top: ${(cloverSize + 1) * column + 1.7}em;
   &:after {

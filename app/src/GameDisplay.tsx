@@ -13,7 +13,7 @@ import { AudioLoader } from './sounds/AudioLoader'
 import LuckyNumbersSounds from './sounds/LuckyNumbersSounds'
 import TutorialPopup from './tutorial/TutorialPopUp'
 import VariantCard from './VariantCard'
-import WelcomePopUp from './WelcomePopup'
+
 
 type Props = {
   game: GameLocalView
@@ -24,17 +24,28 @@ export default function GameDisplay({game, audioLoader}: Props) {
   const playerId = usePlayerId<number>()
   const tutorial = useTutorial()
 
-  const [ladybugPosition, setLadybugPosition] = useState<number>(0)
-  const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(tutorial ? true : game.activePlayer !== undefined)
+  const [playerLadybugPos, setPlayerLadybugPos] = useState<number|undefined>(undefined)
+  const [opponentLadybugPos, setOpponentLadybugPos] = useState<number|undefined>(undefined)
   const [variantCardClosed, setVariantCardClosed] = useState((game.isBrunoVariant === true || game.isMichaelVariant === true) ? false : true)
   const showVariantCard = !variantCardClosed
-  const showWelcomePopup = !welcomePopUpClosed
-
 
   useEffect(() => {
-    if(game.activePlayer !== undefined)
-    setLadybugPosition(ladybugPosition + getLadyBugIncrement(getDisplayPosition(playerId, game.activePlayer-1 , game.players.length), ladybugPosition, game.players.length))
+    if(game.activePlayer !== undefined){
+      playerLadybugPos === undefined 
+        ? setPlayerLadybugPos(90 * getDisplayPosition(playerId, game.activePlayer-1, game.players.length))
+        : setPlayerLadybugPos(playerLadybugPos+360/game.players.length)
+    }
   },[game.activePlayer])
+
+  useEffect(() => {
+    if(game.activePlayer !== undefined){
+      opponentLadybugPos === undefined 
+        ? setOpponentLadybugPos(getInitialOpponentLadybugRot(getDisplayPosition(playerId, game.activePlayer-1, game.players.length)))
+        : setOpponentLadybugPos(opponentLadybugPos + getIncrementOpponentLadybugRot(getDisplayPosition(playerId, game.activePlayer-1, game.players.length), game.players.length))
+    }
+  },[game.activePlayer])
+   
+
   return (
     <>
     {(game.isBrunoVariant || game.isMichaelVariant) && <VariantCard css={[fadeInAnim]} isHide={showVariantCard === false} isBruno={game.isBrunoVariant === true} isMichael={game.isMichaelVariant === true} close={() => setVariantCardClosed(true)} open={() => setVariantCardClosed(false)} />}
@@ -53,12 +64,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
                          isBrunoVariant={game.isBrunoVariant === true} 
                          cloverSelected={game.selectedClover} />
         )}
-        <DrawPile 
-          size={game.faceDownClovers} 
-          canDraw={playerId !== undefined && game.activePlayer === playerId && game.players[playerId - 1].clovers.length === 0 && game.players.find(p => isWinner(p.garden)) === undefined}
-          activePlayer={game.activePlayer}
-          nbPlayers={game.players.length}
-          />
+
         <FaceUpClovers 
           clovers={game.faceUpClovers} 
           canDrag={playerId !== undefined && game.activePlayer === playerId && game.players[playerId-1].clovers.length === 0 && game.players.find(p => isWinner(p.garden)) === undefined} 
@@ -70,8 +76,21 @@ export default function GameDisplay({game, audioLoader}: Props) {
           players={game.players}
           />
 
-        {game.activePlayer !== undefined && <Picture src={Images.ladybug} css={[ladybugStyle(ladybugPosition) ]} />}
-        
+          <DrawPile 
+            size={game.faceDownClovers} 
+            canDraw={playerId !== undefined && game.activePlayer === playerId && game.players[playerId - 1].clovers.length === 0 && game.players.find(p => isWinner(p.garden)) === undefined}
+            activePlayer={game.activePlayer}
+            nbPlayers={game.players.length}
+          />
+
+
+
+
+
+        {game.activePlayer !== undefined && playerLadybugPos !== undefined && <Picture src={Images.ladybug} css={[playerLadybugStyle(playerLadybugPos) ]} />}
+        {game.activePlayer !== undefined && opponentLadybugPos !== undefined && <Picture src={Images.ladybug} css={[opponentLadybugStyle(opponentLadybugPos, game.activePlayer === playerId) ]} />}
+
+
       </div>
 
       {tutorial && <TutorialPopup game={game} tutorial={tutorial}/>}
@@ -83,36 +102,47 @@ export default function GameDisplay({game, audioLoader}: Props) {
   )
 }
 
-const ladybugStyle = (ladyBug:number) => css`
+const playerLadybugStyle = (ladybug:number) => css`
 position:absolute;
 filter: drop-shadow(0 0 0.3em black);
-left:87em;
-top:45.4em;
+pointer-events:none;
+left:120em;
+top:40em;
+transform:rotateZ(${ladybug}deg) translateX(-105em);
 height:4.5em;
-transition:transform 2s ease-in-out;
-
-transform:rotateZ(${ladyBug}deg) translateX(-73em) translateZ(0.02em);
+transition:all 1.5s ease-in-out;
 `
 
-function getLadyBugIncrement(index:number, ladyBug:number, nbPlayers:number):number{
-  if(ladyBug === 0){
-    switch(index){
-      case 0:return -4
-      case 1:return 4
-      case 2:return 180
-      case 3:return 185
-      default:return 0
-    }
-  } else {
-    switch(index){
-      case 0:return nbPlayers === 3 ? 176 : 172
-      case 1:return 8
-      case 2:return 176
-      case 3:return nbPlayers === 2 ? 188 : 4
-      default:return 0
-    }
-  }
+const opponentLadybugStyle = (ladybug:number, isHidden:boolean) => css`
+position:absolute;
+opacity:${isHidden ? 0 : 1};
+pointer-events:none;
+filter: drop-shadow(0 0 0.3em black);
+top:58em;
+left:119em;
+transform:rotateZ(${ladybug}deg) translateX(-42em) translateZ(0.02em) ;
+height:4.5em;
+transition:all 1.5s ease-in-out;
+`
 
+function getInitialOpponentLadybugRot(ladybug:number):number{
+  switch(ladybug){
+    case 0: return 270
+    case 1: return 22
+    case 2: return 164
+    case 3: return 172
+    default: return 0
+  }
+}
+
+function getIncrementOpponentLadybugRot(ladybug:number, nbPlayers:number):number{
+  switch(ladybug){
+    case 0: return nbPlayers === 4 ? 98 : nbPlayers === 3 ? 106 : 98
+    case 1: return 112
+    case 2: return 142
+    case 3: return nbPlayers === 4 ? 8 : 262
+    default: return 0
+  }
 }
 
 const fadeIn = keyframes`

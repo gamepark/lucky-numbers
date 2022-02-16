@@ -27,8 +27,8 @@ const PlayerPanel : FC<Props> = ({playerInfo, index, indexPlayer, activePlayer, 
         <div css={[panelPosition(index)]}>
             <AvatarPanel playerInfo={playerInfo} playerId={indexPlayer} display={index} />
             {isTuto 
-                ? <h1 css={[nameStyle]}>{index === 0 ? t("You") : t("Your Opponent")}</h1>
-                : <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? t('Player {number}', {number: playerInfo?.id}) : playerInfo?.name}</h1>
+                ? <h1 css={[nameStyle(index)]}>{index === 0 ? t("You") : t("Your Opponent")}</h1>
+                : <h1 css={[nameStyle(index)]}>{playerInfo?.name === undefined ? t('Player {number}', {number: playerInfo?.id}) : playerInfo?.name}</h1>
             }
             
             {!isWinner && <PlayerTimer playerId={indexPlayer} css={[toAbsolute, timerStyle]}/>}
@@ -46,7 +46,7 @@ const panelBGStyle = (index:number, activePlayer:boolean) => css`
     position:absolute;
     left: ${panelLeft(index)}em;
     top: ${panelBGTop(index)}em;
-    width:34.3em;
+    width:${index === 0 ? 44.5 : 34.3}em;
     height:12em;
     border:solid 0.6em ${activePlayer ? "gold" : "green"};
     border-radius:2em;
@@ -56,17 +56,18 @@ const panelBGStyle = (index:number, activePlayer:boolean) => css`
 
 const panelPosition = (index:number) => css`
     position:absolute;
-    left: ${panelLeft(index)}em;
+    left: ${index === 0 ? 13 : panelLeft(index)}em;
     top: ${panelTop(index)}em;
     width:34.3em;
     height:6em;
+    font-size:${index === 0 ? 1.2 : 1}em;
     transform-style:preserve-3d;
 `
 
-const nameStyle = css`
+const nameStyle = (index:number) => css`
     position:absolute;
     left:2.5em;
-    width:7.8em;
+    width:${index === 0 ? 8.5 : 7.8}em;
     font-size: 2.5em;
     white-space: nowrap;
     overflow: hidden;

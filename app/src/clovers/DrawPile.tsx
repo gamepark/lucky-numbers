@@ -94,19 +94,19 @@ transition:transform 0.4s ease-in-out;
 
 const cloverDrewTranslation = (duration:number, cssPos:CssPosition, posPlayer:number, isPlayerId:boolean) => css`
   z-index:10;
-  animation: ${cloverDrewKeyframes(cssPos, posPlayer, isPlayerId)} ${duration}s ease-in-out forwards;
+  animation: ${cloverDrewKeyframes(cssPos, posPlayer, isPlayerId)} ${duration}s ease-in-out forwards; 
   transform-style:preserve-3d;
 `
 
 const cloverDrewKeyframes = ({direction, radius, rotation}:CssPosition, posPlayer:number, isPlayerId:boolean) => keyframes`
 from{
-  left: ${Math.cos(direction! * 2 * Math.PI) * (radius!+0.1) * 24 + (16 / 9 * 100 - cloverSize) / 2}em;
-  top: ${Math.sin(direction! * 2 * Math.PI) * (radius!+0.1) * 24 + 25 + headerHeight + 3}em;
+  left: ${Math.cos(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 17 + 7 + (16 / 9 * 100 - cloverSize) / 2}em;
+  top: ${Math.sin(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 16 + 58 + headerHeight + 3}em;
   transform: rotateZ(${isPlayerId ? 0 : rotation!*360}deg) rotateY(0deg) translateZ(0em) scale(1);
 }
 30%,60%{
-  left: ${Math.cos(direction! * 2 * Math.PI) * radius! * 24 + (16 / 9 * 100 - cloverSize) / 2}em;
-  top: ${Math.sin(direction! * 2 * Math.PI) * radius! * 24 + 25 + headerHeight + 3}em;
+  left: ${Math.cos(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 17 + 7 + (16 / 9 * 100 - cloverSize) / 2}em;
+  top: ${Math.sin(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 16 + 58 + headerHeight + 3}em;
   transform:rotateZ(${360}deg) rotateY(180deg) translateZ(-10em) scale(1.5) ;
 }
 to{
@@ -117,7 +117,7 @@ to{
 `
 
 const style = ({direction, radius, rotation}: CssPosition) => css`
-  left: ${Math.cos(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 24 + (16 / 9 * 100 - cloverSize) / 2}em;
-  top: ${Math.sin(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 24 + 25 + headerHeight + 3}em;
+  left: ${Math.cos(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 17 + 7 + (16 / 9 * 100 - cloverSize) / 2}em;
+  top: ${Math.sin(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 16 + 58 + headerHeight + 3}em;
   transform: rotateZ(${rotation! * 360}deg);
 `
