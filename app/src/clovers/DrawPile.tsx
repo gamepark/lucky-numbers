@@ -101,12 +101,12 @@ const cloverDrewTranslation = (duration:number, cssPos:CssPosition, posPlayer:nu
 const cloverDrewKeyframes = ({direction, radius, rotation}:CssPosition, posPlayer:number, isPlayerId:boolean) => keyframes`
 from{
   left: ${Math.cos(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 17 + 7 + (16 / 9 * 100 - cloverSize) / 2}em;
-  top: ${Math.sin(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 16 + 58 + headerHeight + 3}em;
+  top: ${Math.sin(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 16 + 56 + headerHeight + 3}em;
   transform: rotateZ(${isPlayerId ? 0 : rotation!*360}deg) rotateY(0deg) translateZ(0em) scale(1);
 }
 30%,60%{
   left: ${Math.cos(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 17 + 7 + (16 / 9 * 100 - cloverSize) / 2}em;
-  top: ${Math.sin(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 16 + 58 + headerHeight + 3}em;
+  top: ${Math.sin(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 16 + 45 + headerHeight + 3}em;
   transform:rotateZ(${360}deg) rotateY(180deg) translateZ(-10em) scale(1.5) ;
 }
 to{
@@ -118,6 +118,6 @@ to{
 
 const style = ({direction, radius, rotation}: CssPosition) => css`
   left: ${Math.cos(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 17 + 7 + (16 / 9 * 100 - cloverSize) / 2}em;
-  top: ${Math.sin(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 16 + 58 + headerHeight + 3}em;
+  top: ${Math.sin(direction! * 2 * Math.PI) * (Math.sqrt(radius!)) * 16 + 56 + headerHeight + 3}em;
   transform: rotateZ(${rotation! * 360}deg);
 `

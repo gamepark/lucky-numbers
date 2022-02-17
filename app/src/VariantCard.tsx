@@ -70,13 +70,13 @@ const popupStyle = (isHide:boolean) => css`
     text-align: center;
     height: fit-content;
     width:35em;
-    transform: translateZ(0.1em);
+    transform: translateZ(0.1em) translateX(6em);
     z-index : 102;
     border-radius: 1em;
     box-sizing: border-box;
     align-self: ${isHide ? 'start' : 'center'};
     padding: 1em;
-    margin: 0 1em;
+    margin: 0 1em 0 1em;
     outline: none;
     box-shadow: 1em 2em 2.5em -1.5em hsla(0, 0%, 0%, 0.2);
     border:1em black solid;
