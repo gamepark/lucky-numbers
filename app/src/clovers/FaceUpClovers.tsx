@@ -65,12 +65,10 @@ export default function FaceUpClovers({clovers, canDrag, cloversInHand, activePl
 
   const playSetSelectedClover = usePlay<SetSelectedClover>()
 
-  const arrayTest:Clover[] = new Array(18).fill({color:CloverColor.Green, number:1})
-
   function bottomLeftPlayerProjection(monitor: DragLayerMonitor) {
     let offset = monitor.getDifferenceFromInitialOffset()
     if (!offset) return offset
-    return {x: offset.x * 0.85, y: offset.y * 0.8}
+    return {x: offset.x * 1 + offset.y*0.09, y: offset.y * 0.93}
   }
 
   return (
