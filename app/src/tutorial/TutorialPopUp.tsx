@@ -199,6 +199,7 @@ const popupStyle = css`
     transition-property: transform, opacity;
     transition-duration: 0.7s;
     transition-timing-function: ease-in-out;
+    transform-style: flat;
 
     &:before {
         content: '';

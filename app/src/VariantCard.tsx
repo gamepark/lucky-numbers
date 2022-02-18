@@ -57,6 +57,7 @@ const popupOverlayStyle = css`
     display:flex;
     flex-direction:row;
     justify-content:center;
+    transform-style: flat;
 `
 const showPopupOverlayStyle = css`
     left: 50%;
