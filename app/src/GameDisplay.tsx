@@ -83,10 +83,6 @@ export default function GameDisplay({game, audioLoader}: Props) {
             nbPlayers={game.players.length}
           />
 
-
-
-
-
         {game.activePlayer !== undefined && playerLadybugPos !== undefined && <Picture src={Images.ladybug} css={[playerLadybugStyle(playerLadybugPos) ]} />}
         {game.activePlayer !== undefined && opponentLadybugPos !== undefined && <Picture src={Images.ladybug} css={[opponentLadybugStyle(opponentLadybugPos, game.activePlayer === playerId) ]} />}
 
@@ -156,10 +152,6 @@ const fadeIn = keyframes`
 
 const letterBoxStyle = css`
   animation: ${fadeIn} 3s ease-in forwards;
-
-  > div {
-    perspective: 100em;
-  }
 `
 
 const fadeInAnim = css`
@@ -167,7 +159,11 @@ const fadeInAnim = css`
 `
 
 const givePerspective = css`
-  position:relative;
-  transform: rotateX(10deg);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transform:perspective(100em) rotateX(10deg) scale(1.09);
   transform-style:preserve-3d;
 `

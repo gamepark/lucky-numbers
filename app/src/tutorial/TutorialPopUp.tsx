@@ -261,7 +261,7 @@ export const popupWidth = (boxWidth: number) => css`
 `
 
 export const popupPosition = ({boxTop, boxLeft, arrow}: TutorialStepDescription) => css`
-    transform: translate(${boxLeft * 16 / 9}em, ${boxTop}em) translate(-50%, ${!arrow || arrow.angle % 180 !== 0 ? -50 : arrow.angle % 360 === 0 ? 0 : -100}%) translateZ(0.1em);
+    transform: translate(${boxLeft * 16 / 9}em, ${boxTop}em) translate(-50%, ${!arrow || arrow.angle % 180 !== 0 ? -50 : arrow.angle % 360 === 0 ? 0 : -100}%) translateZ(300em);
 `
 
 const arrowStyle = (angle: number) => css`
