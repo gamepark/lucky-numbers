@@ -341,12 +341,12 @@ const tutorialDescription: TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.your.opponent'),
             text: 'tuto.your.opponent',
-            boxTop: 55,
+            boxTop: 56,
             boxLeft: 42,
             boxWidth: 50,
             arrow: {
                 angle: 90,
-                top: 48,
+                top: 49,
                 left: 62
             }
         },
@@ -372,12 +372,12 @@ const tutorialDescription: TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.setup.phase.2'),
             text: 'tuto.setup.phase.2',
-            boxTop: 52,
+            boxTop: 55,
             boxLeft: 38,
             boxWidth: 50,
             arrow: {
                 angle: 225,
-                top: 59,
+                top: 61,
                 left: 9
             }
         },
@@ -396,7 +396,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
             boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 59,
+                top: 60,
                 left: 30
             }
         },
@@ -408,7 +408,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
             boxWidth: 55,
             arrow: {
                 angle: 270,
-                top: 47,
+                top: 48,
                 left: 3
             }
         }
@@ -422,7 +422,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
             boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 47,
+                top: 48,
                 left: 30
             }
         },
@@ -434,7 +434,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
             boxWidth: 55,
             arrow: {
                 angle: 270,
-                top: 58,
+                top: 60,
                 left: 8
             }
         }
@@ -447,7 +447,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
             boxWidth: 55,
             arrow: {
                 angle: 270,
-                top: 70,
+                top: 71,
                 left: 13
             }
         }
@@ -467,7 +467,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
             boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 83,
+                top: 84,
                 left: 20
             }
         },
@@ -479,7 +479,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
             boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 83,
+                top: 84,
                 left: 20
             }
         }
@@ -536,7 +536,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
             boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 47,
+                top: 48,
                 left: 30
             }
         },
@@ -548,7 +548,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
             boxWidth: 50,
             arrow: {
                 angle: 270,
-                top: 47,
+                top: 48,
                 left: 30
             }
         },
@@ -556,12 +556,12 @@ const tutorialDescription: TutorialStepDescription[][] = [
             title: (t: TFunction) => t('title.place.fifth.clover.3'),
             text: 'tuto.place.fifth.clover.3',
             boxTop: 65,
-            boxLeft: 39,
+            boxLeft: 41,
             boxWidth: 55,
             arrow: {
                 angle: 270,
-                top: 59,
-                left: 0
+                top: 60,
+                left: 2
             }
         },
     ],[
@@ -588,12 +588,12 @@ const tutorialDescription: TutorialStepDescription[][] = [
             title: (t: TFunction) => t('title.place.sixth.clover.2'),
             text: 'tuto.place.sixth.clover.2',
             boxTop: 55,
-            boxLeft: 47,
+            boxLeft: 48,
             boxWidth: 55,
             arrow: {
                 angle: 270,
-                top: 47,
-                left: 8
+                top: 48,
+                left: 9
             }
         },
         
