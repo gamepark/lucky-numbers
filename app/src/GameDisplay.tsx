@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import {usePlayerId, useTutorial} from '@gamepark/react-client'
+import { concedeMove } from '@gamepark/lucky-numbers/moves/Concede'
+import {usePlay, usePlayerId, useTutorial} from '@gamepark/react-client'
 import {Letterbox, Picture} from '@gamepark/react-components'
 import { useEffect, useState } from 'react'
 import DrawPile from './clovers/DrawPile'
@@ -11,6 +12,7 @@ import { isWinner } from './players/Board'
 import PlayerDisplay, { getDisplayPosition } from './players/PlayerDisplay'
 import { AudioLoader } from './sounds/AudioLoader'
 import LuckyNumbersSounds from './sounds/LuckyNumbersSounds'
+import Button from './tutorial/Button'
 import TutorialPopup from './tutorial/TutorialPopUp'
 import VariantCard from './VariantCard'
 
@@ -24,27 +26,35 @@ export default function GameDisplay({game, audioLoader}: Props) {
   const playerId = usePlayerId<number>()
   const tutorial = useTutorial()
 
+  const [actualActivePlayer, setActualActivePlayer] = useState<number|undefined>(game.activePlayer)
   const [playerLadybugPos, setPlayerLadybugPos] = useState<number|undefined>(undefined)
   const [opponentLadybugPos, setOpponentLadybugPos] = useState<number|undefined>(undefined)
   const [variantCardClosed, setVariantCardClosed] = useState((game.isBrunoVariant === true || game.isMichaelVariant === true) ? false : true)
   const showVariantCard = !variantCardClosed
 
   useEffect(() => {
-    if(game.activePlayer !== undefined){
+    if(actualActivePlayer !== undefined){
       playerLadybugPos === undefined 
-        ? setPlayerLadybugPos(90 * getDisplayPosition(playerId, game.activePlayer-1, game.players.length))
+        ? setPlayerLadybugPos(90 * getDisplayPosition(playerId, actualActivePlayer-1, game.players.length))
         : setPlayerLadybugPos(playerLadybugPos+360/game.players.length)
     }
-  },[game.activePlayer])
+  },[actualActivePlayer])
+
+  useEffect(() => {
+    if(actualActivePlayer !== undefined){
+      opponentLadybugPos === undefined 
+        ? setOpponentLadybugPos(getInitialOpponentLadybugRot(getDisplayPosition(playerId, actualActivePlayer-1, game.players.length)))
+        : setOpponentLadybugPos(opponentLadybugPos + getIncrementOpponentLadybugRot(getDisplayPosition(playerId, actualActivePlayer-1, game.players.length), game.players.length))
+    }
+  },[actualActivePlayer])
 
   useEffect(() => {
     if(game.activePlayer !== undefined){
-      opponentLadybugPos === undefined 
-        ? setOpponentLadybugPos(getInitialOpponentLadybugRot(getDisplayPosition(playerId, game.activePlayer-1, game.players.length)))
-        : setOpponentLadybugPos(opponentLadybugPos + getIncrementOpponentLadybugRot(getDisplayPosition(playerId, game.activePlayer-1, game.players.length), game.players.length))
+      if(actualActivePlayer !== game.activePlayer){
+        setActualActivePlayer(actualActivePlayer === undefined ? game.activePlayer : (actualActivePlayer % game.players.length) + 1)
+      }
     }
-  },[game.activePlayer])
-   
+  }, [game.activePlayer, actualActivePlayer])
 
   return (
     <>

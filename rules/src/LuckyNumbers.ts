@@ -1,7 +1,8 @@
-import {Competitive, IncompleteInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
+import {Competitive, Eliminations, IncompleteInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
 import GameState, {setupNewGame} from './GameState'
 import GameView from './GameView'
 import {isGameOptions, LuckyNumbersOptions} from './LuckyNumbersOptions'
+import { concede, concedeMove } from './moves/Concede'
 import {drawClover, drawCloverMove} from './moves/DrawClover'
 import { drawCloverForEveryone } from './moves/DrawCloverForEveryone'
 import Move from './moves/Move'
@@ -11,7 +12,7 @@ import PlaceClover, {placeClover, placeCloverMove} from './moves/PlaceClover'
 import {howManyCloversInGarden, isValidPosition} from './PlayerState'
 
 export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
-  implements IncompleteInformation<GameState, GameView, Move, MoveView>, TimeLimit<GameState, Move>, Competitive<GameState, Move> {
+  implements IncompleteInformation<GameState, GameView, Move, MoveView>, TimeLimit<GameState, Move>, Competitive<GameState, Move>, Eliminations<GameState, Move, number> {
   constructor(state: GameState)
   constructor(options: LuckyNumbersOptions)
   constructor(arg: GameState | LuckyNumbersOptions) {
@@ -93,10 +94,20 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
       case MoveType.DrawCloverForEveryone:
         drawCloverForEveryone(this.state)
         break
+      case MoveType.Concede:
+        concede(this.state, move)
+        break
     }
-    if (this.state.activePlayer === undefined && this.state.players.every(player => player.clovers.length === 0) && this.state.players.every(player => howManyCloversInGarden(player.garden) === 4)) {
+    if (this.state.activePlayer === undefined && this.state.players.filter(p => !p.eliminated).every(player => player.clovers.length === 0) && this.state.players.filter(p => !p.eliminated).every(player => howManyCloversInGarden(player.garden) === 4)) {
       this.state.activePlayer = 1
+    } else if(this.state.activePlayer !== undefined) {      // We need to skip eliminated players
+      let nextActivePlayer:number = this.state.activePlayer
+      while(!!this.state.players[nextActivePlayer-1].eliminated){
+        nextActivePlayer = (nextActivePlayer % this.state.players.length) + 1
+      }
+      this.state.activePlayer = nextActivePlayer
     }
+
   }
 
   getAutomaticMove(): void | Move{
@@ -137,5 +148,13 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
     const playedTokensA = howManyCloversInGarden(this.state.players[playerA-1].garden)
     const playedTokenB = howManyCloversInGarden(this.state.players[playerB-1].garden)
     return playedTokenB - playedTokensA
+  }
+
+  isEliminated(playerId: number): boolean {
+    return !!this.state.players[playerId-1].eliminated
+  }
+
+  giveUpMove(playerId: number): Move {
+    return concedeMove(playerId)
   }
 }

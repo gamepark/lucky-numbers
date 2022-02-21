@@ -1,4 +1,5 @@
 import GameView from '@gamepark/lucky-numbers/GameView'
+import { concede } from '@gamepark/lucky-numbers/moves/Concede'
 import {drawCloverInView} from '@gamepark/lucky-numbers/moves/DrawClover'
 import { drawCloverForEveryoneInView } from '@gamepark/lucky-numbers/moves/DrawCloverForEveryone'
 import MoveType from '@gamepark/lucky-numbers/moves/MoveType'
@@ -28,6 +29,9 @@ export default class LuckyNumbersView implements Game<GameView, MoveView> {
       case MoveType.DrawCloverForEveryone:
         drawCloverForEveryoneInView(this.state, move)
         break
+      case MoveType.Concede:
+        concede(this.state, move)
+        break
       case SET_SELECTED_CLOVER:
         setSelectedClover(this.state, move)
         break
@@ -37,6 +41,12 @@ export default class LuckyNumbersView implements Game<GameView, MoveView> {
     }
     if (this.state.activePlayer === undefined && this.state.players.every(player => player.clovers.length === 0) && this.state.players.every(player => howManyCloversInGarden(player.garden) === 4)) {
       this.state.activePlayer = 1
+    } else if(this.state.activePlayer !== undefined) {      // We need to skip eliminated players
+      let nextActivePlayer:number = this.state.activePlayer
+      while(!!this.state.players[nextActivePlayer-1].eliminated){
+        nextActivePlayer = (nextActivePlayer % this.state.players.length) + 1
+      }
+      this.state.activePlayer = nextActivePlayer
     }
   }
 }
