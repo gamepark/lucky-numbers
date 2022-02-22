@@ -67,7 +67,7 @@ export default function Board({garden, idGarden, isMine, isSetupPhase, cloversDi
   const sortedCloversInHand = [...cloverInHand].sort((a:Clover,b:Clover) => a.number-b.number)
   
   return (
-    <div css={[style(itemDrag, idGarden === 0), isMine && itemDrag !== null && !isGoodCloverGoodTime({color:itemDrag.color,number:itemDrag.number}, actionsNumber) && tutorial !== undefined && wrongCloverTutoStyle(t(actionsNumber === 10 ? "Put in discard !" : "Not good clover !"))]} {...props}>
+    <div css={[style(itemDrag, playerPosition === 0), isMine && itemDrag !== null && !isGoodCloverGoodTime({color:itemDrag.color,number:itemDrag.number}, actionsNumber) && tutorial !== undefined && wrongCloverTutoStyle(t(actionsNumber === 10 ? "Put in discard !" : "Not good clover !"))]} {...props}>
       {garden.map((line, row) =>
         line.map((clover, column) =>
           <Fragment key={`${row} ${column}`}>

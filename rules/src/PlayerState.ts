@@ -5,7 +5,7 @@ export type Garden = (Clover | null)[][]
 export default interface PlayerState {
   garden: Garden
   clovers: Clover[]
-  eliminated?:number
+  isEliminated:boolean
 }
 
 export const emptyGarden = [

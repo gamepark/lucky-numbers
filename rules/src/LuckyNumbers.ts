@@ -98,11 +98,12 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
         concede(this.state, move)
         break
     }
-    if (this.state.activePlayer === undefined && this.state.players.filter(p => !p.eliminated).every(player => player.clovers.length === 0) && this.state.players.filter(p => !p.eliminated).every(player => howManyCloversInGarden(player.garden) === 4)) {
+    if (this.state.activePlayer === undefined && this.state.players.filter(p => !p.isEliminated).every(player => player.clovers.length === 0) && this.state.players.filter(p => !p.isEliminated).every(player => howManyCloversInGarden(player.garden) === 4)) {
       this.state.activePlayer = 1
-    } else if(this.state.activePlayer !== undefined) {      // We need to skip eliminated players
+    } 
+    if(this.state.activePlayer !== undefined) {      // We need to skip eliminated players
       let nextActivePlayer:number = this.state.activePlayer
-      while(!!this.state.players[nextActivePlayer-1].eliminated){
+      while(this.state.players[nextActivePlayer-1].isEliminated){
         nextActivePlayer = (nextActivePlayer % this.state.players.length) + 1
       }
       this.state.activePlayer = nextActivePlayer
@@ -151,7 +152,7 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
   }
 
   isEliminated(playerId: number): boolean {
-    return !!this.state.players[playerId-1].eliminated
+    return !!this.state.players[playerId-1].isEliminated
   }
 
   giveUpMove(playerId: number): Move {

@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import { concedeMove } from '@gamepark/lucky-numbers/moves/Concede'
-import {usePlay, usePlayerId, useTutorial} from '@gamepark/react-client'
+import {usePlayerId, useTutorial} from '@gamepark/react-client'
 import {Letterbox, Picture} from '@gamepark/react-components'
 import { useEffect, useState } from 'react'
 import DrawPile from './clovers/DrawPile'
@@ -12,7 +11,6 @@ import { isWinner } from './players/Board'
 import PlayerDisplay, { getDisplayPosition } from './players/PlayerDisplay'
 import { AudioLoader } from './sounds/AudioLoader'
 import LuckyNumbersSounds from './sounds/LuckyNumbersSounds'
-import Button from './tutorial/Button'
 import TutorialPopup from './tutorial/TutorialPopUp'
 import VariantCard from './VariantCard'
 

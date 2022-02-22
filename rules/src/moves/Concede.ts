@@ -13,6 +13,6 @@ export default interface Concede {
   
   export function concede(state: GameState | GameView, move: Concede) {
     const player = state.players[move.playerId]
-    if (player.eliminated) return console.error('Cannot apply', move, 'on', state, ': player is already eliminated')
-    player.eliminated = state.players.filter(player => player.eliminated).length + 1
+    if (player.isEliminated) return console.error('Cannot apply', move, 'on', state, ': player is already eliminated')
+    player.isEliminated = true
   }
