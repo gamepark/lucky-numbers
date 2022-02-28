@@ -6,12 +6,12 @@ import MoveType from '@gamepark/lucky-numbers/moves/MoveType'
 import MoveView from '@gamepark/lucky-numbers/moves/MoveView'
 import {placeClover} from '@gamepark/lucky-numbers/moves/PlaceClover'
 import { howManyCloversInGarden } from '@gamepark/lucky-numbers/PlayerState'
-import {Game} from '@gamepark/rules-api'
+import {Action, Game, Undo} from '@gamepark/rules-api'
 import SetSelectedClover, { resetSelectedClover, ResetSelectedClover, RESET_SELECTED_CLOVER, setSelectedClover, SET_SELECTED_CLOVER } from './localMoves/setSelectedClover'
 
 type LocalMove = MoveView | SetSelectedClover | ResetSelectedClover
 
-export default class LuckyNumbersView implements Game<GameView, MoveView> {
+export default class LuckyNumbersView implements Game<GameView, MoveView>, Undo<GameView, MoveView, number> {
   state: GameView
 
   constructor(state: GameView) {
@@ -48,6 +48,15 @@ export default class LuckyNumbersView implements Game<GameView, MoveView> {
         nextActivePlayer = (nextActivePlayer % this.state.players.length) + 1
       }
       this.state.activePlayer = nextActivePlayer
+    }
+  }
+
+  canUndo(action: Action<MoveView, number>, consecutiveActions: Action<MoveView, number>[]): boolean {
+    if(this.state.activePlayer !== undefined) return false
+    if(this.state.isMichaelVariant === true){
+      return !action.consequences.some(consequence => consequence.type === MoveType.DrawCloverForEveryone)
+    } else {
+      return this.state.activePlayer === undefined
     }
   }
 }

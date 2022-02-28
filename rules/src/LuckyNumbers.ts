@@ -1,4 +1,4 @@
-import {Competitive, Eliminations, IncompleteInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
+import {Action, Competitive, Eliminations, GameSpeed, IncompleteInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
 import GameState, {setupNewGame} from './GameState'
 import GameView from './GameView'
 import {isGameOptions, LuckyNumbersOptions} from './LuckyNumbersOptions'
@@ -12,7 +12,11 @@ import PlaceClover, {placeClover, placeCloverMove} from './moves/PlaceClover'
 import {howManyCloversInGarden, isValidPosition} from './PlayerState'
 
 export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
-  implements IncompleteInformation<GameState, GameView, Move, MoveView>, TimeLimit<GameState, Move>, Competitive<GameState, Move>, Eliminations<GameState, Move, number> {
+  implements IncompleteInformation<GameState, GameView, Move, MoveView>, 
+             TimeLimit<GameState, Move>,
+             Competitive<GameState, Move>, 
+             Eliminations<GameState, Move, number>,
+             Undo<GameState, Move, number> {
   constructor(state: GameState)
   constructor(options: LuckyNumbersOptions)
   constructor(arg: GameState | LuckyNumbersOptions) {
@@ -157,5 +161,14 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
 
   giveUpMove(playerId: number): Move {
     return concedeMove(playerId)
+  }
+
+  canUndo(action: Action<Move, number>, consecutiveActions: Action<Move, number>[]): boolean {
+    if(this.state.activePlayer !== undefined) return false
+    if(this.state.isMichaelVariant === true){
+      return !action.consequences.some(consequence => consequence.type === MoveType.DrawCloverForEveryone)
+    } else {
+      return this.state.activePlayer === undefined
+    }
   }
 }
