@@ -266,7 +266,7 @@ export const popupPosition = ({boxTop, boxLeft, arrow}: TutorialStepDescription)
 
 const arrowStyle = (angle: number) => css`
     position: absolute;
-    transform: rotate(${angle}deg) translateZ(0.1em);
+    transform: rotate(${angle}deg) translateZ(300em);
     will-change: transform;
     z-index: 102;
     transition-property: top, left, transform;
@@ -299,7 +299,9 @@ const resetStyle = css`
     right: 5%;
     font-size: 3em;
     width: 11em;
-    height: fit-content;
+    height: intrinsic;           
+    height: max-content;
+
     font-family: 'Reggae One', sans-serif;
 `
 
