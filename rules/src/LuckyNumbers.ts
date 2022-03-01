@@ -159,7 +159,7 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
   }
 
   canUndo(action: Action<Move, number>, consecutiveActions: Action<Move, number>[]): boolean {
-    return this.state.activePlayer !== undefined
+    return this.state.activePlayer === undefined
       && !action.consequences.some(isDrawCloverForEveryone) && !consecutiveActions.some(ca => ca.consequences.some(isDrawCloverForEveryone))
   }
 }

@@ -50,7 +50,7 @@ export default class LuckyNumbersView implements Game<GameView, MoveView>, Undo<
   }
 
   canUndo(action: Action<MoveView, number>, consecutiveActions: Action<MoveView, number>[]): boolean {
-    return this.state.activePlayer !== undefined
+    return this.state.activePlayer === undefined
       && !action.consequences.some(isDrawCloverForEveryone) && !consecutiveActions.some(ca => ca.consequences.some(isDrawCloverForEveryone))
   }
 }
