@@ -102,16 +102,14 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
         concede(this.state, move)
         break
     }
-    if (this.state.activePlayer === undefined && this.state.players.filter(p => !p.isEliminated).every(player =>
-      player.clovers.length === 0 && howManyCloversInGarden(player.garden) === 4
-    )) {
+    if (this.state.activePlayer === undefined && this.state.players.every(player => howManyCloversInGarden(player.garden) === 4)) {
       this.state.activePlayer = 1
     }
     skipEliminatedPlayers(this.state)
   }
 
   getAutomaticMove(): void | Move {
-    if (this.state.isMichaelVariant === true && this.state.players.every(player => player.clovers.length === 0) && this.state.players.every(player => howManyCloversInGarden(player.garden) !== 4 && this.state.activePlayer === undefined)) {
+    if (this.state.isMichaelVariant === true && this.state.activePlayer === undefined && this.state.players.every(player => player.clovers.length === 0 && howManyCloversInGarden(player.garden) !== 4)) {
       return {type: MoveType.DrawCloverForEveryone}
     }
     return

@@ -41,9 +41,7 @@ export default class LuckyNumbersView implements Game<GameView, MoveView>, Undo<
         resetSelectedClover(this.state)
         break
     }
-    if (this.state.activePlayer === undefined && this.state.players.every(player =>
-      player.clovers.length === 0 && howManyCloversInGarden(player.garden) === 4
-    )) {
+    if (this.state.activePlayer === undefined && this.state.players.every(player => howManyCloversInGarden(player.garden) === 4)) {
       this.state.activePlayer = 1
     }
     skipEliminatedPlayers(this.state)
