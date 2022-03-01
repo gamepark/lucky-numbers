@@ -1,6 +1,6 @@
 {
   "name": "@gamepark/lucky-numbers-app",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "description": "React application",
   "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
