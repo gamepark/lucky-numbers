@@ -27,7 +27,7 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
     return this.state.players.some(player => player.garden.every(row => row.every(space => space !== null)))
   }
 
-  isActive(playerId: number): boolean {
+  isTurnToPlay(playerId: number): boolean {
     if (this.state.players.some(p => p.garden.every(row => row.every(space => space !== null)))) return false
     if (this.state.activePlayer === undefined) {
       const player = this.state.players[playerId - 1]
