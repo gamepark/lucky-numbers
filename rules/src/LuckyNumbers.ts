@@ -108,11 +108,11 @@ export default class LuckyNumbers extends SimultaneousGame<GameState, Move>
     skipEliminatedPlayers(this.state)
   }
 
-  getAutomaticMove(): void | Move {
+  getAutomaticMoves(): Move[] {
     if (this.state.isMichaelVariant === true && this.state.activePlayer === undefined && this.state.players.every(player => player.clovers.length === 0 && howManyCloversInGarden(player.garden) !== 4)) {
-      return {type: MoveType.DrawCloverForEveryone}
+      return [{type: MoveType.DrawCloverForEveryone}]
     }
-    return
+    return []
   }
 
   getView(): GameView {
